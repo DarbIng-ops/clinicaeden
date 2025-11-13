@@ -109,19 +109,19 @@ Route::middleware(['auth', 'role:recepcionista'])->prefix('recepcion')->name('re
 // ============================================================
 // Estructura hospitalaria: pisos, módulos, consultorios, habitaciones
 // ============================================================
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'role:admin'])->group(function () {
     // Pisos
     Route::resource('pisos', PisoController::class);
     Route::get('pisos/{piso}/modulos', [PisoController::class, 'show'])->name('pisos.modulos');
-    
+
     // Módulos de Enfermería
     Route::resource('modulos', ModuloEnfermeriaController::class);
     Route::post('modulos/{modulo}/asignar-auxiliar', [ModuloEnfermeriaController::class, 'asignarAuxiliar'])->name('modulos.asignar-auxiliar');
     Route::delete('modulos/{modulo}/desasignar-auxiliar/{auxiliar}', [ModuloEnfermeriaController::class, 'desasignarAuxiliar'])->name('modulos.desasignar-auxiliar');
-    
+
     // Consultorios
     Route::resource('consultorios', ConsultorioController::class);
-    
+
     // Habitaciones
     Route::resource('habitaciones', HabitacionController::class);
     Route::get('habitaciones-disponibles', [HabitacionController::class, 'disponibles'])->name('habitaciones.disponibles');
@@ -130,7 +130,7 @@ Route::middleware(['auth'])->group(function () {
 // ============================================================
 // Hospitalización: admisión, altas y disponibilidad
 // ============================================================
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'role:admin,medico_general,medico_especialista'])->group(function () {
     Route::resource('hospitalizaciones', HospitalizacionController::class);
     Route::post('hospitalizaciones/{hospitalizacion}/asignar-auxiliar', [HospitalizacionController::class, 'asignarAuxiliar'])->name('hospitalizaciones.asignar-auxiliar');
     Route::post('hospitalizaciones/{hospitalizacion}/alta-medica', [HospitalizacionController::class, 'darAltaMedica'])->name('hospitalizaciones.alta-medica');
@@ -142,7 +142,7 @@ Route::middleware(['auth'])->group(function () {
 // ============================================================
 // Facturación: emisión de facturas y cálculos auxiliares
 // ============================================================
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'role:admin,caja'])->group(function () {
     Route::resource('facturas', FacturaController::class);
     Route::get('facturas/{factura}/imprimir', [FacturaController::class, 'imprimir'])->name('facturas.imprimir');
     Route::get('api/buscar-paciente', [FacturaController::class, 'buscarPaciente'])->name('api.buscar-paciente');
@@ -153,7 +153,7 @@ Route::middleware(['auth'])->group(function () {
 // ============================================================
 // Encuestas de satisfacción: registro y estadísticas
 // ============================================================
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'role:admin,recepcionista'])->group(function () {
     Route::resource('encuestas', EncuestaSatisfaccionController::class);
     Route::get('encuestas/estadisticas', [EncuestaSatisfaccionController::class, 'estadisticas'])->name('encuestas.estadisticas');
     Route::get('api/encuestas/buscar-paciente', [EncuestaSatisfaccionController::class, 'buscarPaciente'])->name('api.encuestas.buscar-paciente');

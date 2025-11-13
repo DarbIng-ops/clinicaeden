@@ -27,7 +27,6 @@ class DashboardController extends Controller
         switch ($user->role) {
             case 'admin':
                 return redirect()->route('admin.dashboard');
-            case 'recepcion':
             case 'recepcionista':
                 return redirect()->route('recepcion.dashboard');
             case 'medico_general':

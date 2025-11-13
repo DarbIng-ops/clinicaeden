@@ -280,7 +280,7 @@ class User extends Authenticatable
      */
     public function esRecepcionista()
     {
-        return in_array($this->role, ['recepcionista', 'recepcion']);
+        return $this->role === 'recepcionista';
     }
 
     /**
@@ -324,7 +324,7 @@ class User extends Authenticatable
      */
     public function puedeGestionarPacientes()
     {
-        return in_array($this->role, ['admin', 'recepcionista', 'recepcion', 'medico_general', 'medico_especialista']);
+        return in_array($this->role, ['admin', 'recepcionista', 'medico_general', 'medico_especialista']);
     }
 
     /**
@@ -344,7 +344,7 @@ class User extends Authenticatable
      */
     public function puedeGestionarFacturas()
     {
-        return in_array($this->role, ['admin', 'caja', 'recepcionista', 'recepcion']);
+        return in_array($this->role, ['admin', 'caja', 'recepcionista']);
     }
 
     /**

@@ -32,23 +32,25 @@ class JefeEnfermeriaController extends Controller
             ->activos()
             ->get();
 
-        // Hospitalizaciones en sus módulos
-        $hospitalizaciones = Hospitalizacion::whereHas('habitacion.modulo', function($query) use ($user) {
-            $query->where('jefe_enfermeria_id', $user->id);
-        })
-        ->with(['paciente', 'habitacion.modulo', 'medicoGeneral', 'auxiliarEnfermeria'])
-        ->where('estado', 'activo')
-        ->orderBy('fecha_ingreso', 'desc')
-        ->get();
+        // Optimización: Obtener IDs de módulos y habitaciones primero
+        $modulosIds = ModuloEnfermeria::where('jefe_enfermeria_id', $user->id)->pluck('id');
+        $habitacionesIds = Habitacion::whereIn('modulo_id', $modulosIds)->pluck('id');
 
-        // Tratamientos pendientes de revisión
-        $tratamientosPendientes = Tratamiento::whereHas('hospitalizacion.habitacion.modulo', function($query) use ($user) {
-            $query->where('jefe_enfermeria_id', $user->id);
-        })
-        ->where('estado', 'pendiente_revision')
-        ->with(['hospitalizacion.paciente', 'hospitalizacion.habitacion.modulo'])
-        ->orderBy('created_at', 'desc')
-        ->get();
+        // Hospitalizaciones en sus módulos (optimizado)
+        $hospitalizaciones = Hospitalizacion::whereIn('habitacion_id', $habitacionesIds)
+            ->with(['paciente', 'habitacion.modulo', 'medicoGeneral', 'auxiliarEnfermeria'])
+            ->where('estado', 'activo')
+            ->orderBy('fecha_ingreso', 'desc')
+            ->get();
+
+        // Tratamientos pendientes de revisión (optimizado)
+        $tratamientosPendientes = Tratamiento::whereHas('hospitalizacion', function($q) use ($habitacionesIds) {
+                $q->whereIn('habitacion_id', $habitacionesIds);
+            })
+            ->where('estado', 'pendiente_revision')
+            ->with(['hospitalizacion.paciente', 'hospitalizacion.habitacion.modulo'])
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         // Estadísticas del módulo
         $totalHabitaciones = $modulos->sum(function($modulo) {
@@ -243,6 +245,12 @@ class JefeEnfermeriaController extends Controller
                     ->withErrors(['error' => 'No tienes acceso a esta hospitalización.']);
             }
 
+            // Verificar que el médico haya dado alta médica primero
+            if (!$hospitalizacion->fecha_alta_medica) {
+                return redirect()->back()
+                    ->withErrors(['error' => 'El médico debe dar alta médica antes del alta de enfermería.']);
+            }
+
             $hospitalizacion->update([
                 'estado' => 'alta_enfermeria',
                 'observaciones_alta_enfermeria' => $request->observaciones_alta,
@@ -386,7 +394,7 @@ class JefeEnfermeriaController extends Controller
      */
     private function notificarAltaEnfermeria(Hospitalizacion $hospitalizacion)
     {
-        $recepcionistas = User::whereIn('role', ['recepcionista', 'recepcion'])
+        $recepcionistas = User::where('role', 'recepcionista')
             ->where('activo', true)
             ->get();
 

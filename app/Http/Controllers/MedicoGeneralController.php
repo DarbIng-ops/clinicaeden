@@ -9,6 +9,7 @@ use App\Models\Consulta;
 use App\Models\Habitacion;
 use App\Models\NotificacionSistema;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class MedicoGeneralController extends Controller
 {
@@ -26,7 +27,7 @@ class MedicoGeneralController extends Controller
         $user = Auth::user();
         
         // Obtener datos para el dashboard
-        $pacientesHospitalizados = Hospitalizacion::with(['paciente', 'habitacion'])
+        $pacientesHospitalizados = Hospitalizacion::with(['paciente', 'habitacion.modulo.piso'])
             ->where('medico_general_id', $user->id)
             ->where('estado', '!=', 'alta')
             ->get();
@@ -256,27 +257,44 @@ class MedicoGeneralController extends Controller
             'indicaciones_iniciales' => 'nullable|string'
         ]);
 
-        // Crear hospitalización
-        $hospitalizacion = Hospitalizacion::create([
-            'paciente_id' => $validated['paciente_id'],
-            'habitacion_id' => $validated['habitacion_id'],
-            'medico_general_id' => Auth::id(),
-            'diagnostico_inicial' => $validated['diagnostico_preliminar'],
-            'fecha_ingreso' => $validated['fecha_ingreso'],
-            'hora_ingreso' => $validated['hora_ingreso'],
-            'observaciones' => $validated['indicaciones_iniciales'] ?? null,
-            'estado' => 'activo'
-        ]);
+        DB::beginTransaction();
+        try {
+            // Verificar disponibilidad con lock pesimista
+            $habitacion = Habitacion::lockForUpdate()->findOrFail($validated['habitacion_id']);
 
-        // Actualizar disponibilidad de habitación si es necesario
-        $habitacion = Habitacion::find($validated['habitacion_id']);
-        if ($habitacion) {
-            $habitacion->update(['disponible' => false]);
+            if (!$habitacion->disponible || !$habitacion->tieneCapacidadDisponible()) {
+                DB::rollback();
+                return back()->withErrors(['habitacion_id' => 'La habitación no tiene capacidad disponible.'])
+                    ->withInput();
+            }
+
+            // Crear hospitalización
+            $hospitalizacion = Hospitalizacion::create([
+                'paciente_id' => $validated['paciente_id'],
+                'habitacion_id' => $validated['habitacion_id'],
+                'medico_general_id' => Auth::id(),
+                'diagnostico_inicial' => $validated['diagnostico_preliminar'],
+                'fecha_ingreso' => $validated['fecha_ingreso'],
+                'hora_ingreso' => $validated['hora_ingreso'],
+                'observaciones' => $validated['indicaciones_iniciales'] ?? null,
+                'estado' => 'activo'
+            ]);
+
+            // Actualizar disponibilidad de habitación
+            if ($habitacion->tieneCapacidadMaxima()) {
+                $habitacion->update(['disponible' => false]);
+            }
+
+            DB::commit();
+            return redirect()
+                ->route('medico_general.hospitalizaciones.index')
+                ->with('success', 'Paciente hospitalizado exitosamente');
+
+        } catch (\Exception $e) {
+            DB::rollback();
+            return back()->withErrors(['error' => 'Error al hospitalizar al paciente: ' . $e->getMessage()])
+                ->withInput();
         }
-
-        return redirect()
-            ->route('medico_general.hospitalizaciones.index')
-            ->with('success', 'Paciente hospitalizado exitosamente');
     }
 
     /**
@@ -340,8 +358,10 @@ class MedicoGeneralController extends Controller
             'accion' => 'required|in:caja,alta,hospitalizar'
         ]);
 
-        // Actualizar consulta con signos vitales y diagnóstico
-        $consulta->update([
+        DB::beginTransaction();
+        try {
+            // Actualizar consulta con signos vitales y diagnóstico
+            $consulta->update([
             'presion_arterial' => $request->presion_arterial,
             'temperatura' => $request->temperatura,
             'frecuencia_cardiaca' => $request->frecuencia_cardiaca,
@@ -364,7 +384,7 @@ class MedicoGeneralController extends Controller
                 'subtotal' => 1000,
                 'impuestos' => 0,
                 'total' => 1000,
-                'metodo_pago' => 'efectivo', // Valor por defecto, se actualizará en caja
+                'metodo_pago' => null, // Se asignará en caja al procesar el pago
                 'estado' => 'pendiente',
                 'fecha_emision' => now()
             ]);
@@ -403,6 +423,13 @@ class MedicoGeneralController extends Controller
             $mensaje = 'Consulta finalizada. Paciente dado de alta.';
         }
 
-        return redirect()->route('medico_general.dashboard')->with('success', $mensaje);
+            DB::commit();
+            return redirect()->route('medico_general.dashboard')->with('success', $mensaje);
+
+        } catch (\Exception $e) {
+            DB::rollback();
+            \Log::error('Error al finalizar consulta: ' . $e->getMessage());
+            return back()->withErrors(['error' => 'Error al procesar la consulta. Por favor, intente nuevamente.'])->withInput();
+        }
     }
 }

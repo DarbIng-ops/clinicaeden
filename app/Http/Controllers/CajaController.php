@@ -72,7 +72,7 @@ class CajaController extends Controller
     {
         $request->validate([
             'metodo_pago' => 'required|in:efectivo,tarjeta,transferencia',
-            'monto_recibido' => 'required|numeric|min:' . $factura->total,
+            'monto_recibido' => 'required|numeric|min:' . $factura->total . '|max:' . ($factura->total * 1.5),
             'observaciones' => 'nullable|string|max:500'
         ]);
 
@@ -90,11 +90,11 @@ class CajaController extends Controller
             // Si la factura está relacionada con una hospitalización, cambiar estado
             if ($factura->hospitalizacion) {
                 $hospitalizacion = $factura->hospitalizacion;
-                
-                // Solo cambiar a 'alta_pago' si ya tiene alta médica y de enfermería
-                if (in_array($hospitalizacion->estado, ['alta_medica', 'alta_enfermeria'])) {
+
+                // Solo cambiar a 'alta_pago' si ya tiene AMBAS altas (médica Y enfermería)
+                if ($hospitalizacion->fecha_alta_medica && $hospitalizacion->fecha_alta_enfermeria) {
                     $hospitalizacion->update(['estado' => 'alta_pago']);
-                    
+
                     // Notificar a recepción para procesar la salida
                     $this->notificarRecepcion($hospitalizacion);
                 }
@@ -167,7 +167,7 @@ class CajaController extends Controller
     public function confirmarPago(Request $request, Factura $factura)
     {
         $request->validate([
-            'metodo_pago' => 'required|in:efectivo,tarjeta',
+            'metodo_pago' => 'required|in:efectivo,tarjeta,transferencia',
             'monto_recibido' => 'required|numeric|min:' . $factura->total
         ]);
 
@@ -240,7 +240,7 @@ class CajaController extends Controller
     {
         try {
             // Buscar recepcionistas activos
-            $recepcionistas = \App\Models\User::whereIn('role', ['recepcionista', 'recepcion'])
+            $recepcionistas = \App\Models\User::where('role', 'recepcionista')
                 ->where('activo', true)
                 ->get();
 

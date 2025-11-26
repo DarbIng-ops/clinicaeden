@@ -83,9 +83,10 @@ class HospitalizacionController extends Controller
 
         DB::beginTransaction();
         try {
-            // Verificar que la habitación tenga capacidad disponible
-            $habitacion = Habitacion::findOrFail($request->habitacion_id);
+            // Verificar que la habitación tenga capacidad disponible (con lock pesimista)
+            $habitacion = Habitacion::lockForUpdate()->findOrFail($request->habitacion_id);
             if (!$habitacion->tieneCapacidadDisponible()) {
+                DB::rollback();
                 return back()->withErrors(['habitacion_id' => 'La habitación seleccionada no tiene capacidad disponible.']);
             }
 
@@ -215,7 +216,7 @@ class HospitalizacionController extends Controller
         $hospitalizacion->update(['estado' => 'alta_enfermeria']);
 
         // Notificar a recepción
-        $recepcionistas = User::where('role', 'recepcion')->where('activo', true)->get();
+        $recepcionistas = User::where('role', 'recepcionista')->where('activo', true)->get();
         foreach ($recepcionistas as $recepcionista) {
             NotificacionSistema::crearNotificacion(
                 Auth::id(),

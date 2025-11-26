@@ -34,16 +34,18 @@ class RecepcionistaController extends Controller
         // Encuestas pendientes
         $encuestasPendientes = 0; // Se puede implementar lógica específica
         
-        // Pacientes listos para salida
+        // Pacientes listos para salida (optimizado para evitar N+1)
         $pacientesListosParaSalida = \App\Models\Factura::where('estado', 'pagado')
+            ->with(['paciente', 'consulta.encuestaSatisfaccion'])
             ->whereHas('consulta', function($q) {
-                $q->where('estado', 'completada')
-                  ->whereDoesntHave('encuestaSatisfaccion');
+                $q->where('estado', 'completada');
             })
-            ->with(['paciente', 'consulta'])
             ->whereDate('fecha_pago', '>=', now()->subDays(1))
             ->orderBy('fecha_pago', 'desc')
-            ->get();
+            ->get()
+            ->filter(function($factura) {
+                return $factura->consulta && !$factura->consulta->encuestaSatisfaccion;
+            });
         
         // Notificaciones
         $notificaciones = \App\Models\NotificacionSistema::where('usuario_receptor_id', Auth::id())
@@ -170,14 +172,19 @@ class RecepcionistaController extends Controller
         ]);
 
         try {
-            $pacienteData = $request->all();
-            
+            $pacienteData = $request->only([
+                'dni', 'nombres', 'apellidos', 'fecha_nacimiento', 'sexo',
+                'telefono', 'email', 'direccion', 'ciudad', 'tipo_sangre',
+                'alergias', 'enfermedades_cronicas',
+                'contacto_emergencia_nombre', 'contacto_emergencia_telefono'
+            ]);
+
             // Manejar subida de foto
             if ($request->hasFile('foto')) {
                 $fotoPath = $request->file('foto')->store('pacientes', 'public');
                 $pacienteData['foto'] = $fotoPath;
             }
-            
+
             // Crear paciente
             $paciente = Paciente::create($pacienteData);
             
@@ -302,19 +309,24 @@ class RecepcionistaController extends Controller
         ]);
 
         try {
-            $pacienteData = $request->all();
-            
+            $pacienteData = $request->only([
+                'dni', 'nombres', 'apellidos', 'fecha_nacimiento', 'sexo',
+                'telefono', 'email', 'direccion', 'ciudad', 'tipo_sangre',
+                'alergias', 'enfermedades_cronicas',
+                'contacto_emergencia_nombre', 'contacto_emergencia_telefono'
+            ]);
+
             // Manejar subida de nueva foto
             if ($request->hasFile('foto')) {
                 // Eliminar foto anterior si existe
                 if ($paciente->foto && Storage::disk('public')->exists($paciente->foto)) {
                     Storage::disk('public')->delete($paciente->foto);
                 }
-                
+
                 $fotoPath = $request->file('foto')->store('pacientes', 'public');
                 $pacienteData['foto'] = $fotoPath;
             }
-            
+
             // Actualizar paciente
             $paciente->update($pacienteData);
             
@@ -405,13 +417,11 @@ class RecepcionistaController extends Controller
     public function buscarPorDni(Request $request)
     {
         try {
-            $dni = $request->input('dni');
-            
-            if (empty($dni)) {
-                return response()->json(['error' => 'DNI requerido'], 400);
-            }
-            
-            $paciente = Paciente::where('dni', $dni)->first();
+            $validated = $request->validate([
+                'dni' => 'required|string|max:20|regex:/^[0-9]{7,8}$/'
+            ]);
+
+            $paciente = Paciente::where('dni', $validated['dni'])->first();
             
             if (!$paciente) {
                 return response()->json(['error' => 'Paciente no encontrado'], 404);
@@ -570,7 +580,13 @@ class RecepcionistaController extends Controller
                 'comentarios_encuesta' => 'nullable|string',
                 'observaciones_salida' => 'nullable|string'
             ]);
-            
+
+            // Calcular calidad general solo si todos los valores están presentes
+            $calidad = null;
+            if ($request->atencion_medica && $request->tiempo_espera && $request->trato_personal) {
+                $calidad = round(($request->atencion_medica + $request->tiempo_espera + $request->trato_personal) / 3, 1);
+            }
+
             // Guardar encuesta de satisfacción
             \App\Models\EncuestaSatisfaccion::create([
                 'paciente_id' => $paciente->id,
@@ -582,7 +598,7 @@ class RecepcionistaController extends Controller
                 'comida' => null,
                 'personal_recepcion' => $request->trato_personal,
                 'tiempo_espera' => $request->tiempo_espera,
-                'calidad_general' => round(($request->atencion_medica + $request->tiempo_espera + $request->trato_personal) / 3, 1),
+                'calidad_general' => $calidad,
                 'comentarios' => $request->comentarios_encuesta,
                 'recomendaria' => 1,
                 'fecha_encuesta' => now()

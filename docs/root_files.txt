@@ -1,0 +1,51 @@
+﻿
+
+    Directorio: C:\xampp\htdocs\clinicaeden
+
+
+Mode          LastWriteTime Length Name                                  
+----          ------------- ------ ----                                  
+d----- 13/11/2025      9:00        .claude                               
+da---- 28/10/2025     21:33        app                                   
+da---- 15/10/2025      9:56        bootstrap                             
+da---- 20/10/2025     13:45        config                                
+da---- 27/10/2025      8:12        database                              
+d-----  7/12/2025     14:25        docs                                  
+d----- 20/10/2025     18:06        node_modules                          
+da---- 25/11/2025     21:10        public                                
+da---- 20/10/2025     13:45        resources                             
+da---- 13/11/2025      9:00        routes                                
+da---- 15/10/2025      9:56        storage                               
+da---- 15/10/2025      9:56        tests                                 
+d----- 22/10/2025     21:09        vendor                                
+-a---- 15/10/2025      9:56    252 .editorconfig                         
+-a---- 30/10/2025     13:34   1299 .env                                  
+-a---- 11/11/2025     15:24   2474 .env.example                          
+-a---- 15/10/2025      9:56    186 .gitattributes                        
+-a---- 12/11/2025     17:35    322 .gitignore                            
+-a---- 12/11/2025     16:59  20957 .phpunit.result.cache                 
+-a---- 20/11/2025     18:36   4391 ANALISIS_CARPETAS_MEDICO.md           
+-a---- 15/10/2025      9:56    425 artisan                               
+-a---- 26/11/2025     13:50  10779 CLAUDE.md                             
+-a---- 27/10/2025      8:07 139264 clinicaeden                           
+-a---- 20/10/2025     13:44   2947 composer.json                         
+-a---- 20/10/2025     13:45 331108 composer.lock                         
+-a---- 27/10/2025     10:01   3748 CORRECCION_SQLITE_MYSQL.md            
+-a---- 27/10/2025      8:05   5174 ESTRUCTURA_HOSPITALARIA_ACTUALIZADA.md
+-a---- 20/11/2025     18:32  16739 informe.md                            
+-a---- 27/10/2025      8:41   5513 MIGRACIONES_OPTIMIZADAS.md            
+-a---- 20/10/2025     18:06 157328 package-lock.json                     
+-a---- 20/10/2025     13:45    568 package.json                          
+-a---- 12/11/2025     16:52   1419 phpunit.xml                           
+-a---- 20/10/2025     13:45     93 postcss.config.js                     
+-a----  7/12/2025     14:10     54 project_structure.txt                 
+-a---- 20/11/2025     17:42   6369 README.md                             
+-a---- 27/10/2025     10:49   9936 REVISION_COMPLETA_SISTEMA.md          
+-a---- 20/11/2025     17:58  12798 SEEDERS_USUARIOS_DETALLADO.md         
+-a---- 27/10/2025     10:32   8886 SISTEMA_AUTENTICACION_ROLES.md        
+-a---- 27/10/2025     10:07   4010 SOLUCION_GROUP_BY.md                  
+-a---- 20/10/2025     13:45    656 tailwind.config.js                    
+-a---- 20/11/2025     17:50   6898 USUARIOS_PRUEBA.md                    
+-a---- 20/10/2025     13:45    263 vite.config.js                        
+
+

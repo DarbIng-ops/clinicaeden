@@ -1,0 +1,70 @@
+﻿
+
+    Directorio: C:\xampp\htdocs\clinicaeden\database\migrations
+
+
+Mode          LastWriteTime Length Name                                        
+----          ------------- ------ ----                                        
+-a---- 20/10/2025     13:44   1603 0001_01_01_000000_create_users_table.php    
+------ 15/10/2025      9:56    849 0001_01_01_000001_create_cache_table.php    
+------ 15/10/2025      9:56   1812 0001_01_01_000002_create_jobs_table.php     
+-a---- 27/10/2025      8:34   4252 2025_01_15_000000_recreate_hospital_structur
+                                   e.php                                       
+-a---- 20/10/2025     13:44   1057 2025_10_20_164440_add_two_factor_columns_to_
+                                   users_table.php                             
+-a---- 20/10/2025     13:45    863 2025_10_20_164510_create_personal_access_tok
+                                   ens_table.php                               
+-a---- 20/10/2025     13:55    619 2025_10_20_164828_add_role_to_users_table.ph
+                                   p                                           
+-a---- 23/10/2025      6:55    875 2025_10_23_095328_add_additional_fields_to_u
+                                   sers_table.php                              
+-a---- 23/10/2025      6:55   1285 2025_10_23_095504_create_pacientes_table.php
+-a---- 23/10/2025      6:56   1182 2025_10_23_095626_create_citas_table.php    
+-a---- 23/10/2025      6:58    565 2025_10_23_095739_create_historias_clinicas_
+                                   table.php                                   
+-a---- 23/10/2025      6:58   1074 2025_10_23_095833_create_consultas_table.php
+-a---- 23/10/2025      6:59    826 2025_10_23_095928_create_tratamientos_table.
+                                   php                                         
+-a---- 23/10/2025      7:00    767 2025_10_23_100002_create_formulas_medicas_ta
+                                   ble.php                                     
+-a---- 23/10/2025      7:01    795 2025_10_23_100040_create_procedimientos_tabl
+                                   e.php                                       
+-a---- 26/10/2025      6:31   1556 2025_10_23_100100_create_hospitalizaciones_t
+                                   able.php                                    
+-a---- 26/10/2025      6:31   1409 2025_10_23_100200_create_facturas_table.php 
+-a---- 26/10/2025      6:25   1541 2025_10_23_100300_create_encuestas_satisfacc
+                                   ion_table.php                               
+-a---- 26/10/2025      6:31   1040 2025_10_23_100400_create_notificaciones_sist
+                                   ema_table.php                               
+-a---- 24/10/2025      6:41    726 2025_10_24_094127_create_notifications_table
+                                   .php                                        
+-a---- 26/10/2025      6:32    767 2025_10_26_092017_add_costo_to_tratamientos_
+                                   table.php                                   
+-a---- 26/10/2025      6:32    703 2025_10_26_092330_add_hospitalizacion_fields
+                                   _to_users_table.php                         
+-a---- 26/10/2025     17:03   1985 2025_10_26_195413_fix_pacientes_constraints_
+                                   and_indexes.php                             
+-a---- 27/10/2025     10:32   1283 2025_10_27_132539_add_additional_user_fields
+                                   .php                                        
+-a---- 27/10/2025     10:49   1222 2025_10_27_133808_cleanup_users_table.php   
+-a---- 27/10/2025     13:17    640 2025_10_27_161620_add_fecha_programada_to_tr
+                                   atamientos_table.php                        
+-a---- 27/10/2025     13:17   1305 2025_10_27_161641_add_completion_fields_to_t
+                                   ratamientos_table.php                       
+-a---- 27/10/2025     13:28   1297 2025_10_27_162535_add_missing_fields_to_cons
+                                   ultas_table.php                             
+-a---- 27/10/2025     13:28    797 2025_10_27_162548_add_missing_fields_to_fact
+                                   uras_table.php                              
+-a---- 27/10/2025     13:28   1001 2025_10_27_162601_add_missing_fields_to_hosp
+                                   italizaciones_table.php                     
+-a---- 27/10/2025     13:28   1254 2025_10_27_162611_add_missing_fields_to_trat
+                                   amientos_table_final.php                    
+-a---- 28/10/2025     20:19    683 2025_10_28_231852_make_historia_clinica_id_n
+                                   ullable_in_consultas.php                    
+-a---- 28/10/2025     20:49    657 2025_10_28_234934_make_caja_id_nullable_in_f
+                                   acturas_table.php                           
+-a---- 31/10/2025      6:41   1502 2025_10_31_094024_add_signos_vitales_to_cons
+                                   ultas_table.php                             
+-a---- 13/11/2025      9:00   1018 2025_11_13_112235_change_role_to_enum.php   
+
+

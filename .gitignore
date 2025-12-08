@@ -25,3 +25,6 @@ Thumbs.db
 npm-debug.log
 yarn-error.log
 *.sqlite*
+
+# Claude Code CLI configuration
+.claude/

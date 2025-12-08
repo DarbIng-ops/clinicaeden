@@ -1,0 +1,9 @@
+﻿
+FullName                                                              
+--------                                                              
+C:\xampp\htdocs\clinicaeden\app\Livewire\Pacientes\CrearPaciente.php  
+C:\xampp\htdocs\clinicaeden\app\Livewire\Pacientes\EditarPaciente.php 
+C:\xampp\htdocs\clinicaeden\app\Livewire\Pacientes\ListarPacientes.php
+C:\xampp\htdocs\clinicaeden\app\Livewire\Pacientes\VerPaciente.php    
+
+

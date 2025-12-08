@@ -1,0 +1,7 @@
+﻿0,25 MB	app
+0,09 MB	public
+0,55 MB	resources
+0,05 MB	database
+5,91 MB	storage
+0,05 MB	config
+0,02 MB	routes

@@ -16,6 +16,17 @@ export default {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
+            colors: {
+                eden: {
+                    'azul-oscuro': '#1A2E4A',
+                    'azul-medio': '#2D5F8A',
+                    'azul-claro': '#4A90C4',
+                    'verde': '#27AE60',
+                    'naranja': '#E67E22',
+                    'gris': '#F2F4F7',
+                    'rojo': '#C0392B',
+                },
+            },
         },
     },
 

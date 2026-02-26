@@ -237,4 +237,19 @@ class Paciente extends Model
     {
         return !empty($this->telefono) || !empty($this->email);
     }
+
+    public function hospitalizaciones()
+    {
+        return $this->hasMany(Hospitalizacion::class);
+    }
+
+    public function facturas()
+    {
+        return $this->hasMany(Factura::class);
+    }
+
+    public function encuestasSatisfaccion()
+    {
+        return $this->hasMany(EncuestaSatisfaccion::class);
+    }
 }

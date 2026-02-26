@@ -32,7 +32,7 @@ class FacturaController extends Controller
             case 'caja':
                 $facturas = $user->facturasComoCaja()->with(['paciente', 'hospitalizacion'])->get();
                 break;
-            case 'recepcion':
+            case 'recepcionista':
                 $facturas = Factura::with(['paciente', 'hospitalizacion', 'caja'])->get();
                 break;
         }

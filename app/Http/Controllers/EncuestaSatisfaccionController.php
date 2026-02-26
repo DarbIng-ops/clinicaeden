@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\EncuestaSatisfaccion;
 use App\Models\Hospitalizacion;
+use App\Models\Consulta;
 use App\Models\Paciente;
 use Illuminate\Support\Facades\Auth;
 

@@ -92,16 +92,9 @@ Route::middleware(['auth', 'role:recepcionista'])->prefix('recepcion')->name('re
     
     // Gestión de salida de pacientes
     Route::get('/salidas', [RecepcionistaController::class, 'salidas'])->name('salidas');
-    Route::get('/pacientes/{paciente}/salida', [RecepcionistaController::class, 'procesarSalida'])->name('pacientes.salida');
     Route::get('/pacientes/{paciente}/procesar-salida', [RecepcionistaController::class, 'procesarSalida'])->name('procesar-salida');
-    Route::post('/pacientes/{paciente}/completar-salida', [RecepcionistaController::class, 'confirmarSalida'])->name('pacientes.completar-salida');
     Route::post('/pacientes/{paciente}/confirmar-salida', [RecepcionistaController::class, 'confirmarSalida'])->name('confirmar-salida');
-    
-    // Encuestas de satisfacción
-    Route::get('/encuestas', [RecepcionistaController::class, 'encuestas'])->name('encuestas.index');
-    Route::get('/encuestas/crear/{paciente}', [RecepcionistaController::class, 'crearEncuesta'])->name('encuestas.crear');
-    Route::post('/encuestas', [RecepcionistaController::class, 'guardarEncuesta'])->name('encuestas.guardar');
-    
+
     // Rutas AJAX para búsquedas
     Route::get('/api/buscar-paciente-dni', [RecepcionistaController::class, 'buscarPorDni'])->name('api.buscar-paciente-dni');
 });

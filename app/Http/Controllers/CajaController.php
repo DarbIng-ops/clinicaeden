@@ -59,66 +59,6 @@ class CajaController extends Controller
     }
 
     /**
-     * Procesar el pago de una factura determinada.
-     *
-     * Valida la información del cobro, actualiza el estado de la factura,
-     * registra el pago y coordina la siguiente acción con hospitalización o recepción.
-     *
-     * @param \Illuminate\Http\Request $request Datos de pago ingresados por el cajero
-     * @param \App\Models\Factura $factura Factura que se está cobrando
-     * @return \Illuminate\Http\RedirectResponse Redirección al dashboard con mensaje de confirmación
-     */
-    public function procesarPago(Request $request, Factura $factura)
-    {
-        $request->validate([
-            'metodo_pago' => 'required|in:efectivo,tarjeta,transferencia',
-            'monto_recibido' => 'required|numeric|min:' . $factura->total . '|max:' . ($factura->total * 1.5),
-            'observaciones' => 'nullable|string|max:500'
-        ]);
-
-        try {
-            // Actualizar factura
-            $factura->update([
-                'estado' => 'pagado',
-                'metodo_pago' => $request->metodo_pago,
-                'monto_recibido' => $request->monto_recibido,
-                'fecha_pago' => now(),
-                'caja_id' => Auth::id(),
-                'observaciones_pago' => $request->observaciones
-            ]);
-
-            // Si la factura está relacionada con una hospitalización, cambiar estado
-            if ($factura->hospitalizacion) {
-                $hospitalizacion = $factura->hospitalizacion;
-
-                // Solo cambiar a 'alta_pago' si ya tiene AMBAS altas (médica Y enfermería)
-                if ($hospitalizacion->fecha_alta_medica && $hospitalizacion->fecha_alta_enfermeria) {
-                    $hospitalizacion->update(['estado' => 'alta_pago']);
-
-                    // Notificar a recepción para procesar la salida
-                    $this->notificarRecepcion($hospitalizacion);
-                }
-            }
-
-            Log::info('Pago procesado por caja', [
-                'caja_id' => Auth::id(),
-                'factura_id' => $factura->id,
-                'paciente_id' => $factura->paciente_id,
-                'monto' => $factura->total,
-                'metodo_pago' => $request->metodo_pago
-            ]);
-
-            return redirect()->route('caja.dashboard')
-                ->with('success', 'Pago procesado exitosamente. Se ha notificado a recepción.');
-
-        } catch (\Exception $e) {
-            Log::error('Error al procesar pago: ' . $e->getMessage());
-            return redirect()->back()
-                ->withErrors(['error' => 'Error al procesar el pago. Inténtalo de nuevo.']);
-        }
-    }
-
-    /**
      * Mostrar los detalles completos de una factura.
      *
      * @param \App\Models\Factura $factura Factura que se desea visualizar

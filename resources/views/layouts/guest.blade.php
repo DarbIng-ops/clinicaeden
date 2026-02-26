@@ -21,18 +21,8 @@
         @livewireStyles
     </head>
     <body>
-        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-eden-gris">
-            <div class="mb-8">
-                <a href="/">
-                    <img src="{{ asset('images/icono.png') }}"
-                         alt="Sanatorio Eden"
-                         class="h-32 w-auto mx-auto">
-                </a>
-            </div>
-
-            <div class="w-full sm:max-w-md px-6 py-8 bg-white shadow-xl overflow-hidden sm:rounded-xl border-t-4 border-eden-azul-medio">
-                {{ $slot }}
-            </div>
+        <div class="font-sans text-gray-900 antialiased">
+            {{ $slot }}
         </div>
 
         @livewireScripts

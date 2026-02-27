@@ -1,9 +1,17 @@
 <!-- Main Sidebar Container -->
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="{{ route('dashboard') }}" class="brand-link">
-        <i class="fas fa-hospital-alt brand-image ml-3"></i>
-        <span class="brand-text font-weight-light">ClinicaEden</span>
+    @php
+        $homeRoute = match(auth()->user()->role ?? '') {
+            'admin'          => route('admin.dashboard'),
+            'recepcionista'  => route('recepcion.dashboard'),
+            default          => route('dashboard'),
+        };
+    @endphp
+    <a href="{{ $homeRoute }}" class="brand-link">
+        <img src="{{ asset('images/icono.png') }}" alt="Clínica Eden"
+             class="brand-image img-circle elevation-3" style="opacity:.85">
+        <span class="brand-text font-weight-light">Clínica <strong>Eden</strong></span>
     </a>
 
     <!-- Sidebar -->
@@ -27,26 +35,26 @@
                     <!-- Menú Administrador -->
                     <li class="nav-item">
                         <a href="{{ route('admin.dashboard') }}" class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
-                            <i class="nav-icon fas fa-tachometer-alt"></i>
-                            <p>Dashboard</p>
+                            <i class="nav-icon fas fa-home"></i>
+                            <p>Inicio</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="{{ route('admin.usuarios') }}" class="nav-link {{ request()->routeIs('admin.usuarios*') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-users"></i>
                             <p>Usuarios</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="{{ route('admin.asignaciones.medicos') }}" class="nav-link {{ request()->routeIs('admin.asignaciones.*') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-user-md"></i>
-                            <p>Médicos</p>
+                            <p>Asignaciones</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="nav-icon fas fa-cog"></i>
-                            <p>Configuración</p>
+                        <a href="{{ route('admin.reportes') }}" class="nav-link {{ request()->routeIs('admin.reportes') ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-chart-bar"></i>
+                            <p>Reportes</p>
                         </a>
                     </li>
                 @endif
@@ -122,15 +130,9 @@
         </a>
     </li>
     <li class="nav-item">
-        <a href="#" class="nav-link">
-            <i class="nav-icon fas fa-calendar-alt"></i>
-            <p>Agendar Cita</p>
-        </a>
-    </li>
-    <li class="nav-item">
-        <a href="#" class="nav-link">
-            <i class="nav-icon fas fa-list"></i>
-            <p>Ver Citas</p>
+        <a href="{{ route('recepcion.salidas') }}" class="nav-link {{ request()->routeIs('recepcion.salidas') ? 'active' : '' }}">
+            <i class="nav-icon fas fa-door-open"></i>
+            <p>Salidas</p>
         </a>
     </li>
 @endif

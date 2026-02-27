@@ -190,7 +190,7 @@ class MedicoGeneralController extends Controller
                 ['consulta_id' => $consulta->id]
             );
 
-            return redirect()->route('medico_general.ver-paciente', $paciente)
+            return redirect()->route('medico_general.pacientes.show', $paciente)
                 ->with('success', 'Consulta creada exitosamente.');
 
         } catch (\Exception $e) {

@@ -135,4 +135,14 @@ class Consulta extends Model
     {
         return $this->hasOne(EncuestaSatisfaccion::class, 'consulta_id');
     }
+
+    /**
+     * Relación: factura emitida para esta consulta.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function factura()
+    {
+        return $this->hasOne(Factura::class, 'consulta_id');
+    }
 }

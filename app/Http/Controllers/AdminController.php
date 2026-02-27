@@ -5,9 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Paciente;
+use App\Models\Consulta;
+use App\Models\EncuestaSatisfaccion;
 use App\Models\Hospitalizacion;
 use App\Models\Factura;
 use App\Models\ModuloEnfermeria;
+use App\Models\Tratamiento;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
@@ -27,45 +30,76 @@ class AdminController extends Controller
      */
     public function index()
     {
-        // Estadísticas generales
-        $totalUsuarios = User::count();
-        $usuariosActivos = User::activos()->count();
-        $totalPacientes = Paciente::count();
-        $hospitalizacionesActivas = Hospitalizacion::activas()->count();
-        
-        // Ingresos del mes
-        $ingresosMes = Factura::whereMonth('fecha_emision', now()->month)
+        // Mensaje motivacional aleatorio
+        $mensajes = [
+            'Tu liderazgo hace la diferencia en Clínica Eden 💚',
+            'Juntos construimos un mejor sistema de salud ⚕️',
+            'La excelencia médica comienza con tu gestión 🌟',
+            'Cada decisión tuya mejora la vida de nuestros pacientes 💙',
+            'Tu compromiso inspira a todo el equipo médico ✨',
+            'Gracias por dedicarte a la salud de nuestra comunidad 🏥',
+        ];
+        $mensajeMotivacional = $mensajes[array_rand($mensajes)];
+
+        // Estadísticas principales
+        $totalUsuarios        = User::count();
+        $usuariosActivos      = User::activos()->count();
+        $medicosTotal         = User::whereIn('role', ['medico_general', 'medico_especialista'])
+                                    ->activos()->count();
+        $pacientesTotal       = Paciente::count();
+        $hospitalizadosActuales = Hospitalizacion::activas()->count();
+
+        // Ingresos del mes actual
+        $ingresosMes = Factura::where('estado', 'pagado')
+            ->whereMonth('fecha_emision', now()->month)
             ->whereYear('fecha_emision', now()->year)
-            ->where('estado', 'pagado')
             ->sum('total');
 
-        // Balance de personal por rol
-        $balancePersonal = User::activos()
-            ->select('role', DB::raw('COUNT(*) as total'))
-            ->groupBy('role')
-            ->get()
-            ->pluck('total', 'role');
+        // Actividad reciente: últimos usuarios + últimos pacientes registrados (24 h)
+        $actividadReciente = collect();
 
-        // Usuarios recientes
-        $usuariosRecientes = User::with(['modulosComoJefe', 'modulosComoAuxiliar'])
+        User::where('created_at', '>=', now()->subDay())
             ->orderBy('created_at', 'desc')
-            ->limit(10)
-            ->get();
+            ->limit(5)
+            ->get()
+            ->each(function ($u) use (&$actividadReciente) {
+                $actividadReciente->push((object)[
+                    'icono'       => 'fa-user-plus',
+                    'color'       => '#2D5F8A',
+                    'descripcion' => "Nuevo usuario registrado: {$u->name}",
+                    'detalle'     => ucfirst(str_replace('_', ' ', $u->role)),
+                    'tiempo'      => $u->created_at,
+                ]);
+            });
 
-        // Módulos de enfermería con personal asignado
-        $modulosConPersonal = ModuloEnfermeria::with(['jefeEnfermeria', 'auxiliares'])
-            ->activos()
-            ->get();
+        Paciente::where('created_at', '>=', now()->subDay())
+            ->orderBy('created_at', 'desc')
+            ->limit(5)
+            ->get()
+            ->each(function ($p) use (&$actividadReciente) {
+                $actividadReciente->push((object)[
+                    'icono'       => 'fa-user-injured',
+                    'color'       => '#27AE60',
+                    'descripcion' => "Paciente registrado: {$p->nombres} {$p->apellidos}",
+                    'detalle'     => "DNI: {$p->dni}",
+                    'tiempo'      => $p->created_at,
+                ]);
+            });
+
+        $actividadReciente = $actividadReciente
+            ->sortByDesc('tiempo')
+            ->take(6)
+            ->values();
 
         return view('admin.dashboard', compact(
+            'mensajeMotivacional',
             'totalUsuarios',
-            'usuariosActivos', 
-            'totalPacientes',
-            'hospitalizacionesActivas',
+            'usuariosActivos',
+            'medicosTotal',
+            'pacientesTotal',
+            'hospitalizadosActuales',
             'ingresosMes',
-            'balancePersonal',
-            'usuariosRecientes',
-            'modulosConPersonal'
+            'actividadReciente'
         ));
     }
 
@@ -473,6 +507,107 @@ class AdminController extends Controller
             'facturasPagadas'
         ));
     }
+
+    // ─── Reportes detallados ───────────────────────────────────────────────────
+
+    private function periodoDesdeRequest(Request $request): array
+    {
+        return [
+            $request->get('fecha_inicio', now()->startOfMonth()->format('Y-m-d')),
+            $request->get('fecha_fin',    now()->format('Y-m-d')),
+        ];
+    }
+
+    public function reportePacientes(Request $request)
+    {
+        [$fechaInicio, $fechaFin] = $this->periodoDesdeRequest($request);
+
+        $pacientes = Paciente::with('consultas')
+            ->whereBetween('created_at', [$fechaInicio, $fechaFin . ' 23:59:59'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('admin.reportes.pacientes', compact('pacientes', 'fechaInicio', 'fechaFin'));
+    }
+
+    public function reporteConsultas(Request $request)
+    {
+        [$fechaInicio, $fechaFin] = $this->periodoDesdeRequest($request);
+
+        $consultas = Consulta::with(['paciente', 'medico'])
+            ->whereBetween('fecha_consulta', [$fechaInicio, $fechaFin . ' 23:59:59'])
+            ->orderBy('fecha_consulta', 'desc')
+            ->get();
+
+        return view('admin.reportes.consultas', compact('consultas', 'fechaInicio', 'fechaFin'));
+    }
+
+    public function reporteHospitalizaciones(Request $request)
+    {
+        [$fechaInicio, $fechaFin] = $this->periodoDesdeRequest($request);
+
+        $hospitalizaciones = Hospitalizacion::with(['paciente', 'medico'])
+            ->whereBetween('fecha_ingreso', [$fechaInicio, $fechaFin . ' 23:59:59'])
+            ->orderBy('fecha_ingreso', 'desc')
+            ->get();
+
+        return view('admin.reportes.hospitalizaciones', compact('hospitalizaciones', 'fechaInicio', 'fechaFin'));
+    }
+
+    public function reporteFinanciero(Request $request)
+    {
+        [$fechaInicio, $fechaFin] = $this->periodoDesdeRequest($request);
+
+        $facturas = Factura::with('paciente')
+            ->whereBetween('created_at', [$fechaInicio, $fechaFin . ' 23:59:59'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $totalIngresos  = $facturas->where('estado', 'pagado')->sum('total');
+        $totalPendiente = $facturas->where('estado', 'pendiente')->sum('total');
+
+        return view('admin.reportes.financiero', compact(
+            'facturas', 'totalIngresos', 'totalPendiente', 'fechaInicio', 'fechaFin'
+        ));
+    }
+
+    public function reporteSatisfaccion(Request $request)
+    {
+        [$fechaInicio, $fechaFin] = $this->periodoDesdeRequest($request);
+
+        $encuestas = EncuestaSatisfaccion::with('paciente')
+            ->whereBetween('created_at', [$fechaInicio, $fechaFin . ' 23:59:59'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $promedioGeneral = $encuestas->isNotEmpty()
+            ? round($encuestas->avg('calidad_general'), 2)
+            : 0;
+
+        $recomendarian = $encuestas->where('recomendaria', true)->count();
+
+        return view('admin.reportes.satisfaccion', compact(
+            'encuestas', 'promedioGeneral', 'recomendarian', 'fechaInicio', 'fechaFin'
+        ));
+    }
+
+    public function reporteMedicamentos(Request $request)
+    {
+        [$fechaInicio, $fechaFin] = $this->periodoDesdeRequest($request);
+
+        $tratamientos = Tratamiento::with(['consulta.paciente', 'consulta.medico'])
+            ->whereBetween('created_at', [$fechaInicio, $fechaFin . ' 23:59:59'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $totalCosto = $tratamientos->sum('costo');
+
+        return view('admin.reportes.medicamentos', compact(
+            'tratamientos', 'totalCosto', 'fechaInicio', 'fechaFin'
+        ));
+    }
+
+    // ──────────────────────────────────────────────────────────────────────────
 
     /**
      * Reactivar un usuario previamente desactivado.

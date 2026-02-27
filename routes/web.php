@@ -21,6 +21,7 @@ use App\Http\Controllers\HabitacionController;
 use App\Http\Controllers\CajaController;
 use App\Http\Controllers\JefeEnfermeriaController;
 use App\Http\Controllers\AuxiliarEnfermeriaController;
+use App\Http\Controllers\ProfileController;
 // ============================================================
 // Página principal pública
 // ============================================================
@@ -36,6 +37,16 @@ Route::middleware(['auth', 'verified'])->get('/dashboard', [DashboardController:
 // ============================================================
 // Notificaciones: accesibles para cualquier usuario autenticado
 // ============================================================
+// ============================================================
+// Perfil de usuario: para todos los roles autenticados
+// ============================================================
+Route::middleware(['auth'])->group(function () {
+    Route::get('/user/profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::put('/user/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/user/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
+    Route::post('/user/profile/photo', [ProfileController::class, 'updatePhoto'])->name('profile.photo');
+});
+
 Route::middleware(['auth'])->group(function () {
     Route::get('/notificaciones', [NotificacionController::class, 'index'])->name('notificaciones.index');
     Route::post('/notificaciones/{id}/marcar-leida', [NotificacionController::class, 'marcarLeida'])->name('notificaciones.marcar-leida');
@@ -67,6 +78,12 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     // Reportes y configuración
     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
     Route::get('/reportes', [AdminController::class, 'reportes'])->name('reportes');
+    Route::get('/reportes/pacientes', [AdminController::class, 'reportePacientes'])->name('reportes.pacientes');
+    Route::get('/reportes/consultas', [AdminController::class, 'reporteConsultas'])->name('reportes.consultas');
+    Route::get('/reportes/hospitalizaciones', [AdminController::class, 'reporteHospitalizaciones'])->name('reportes.hospitalizaciones');
+    Route::get('/reportes/financiero', [AdminController::class, 'reporteFinanciero'])->name('reportes.financiero');
+    Route::get('/reportes/satisfaccion', [AdminController::class, 'reporteSatisfaccion'])->name('reportes.satisfaccion');
+    Route::get('/reportes/medicamentos', [AdminController::class, 'reporteMedicamentos'])->name('reportes.medicamentos');
     Route::get('/balance-personal', [AdminController::class, 'balancePersonal'])->name('balance-personal');
     Route::get('/balance-ingresos', [AdminController::class, 'balanceIngresos'])->name('balance-ingresos');
 });

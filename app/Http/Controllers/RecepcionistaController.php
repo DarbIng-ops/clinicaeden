@@ -40,7 +40,7 @@ class RecepcionistaController extends Controller
             ->whereHas('consulta', function($q) {
                 $q->where('estado', 'completada');
             })
-            ->whereDate('fecha_pago', '>=', now()->subDays(1))
+            ->whereDate('fecha_pago', '>=', now()->subDays(7))
             ->orderBy('fecha_pago', 'desc')
             ->get()
             ->filter(function($factura) {
@@ -480,7 +480,13 @@ class RecepcionistaController extends Controller
             'motivo_consulta' => 'required|string|max:500'
         ]);
 
+        $paciente = \App\Models\Paciente::findOrFail($request->paciente_id);
+
+        // Obtener o crear historia clínica (requerida NOT NULL en tabla consultas)
+        $historiaClinica = $paciente->historiaClinica ?? $paciente->historiaClinica()->create([]);
+
         $consulta = \App\Models\Consulta::create([
+            'historia_clinica_id' => $historiaClinica->id,
             'paciente_id' => $request->paciente_id,
             'medico_id' => $request->medico_id,
             'motivo' => $request->motivo_consulta,
@@ -519,7 +525,7 @@ class RecepcionistaController extends Controller
             })
             ->whereDoesntHave('consulta.encuestaSatisfaccion')
             ->with(['paciente', 'consulta'])
-            ->whereDate('fecha_pago', '>=', now()->subDays(1))
+            ->whereDate('fecha_pago', '>=', now()->subDays(7))
             ->orderBy('fecha_pago', 'desc')
             ->get();
         

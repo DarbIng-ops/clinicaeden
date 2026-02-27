@@ -3,85 +3,76 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Consulta;
+use Illuminate\Support\Facades\Auth;
 
 class ConsultaController extends Controller
 {
     /**
-     * Listar consultas médicas registradas.
-     *
-     * Controlador reservado para futuras implementaciones de gestión general de
-     * consultas fuera de los módulos específicos de cada rol.
-     *
-     * @return void
+     * Listar consultas del médico autenticado.
+     * Usado por medico_general y medico_especialista vía resource route.
      */
     public function index()
     {
-        //
+        $user = Auth::user();
+
+        $consultas = Consulta::with(['paciente'])
+            ->where('medico_id', $user->id)
+            ->orderBy('fecha_consulta', 'desc')
+            ->paginate(15);
+
+        // Determinar vista según rol
+        $vista = match($user->role) {
+            'medico_general'      => 'medico_general.consultas.index',
+            'medico_especialista' => 'medico_especialista.consultas.index',
+            default               => 'medico_general.consultas.index',
+        };
+
+        return view($vista, compact('consultas'));
     }
 
     /**
-     * Mostrar formulario para crear una nueva consulta.
-     *
-     * @return void
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Persistir una nueva consulta médica.
-     *
-     * @param \Illuminate\Http\Request $request Datos de la nueva consulta
-     * @return void
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Mostrar los datos de una consulta específica.
-     *
-     * @param string $id Identificador de la consulta
-     * @return void
+     * Mostrar detalle de una consulta.
      */
     public function show(string $id)
     {
-        //
+        $user = Auth::user();
+
+        $consulta = Consulta::with(['paciente', 'medico', 'historiaClinica'])
+            ->where('medico_id', $user->id)
+            ->findOrFail($id);
+
+        $vista = match($user->role) {
+            'medico_general'      => 'medico_general.consultas.show',
+            'medico_especialista' => 'medico_especialista.consultas.show',
+            default               => 'medico_general.consultas.show',
+        };
+
+        return view($vista, compact('consulta'));
     }
 
-    /**
-     * Mostrar formulario de edición de una consulta.
-     *
-     * @param string $id Identificador de la consulta a editar
-     * @return void
-     */
+    public function create()
+    {
+        return redirect()->back()->with('info', 'Use el flujo de paciente para crear consultas.');
+    }
+
+    public function store(Request $request)
+    {
+        return redirect()->back()->with('info', 'Use el flujo de paciente para crear consultas.');
+    }
+
     public function edit(string $id)
     {
-        //
+        return redirect()->back()->with('info', 'Edición no disponible.');
     }
 
-    /**
-     * Actualizar la información de una consulta.
-     *
-     * @param \Illuminate\Http\Request $request Datos actualizados
-     * @param string $id Identificador de la consulta
-     * @return void
-     */
     public function update(Request $request, string $id)
     {
-        //
+        return redirect()->back()->with('info', 'Edición no disponible.');
     }
 
-    /**
-     * Eliminar una consulta del sistema.
-     *
-     * @param string $id Identificador de la consulta a eliminar
-     * @return void
-     */
     public function destroy(string $id)
     {
-        //
+        return redirect()->back()->with('info', 'Eliminación no disponible.');
     }
 }

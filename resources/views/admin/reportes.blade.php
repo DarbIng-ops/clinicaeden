@@ -1,120 +1,228 @@
-@extends('layouts.app')
+@extends('layouts.adminlte')
+
+@section('title', 'Reportes y Estadísticas')
+@section('page-title', 'Reportes y Estadísticas')
 
 @section('content')
-<div class="container mx-auto px-4 py-8">
-    <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-900">📊 Reportes y Estadísticas</h1>
-        <p class="text-gray-600 mt-2">Genera reportes detallados del sistema</p>
-    </div>
 
-    <!-- Filtros de Reportes -->
-    <div class="bg-white rounded-lg shadow-md p-6 mb-8">
-        <h2 class="text-xl font-semibold mb-4">Filtros de Búsqueda</h2>
-        <form method="GET" action="{{ route('admin.reportes') }}" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Fecha Inicio</label>
-                <input type="date" name="fecha_inicio" value="{{ request('fecha_inicio', now()->startOfMonth()->format('Y-m-d')) }}" class="w-full border border-gray-300 rounded-lg px-4 py-2">
-            </div>
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Fecha Fin</label>
-                <input type="date" name="fecha_fin" value="{{ request('fecha_fin', now()->format('Y-m-d')) }}" class="w-full border border-gray-300 rounded-lg px-4 py-2">
-            </div>
-            <div class="flex items-end">
-                <button type="submit" class="w-full bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">
-                    🔍 Generar Reporte
+    <!-- Filtro de período -->
+    <div class="card card-outline card-primary">
+        <div class="card-header">
+            <h3 class="card-title"><i class="fas fa-calendar-alt mr-1"></i> Período del Reporte</h3>
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <i class="fas fa-minus"></i>
                 </button>
             </div>
-        </form>
+        </div>
+        <div class="card-body">
+            <form method="GET" action="{{ route('admin.reportes') }}" class="row align-items-end">
+                <div class="col-md-4">
+                    <div class="form-group mb-0">
+                        <label>Fecha Inicio</label>
+                        <input type="date" name="fecha_inicio"
+                               value="{{ request('fecha_inicio', now()->startOfMonth()->format('Y-m-d')) }}"
+                               class="form-control">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group mb-0">
+                        <label>Fecha Fin</label>
+                        <input type="date" name="fecha_fin"
+                               value="{{ request('fecha_fin', now()->format('Y-m-d')) }}"
+                               class="form-control">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-primary btn-block">
+                        <i class="fas fa-search mr-1"></i> Actualizar Estadísticas
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 
-    <!-- Tarjetas de Reportes -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        
-        <!-- Reporte de Pacientes -->
-        <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition">
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="text-lg font-semibold text-gray-900">👥 Pacientes</h3>
-                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">Disponible</span>
+    <!-- Estadísticas rápidas del mes -->
+    <div class="row">
+        <div class="col-12 col-sm-6 col-md-3">
+            <div class="info-box">
+                <span class="info-box-icon bg-info elevation-1"><i class="fas fa-user-plus"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">Pacientes Nuevos</span>
+                    <span class="info-box-number">{{ \App\Models\Paciente::whereMonth('created_at', now()->month)->count() }}</span>
+                    <span class="progress-description text-muted">este mes</span>
+                </div>
             </div>
-            <p class="text-gray-600 mb-4">Listado completo de pacientes registrados con sus datos personales</p>
-            <a href="#" class="text-blue-600 hover:text-blue-800 font-medium">📥 Descargar PDF →</a>
         </div>
-
-        <!-- Reporte de Consultas -->
-        <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition">
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="text-lg font-semibold text-gray-900">🩺 Consultas</h3>
-                <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">Disponible</span>
+        <div class="col-12 col-sm-6 col-md-3">
+            <div class="info-box">
+                <span class="info-box-icon bg-success elevation-1"><i class="fas fa-stethoscope"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">Consultas</span>
+                    <span class="info-box-number">{{ \App\Models\Consulta::whereMonth('created_at', now()->month)->count() }}</span>
+                    <span class="progress-description text-muted">este mes</span>
+                </div>
             </div>
-            <p class="text-gray-600 mb-4">Historial de consultas médicas realizadas en el período</p>
-            <a href="#" class="text-blue-600 hover:text-blue-800 font-medium">📥 Descargar PDF →</a>
         </div>
-
-        <!-- Reporte de Hospitalizaciones -->
-        <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition">
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="text-lg font-semibold text-gray-900">🏥 Hospitalizaciones</h3>
-                <span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm">Disponible</span>
+        <div class="col-12 col-sm-6 col-md-3">
+            <div class="info-box">
+                <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-bed"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">Hospitalizaciones</span>
+                    <span class="info-box-number">{{ \App\Models\Hospitalizacion::whereMonth('created_at', now()->month)->count() }}</span>
+                    <span class="progress-description text-muted">este mes</span>
+                </div>
             </div>
-            <p class="text-gray-600 mb-4">Registro de pacientes hospitalizados y altas médicas</p>
-            <a href="#" class="text-blue-600 hover:text-blue-800 font-medium">📥 Descargar PDF →</a>
         </div>
-
-        <!-- Reporte Financiero -->
-        <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition">
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="text-lg font-semibold text-gray-900">💰 Reporte Financiero</h3>
-                <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm">Disponible</span>
-            </div>
-            <p class="text-gray-600 mb-4">Ingresos, facturas pagadas y pendientes del período</p>
-            <a href="#" class="text-blue-600 hover:text-blue-800 font-medium">📥 Descargar PDF →</a>
-        </div>
-
-        <!-- Reporte de Satisfacción -->
-        <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition">
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="text-lg font-semibold text-gray-900">⭐ Satisfacción</h3>
-                <span class="bg-pink-100 text-pink-800 px-3 py-1 rounded-full text-sm">Disponible</span>
-            </div>
-            <p class="text-gray-600 mb-4">Encuestas de satisfacción y calificaciones de pacientes</p>
-            <a href="#" class="text-blue-600 hover:text-blue-800 font-medium">📥 Descargar PDF →</a>
-        </div>
-
-        <!-- Reporte de Medicamentos -->
-        <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition">
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="text-lg font-semibold text-gray-900">💊 Medicamentos</h3>
-                <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm">Disponible</span>
-            </div>
-            <p class="text-gray-600 mb-4">Inventario de medicamentos y tratamientos recetados</p>
-            <a href="#" class="text-blue-600 hover:text-blue-800 font-medium">📥 Descargar PDF →</a>
-        </div>
-
-    </div>
-
-    <!-- Estadísticas Rápidas -->
-    <div class="bg-white rounded-lg shadow-md p-6 mt-8">
-        <h2 class="text-xl font-semibold mb-6">📈 Estadísticas del Mes Actual</h2>
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div class="text-center">
-                <div class="text-3xl font-bold text-blue-600">{{ \App\Models\Paciente::whereMonth('created_at', now()->month)->count() }}</div>
-                <div class="text-gray-600 mt-2">Pacientes Nuevos</div>
-            </div>
-            <div class="text-center">
-                <div class="text-3xl font-bold text-green-600">{{ \App\Models\Consulta::whereMonth('created_at', now()->month)->count() }}</div>
-                <div class="text-gray-600 mt-2">Consultas Realizadas</div>
-            </div>
-            <div class="text-center">
-                <div class="text-3xl font-bold text-purple-600">{{ \App\Models\Hospitalizacion::whereMonth('created_at', now()->month)->count() }}</div>
-                <div class="text-gray-600 mt-2">Hospitalizaciones</div>
-            </div>
-            <div class="text-center">
-                <div class="text-3xl font-bold text-yellow-600">${{ number_format(\App\Models\Factura::where('estado', 'pagado')->whereMonth('created_at', now()->month)->sum('total'), 2) }}</div>
-                <div class="text-gray-600 mt-2">Ingresos Totales</div>
+        <div class="col-12 col-sm-6 col-md-3">
+            <div class="info-box">
+                <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-dollar-sign"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">Ingresos</span>
+                    <span class="info-box-number">
+                        ${{ number_format(\App\Models\Factura::where('estado','pagado')->whereMonth('created_at', now()->month)->sum('total'), 0, ',', '.') }}
+                    </span>
+                    <span class="progress-description text-muted">este mes</span>
+                </div>
             </div>
         </div>
     </div>
 
-</div>
+    <!-- Tarjetas de reportes -->
+    <div class="row">
+
+        @php
+            $fi = request('fecha_inicio', now()->startOfMonth()->format('Y-m-d'));
+            $ff = request('fecha_fin', now()->format('Y-m-d'));
+            $qs = http_build_query(['fecha_inicio' => $fi, 'fecha_fin' => $ff]);
+        @endphp
+
+        {{-- Pacientes --}}
+        <div class="col-12 col-sm-6 col-lg-4">
+            <div class="card card-outline card-info">
+                <div class="card-header">
+                    <h3 class="card-title"><i class="fas fa-users mr-1"></i> Pacientes</h3>
+                    <div class="card-tools">
+                        <span class="badge badge-info">Disponible</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted">Listado de pacientes registrados con datos personales e historial de consultas.</p>
+                </div>
+                <div class="card-footer">
+                    <a href="{{ route('admin.reportes.pacientes') }}?{{ $qs }}"
+                       class="btn btn-info btn-sm btn-block">
+                        <i class="fas fa-eye mr-1"></i> Ver Reporte →
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        {{-- Consultas --}}
+        <div class="col-12 col-sm-6 col-lg-4">
+            <div class="card card-outline card-success">
+                <div class="card-header">
+                    <h3 class="card-title"><i class="fas fa-stethoscope mr-1"></i> Consultas</h3>
+                    <div class="card-tools">
+                        <span class="badge badge-success">Disponible</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted">Historial de consultas médicas realizadas, médico asignado y diagnósticos.</p>
+                </div>
+                <div class="card-footer">
+                    <a href="{{ route('admin.reportes.consultas') }}?{{ $qs }}"
+                       class="btn btn-success btn-sm btn-block">
+                        <i class="fas fa-eye mr-1"></i> Ver Reporte →
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        {{-- Hospitalizaciones --}}
+        <div class="col-12 col-sm-6 col-lg-4">
+            <div class="card card-outline card-warning">
+                <div class="card-header">
+                    <h3 class="card-title"><i class="fas fa-hospital mr-1"></i> Hospitalizaciones</h3>
+                    <div class="card-tools">
+                        <span class="badge badge-warning">Disponible</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted">Registro de ingresos hospitalarios, altas médicas y estado de cada paciente.</p>
+                </div>
+                <div class="card-footer">
+                    <a href="{{ route('admin.reportes.hospitalizaciones') }}?{{ $qs }}"
+                       class="btn btn-warning btn-sm btn-block">
+                        <i class="fas fa-eye mr-1"></i> Ver Reporte →
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        {{-- Financiero --}}
+        <div class="col-12 col-sm-6 col-lg-4">
+            <div class="card card-outline card-danger">
+                <div class="card-header">
+                    <h3 class="card-title"><i class="fas fa-file-invoice-dollar mr-1"></i> Financiero</h3>
+                    <div class="card-tools">
+                        <span class="badge badge-danger">Disponible</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted">Ingresos, facturas pagadas, pendientes y totales del período seleccionado.</p>
+                </div>
+                <div class="card-footer">
+                    <a href="{{ route('admin.reportes.financiero') }}?{{ $qs }}"
+                       class="btn btn-danger btn-sm btn-block">
+                        <i class="fas fa-eye mr-1"></i> Ver Reporte →
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        {{-- Satisfacción --}}
+        <div class="col-12 col-sm-6 col-lg-4">
+            <div class="card card-outline card-pink" style="border-top-color: #e83e8c;">
+                <div class="card-header">
+                    <h3 class="card-title"><i class="fas fa-star mr-1"></i> Satisfacción</h3>
+                    <div class="card-tools">
+                        <span class="badge" style="background:#e83e8c;color:#fff;">Disponible</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted">Encuestas de satisfacción, calificaciones promedio y nivel de recomendación.</p>
+                </div>
+                <div class="card-footer">
+                    <a href="{{ route('admin.reportes.satisfaccion') }}?{{ $qs }}"
+                       class="btn btn-sm btn-block text-white" style="background:#e83e8c;">
+                        <i class="fas fa-eye mr-1"></i> Ver Reporte →
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        {{-- Medicamentos / Tratamientos --}}
+        <div class="col-12 col-sm-6 col-lg-4">
+            <div class="card card-outline card-secondary">
+                <div class="card-header">
+                    <h3 class="card-title"><i class="fas fa-pills mr-1"></i> Medicamentos</h3>
+                    <div class="card-tools">
+                        <span class="badge badge-secondary">Disponible</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted">Tratamientos y medicamentos recetados con dosis, frecuencia y costo estimado.</p>
+                </div>
+                <div class="card-footer">
+                    <a href="{{ route('admin.reportes.medicamentos') }}?{{ $qs }}"
+                       class="btn btn-secondary btn-sm btn-block">
+                        <i class="fas fa-eye mr-1"></i> Ver Reporte →
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
 @endsection
-

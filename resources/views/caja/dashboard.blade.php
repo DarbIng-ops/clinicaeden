@@ -3,7 +3,7 @@
 @section('content')
 <div class="container mx-auto px-4 py-8">
     <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-900">Dashboard de Caja</h1>
+        <h1 class="text-3xl font-bold text-gray-900">Panel de Caja</h1>
         <p class="text-gray-600">Gestión de pagos y facturas</p>
     </div>
 

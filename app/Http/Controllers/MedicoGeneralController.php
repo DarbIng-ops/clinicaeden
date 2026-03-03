@@ -358,78 +358,91 @@ class MedicoGeneralController extends Controller
             'accion' => 'required|in:caja,alta,hospitalizar'
         ]);
 
+        // PASO 1: Actualizar el estado de la consulta en su propia transacción
+        // Se hace primero y de forma independiente para que siempre se comprometa
+        // aunque falle la creación de factura o notificaciones.
         DB::beginTransaction();
         try {
-            // Actualizar consulta con signos vitales y diagnóstico
             $consulta->update([
-            'presion_arterial' => $request->presion_arterial,
-            'temperatura' => $request->temperatura,
-            'frecuencia_cardiaca' => $request->frecuencia_cardiaca,
-            'frecuencia_respiratoria' => $request->frecuencia_respiratoria,
-            'saturacion_oxigeno' => $request->saturacion_oxigeno,
-            'peso' => $request->peso,
-            'talla' => $request->talla,
-            'diagnostico' => $request->diagnostico,
-            'tratamiento' => $request->tratamiento,
-            'estado' => 'completada',
-            'hora_atencion' => now()
-        ]);
-
-        // Procesar según la acción seleccionada
-        if ($request->accion === 'caja') {
-            \App\Models\Factura::create([
-                'paciente_id' => $consulta->paciente_id,
-                'consulta_id' => $consulta->id,
-                'numero_factura' => 'FAC-' . str_pad($consulta->id, 8, '0', STR_PAD_LEFT),
-                'subtotal' => 1000,
-                'impuestos' => 0,
-                'total' => 1000,
-                'metodo_pago' => null, // Se asignará en caja al procesar el pago
-                'estado' => 'pendiente',
-                'fecha_emision' => now()
+                'presion_arterial'      => $request->presion_arterial,
+                'temperatura'           => $request->temperatura,
+                'frecuencia_cardiaca'   => $request->frecuencia_cardiaca,
+                'frecuencia_respiratoria' => $request->frecuencia_respiratoria,
+                'saturacion_oxigeno'    => $request->saturacion_oxigeno,
+                'peso'                  => $request->peso,
+                'talla'                 => $request->talla,
+                'diagnostico'           => $request->diagnostico,
+                'tratamiento'           => $request->tratamiento,
+                'estado'                => 'completada',
+                'hora_atencion'         => now(),
             ]);
-            
-            $usuariosCaja = \App\Models\User::where('role', 'caja')->where('activo', 1)->get();
-            foreach ($usuariosCaja as $caja) {
-                \App\Models\NotificacionSistema::create([
-                    'usuario_emisor_id' => auth()->id(),
-                    'usuario_receptor_id' => $caja->id,
-                    'titulo' => 'Paciente derivado a Caja',
-                    'mensaje' => 'Paciente: ' . $consulta->paciente->nombres . ' ' . $consulta->paciente->apellidos . ' debe realizar pago de $1000',
-                    'tipo' => 'derivacion_caja',
-                    'leida' => false
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollback();
+            \Log::error('Error al actualizar consulta: ' . $e->getMessage());
+            return back()->withErrors(['error' => 'Error al actualizar la consulta. Por favor, intente nuevamente.'])->withInput();
+        }
+
+        // PASO 2: Procesar la acción derivada (factura, notificaciones) en operación separada
+        $mensaje = 'Consulta finalizada.';
+
+        if ($request->accion === 'caja') {
+            try {
+                // Generar número de factura único usando timestamp para evitar colisiones
+                $numeroFactura = 'FAC-' . str_pad($consulta->id, 6, '0', STR_PAD_LEFT) . '-' . now()->format('His');
+
+                \App\Models\Factura::create([
+                    'paciente_id'    => $consulta->paciente_id,
+                    'consulta_id'    => $consulta->id,
+                    'numero_factura' => $numeroFactura,
+                    'subtotal'       => 1000,
+                    'impuestos'      => 0,
+                    'total'          => 1000,
+                    'metodo_pago'    => null,
+                    'estado'         => 'pendiente',
+                    'fecha_emision'  => now(),
                 ]);
+
+                $usuariosCaja = \App\Models\User::where('role', 'caja')->where('activo', 1)->get();
+                foreach ($usuariosCaja as $caja) {
+                    \App\Models\NotificacionSistema::create([
+                        'usuario_emisor_id'   => auth()->id(),
+                        'usuario_receptor_id' => $caja->id,
+                        'titulo'  => 'Paciente derivado a Caja',
+                        'mensaje' => 'Paciente: ' . $consulta->paciente->nombres . ' ' . $consulta->paciente->apellidos . ' debe realizar pago de $1000',
+                        'tipo'    => 'derivacion_caja',
+                        'leida'   => false,
+                    ]);
+                }
+
+                $mensaje = 'Consulta finalizada. Paciente derivado a Caja para procesar pago.';
+            } catch (\Exception $e) {
+                \Log::error('Error al crear factura/notificación de caja: ' . $e->getMessage());
+                $mensaje = 'Consulta finalizada, pero ocurrió un error al generar la factura. Contacte al administrador.';
             }
-            
-            $mensaje = 'Consulta finalizada. Paciente derivado a Caja para procesar pago.';
-            
+
         } elseif ($request->accion === 'hospitalizar') {
-            // Notificar a jefes de enfermería para coordinar la internación
-            $jefesEnfermeria = \App\Models\User::where('role', 'jefe_enfermeria')->where('activo', 1)->get();
-            foreach ($jefesEnfermeria as $jefe) {
-                \App\Models\NotificacionSistema::create([
-                    'usuario_emisor_id' => auth()->id(),
-                    'usuario_receptor_id' => $jefe->id,
-                    'titulo' => 'Paciente para hospitalizar',
-                    'mensaje' => 'Paciente: ' . $consulta->paciente->nombres . ' ' . $consulta->paciente->apellidos . ' requiere internación',
-                    'tipo' => 'hospitalizacion',
-                    'leida' => false
-                ]);
+            try {
+                $jefesEnfermeria = \App\Models\User::where('role', 'jefe_enfermeria')->where('activo', 1)->get();
+                foreach ($jefesEnfermeria as $jefe) {
+                    \App\Models\NotificacionSistema::create([
+                        'usuario_emisor_id'   => auth()->id(),
+                        'usuario_receptor_id' => $jefe->id,
+                        'titulo'  => 'Paciente para hospitalizar',
+                        'mensaje' => 'Paciente: ' . $consulta->paciente->nombres . ' ' . $consulta->paciente->apellidos . ' requiere internación',
+                        'tipo'    => 'hospitalizacion',
+                        'leida'   => false,
+                    ]);
+                }
+                $mensaje = 'Consulta finalizada. Paciente derivado a hospitalización.';
+            } catch (\Exception $e) {
+                \Log::error('Error al crear notificación de hospitalización: ' . $e->getMessage());
+                $mensaje = 'Consulta finalizada. Notifique manualmente al equipo de enfermería.';
             }
-            
-            $mensaje = 'Consulta finalizada. Paciente derivado a hospitalización.';
         } else {
-            // En caso de alta, solo se informa la finalización de la consulta
             $mensaje = 'Consulta finalizada. Paciente dado de alta.';
         }
 
-            DB::commit();
-            return redirect()->route('medico_general.dashboard')->with('success', $mensaje);
-
-        } catch (\Exception $e) {
-            DB::rollback();
-            \Log::error('Error al finalizar consulta: ' . $e->getMessage());
-            return back()->withErrors(['error' => 'Error al procesar la consulta. Por favor, intente nuevamente.'])->withInput();
-        }
+        return redirect()->route('medico_general.dashboard')->with('success', $mensaje);
     }
 }

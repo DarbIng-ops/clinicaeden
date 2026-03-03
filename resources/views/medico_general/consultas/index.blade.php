@@ -8,7 +8,7 @@
             <p class="text-gray-600">Historial completo de consultas asignadas</p>
         </div>
         <a href="{{ route('medico_general.dashboard') }}" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition">
-            Volver al Dashboard
+            Volver al Inicio
         </a>
     </div>
 

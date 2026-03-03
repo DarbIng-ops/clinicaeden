@@ -107,32 +107,37 @@ class CajaController extends Controller
     public function confirmarPago(Request $request, Factura $factura)
     {
         $request->validate([
-            'metodo_pago' => 'required|in:efectivo,tarjeta,transferencia',
-            'monto_recibido' => 'required|numeric|min:' . $factura->total
+            'metodo_pago'    => 'required|in:efectivo,tarjeta,transferencia',
+            'monto_recibido' => 'required|numeric|min:' . $factura->total,
         ]);
 
-        $factura->update([
-            'estado' => 'pagado',
-            'metodo_pago' => $request->metodo_pago,
-            'monto_recibido' => $request->monto_recibido,
-            'fecha_pago' => now(),
-            'caja_id' => Auth::id()
-        ]);
+        $factura->load(['paciente', 'consulta']);
 
-        // Notificar a recepción
-        $recepcionistas = \App\Models\User::where('role', 'recepcionista')->where('activo', 1)->get();
-        foreach ($recepcionistas as $recep) {
-            \App\Models\NotificacionSistema::create([
-                'usuario_emisor_id' => Auth::id(),
-                'usuario_receptor_id' => $recep->id,
-                'titulo' => 'Pago procesado',
-                'mensaje' => 'Paciente: ' . $factura->paciente->nombres . ' ' . $factura->paciente->apellidos . ' - Puede procesar salida',
-                'tipo' => 'pago_confirmado',
-                'leida' => false
+        \Illuminate\Support\Facades\DB::transaction(function () use ($request, $factura) {
+            $factura->update([
+                'estado'         => 'pagado',
+                'metodo_pago'    => $request->metodo_pago,
+                'monto_recibido' => $request->monto_recibido,
+                'fecha_pago'     => now(),
+                'caja_id'        => Auth::id(),
             ]);
-        }
 
-        return redirect()->route('caja.dashboard')->with('success', 'Pago procesado exitosamente');
+            // Notificar a recepcionistas para procesar salida del paciente
+            $nombrePaciente = $factura->paciente->nombres . ' ' . $factura->paciente->apellidos;
+            $recepcionistas = \App\Models\User::where('role', 'recepcionista')->where('activo', 1)->get();
+            foreach ($recepcionistas as $recep) {
+                NotificacionSistema::create([
+                    'usuario_emisor_id'   => Auth::id(),
+                    'usuario_receptor_id' => $recep->id,
+                    'titulo'              => 'Pago procesado — Paciente listo para salida',
+                    'mensaje'             => "Paciente: {$nombrePaciente} completó el pago. Puede procesar su salida.",
+                    'tipo'                => 'pago_confirmado',
+                    'leida'               => false,
+                ]);
+            }
+        });
+
+        return redirect()->route('caja.dashboard')->with('success', 'Pago procesado exitosamente.');
     }
 
     /**

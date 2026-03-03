@@ -16,8 +16,12 @@ class NotificacionController extends Controller
     {
         $notificacion = auth()->user()->notificacionesRecibidas()->findOrFail($id);
         $notificacion->marcarComoLeida();
-        
-        return response()->json(['success' => true]);
+
+        if (request()->expectsJson()) {
+            return response()->json(['success' => true]);
+        }
+
+        return redirect()->back()->with('success', 'Notificación marcada como leída.');
     }
 
     public function marcarTodasLeidas()

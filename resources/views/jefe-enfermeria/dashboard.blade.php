@@ -3,7 +3,7 @@
 @section('content')
 <div class="container mx-auto px-4 py-8">
     <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-900">Dashboard Jefe de Enfermería</h1>
+        <h1 class="text-3xl font-bold text-gray-900">Panel Jefe de Enfermería</h1>
         <p class="text-gray-600">Gestión de módulos y personal de enfermería</p>
     </div>
 

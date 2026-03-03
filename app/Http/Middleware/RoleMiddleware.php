@@ -73,8 +73,8 @@ class RoleMiddleware
             return redirect()->route('dashboard')->with('error', 'Tu rol de usuario no es válido. Contacta al administrador.');
         }
 
-        // Verificar que el usuario tenga uno de los roles permitidos
-        if (!in_array($user->role, $roles)) {
+        // Verificar que el usuario tenga uno de los roles permitidos (trim para evitar espacios involuntarios)
+        if (!in_array(trim($user->role), array_map('trim', $roles))) {
             Log::warning('Intento de acceso sin permisos', [
                 'user_id' => $user->id,
                 'email' => $user->email,

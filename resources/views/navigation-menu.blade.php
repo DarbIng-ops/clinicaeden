@@ -15,12 +15,34 @@
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
+                        Inicio
                     </x-nav-link>
                 </div>
             </div>
 
             <div class="hidden sm:flex sm:items-center sm:ms-6">
+                <!-- Notification Bell -->
+                @php
+                    $notifCount = auth()->user()->notificacionesNoLeidas()->count();
+                    $notifRoute = match(auth()->user()->role ?? '') {
+                        'medico_general'      => 'medico_general.notificaciones.index',
+                        'medico_especialista' => 'medico_especialista.notificaciones.index',
+                        default               => 'notificaciones.index',
+                    };
+                @endphp
+                <div class="ms-3 relative">
+                    <a href="{{ route($notifRoute) }}"
+                       class="relative inline-flex items-center p-2 text-white hover:text-gray-200 transition"
+                       title="Notificaciones">
+                        <i class="fas fa-bell text-xl"></i>
+                        @if($notifCount > 0)
+                            <span class="absolute top-0 right-0 inline-flex items-center justify-center w-4 h-4 text-xs font-bold text-white bg-red-500 rounded-full">
+                                {{ $notifCount > 9 ? '9+' : $notifCount }}
+                            </span>
+                        @endif
+                    </a>
+                </div>
+
                 <!-- Teams Dropdown -->
                 @if (Laravel\Jetstream\Jetstream::hasTeamFeatures())
                     <div class="ms-3 relative">
@@ -142,7 +164,7 @@
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
+                Inicio
             </x-responsive-nav-link>
         </div>
 

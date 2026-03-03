@@ -1,264 +1,188 @@
-# 🏥 CLÍNICA EDÉN - REVISIÓN COMPLETA DEL SISTEMA
+# REPORTE DE ESTADO — CLÍNICA EDÉN
 
-## ✅ **REVISIÓN GENERAL COMPLETADA**
+═══════════════════════════════════════
+ REPORTE DE ESTADO — CLÍNICA EDÉN
+═══════════════════════════════════════
 
-### 🔍 **1. MIGRACIONES, SEEDERS Y FACTORIES SINCRONIZADOS**
+## 1. RESUMEN EJECUTIVO
 
-#### **Migraciones Optimizadas:**
-- ✅ **Tabla `users`** - Limpiada de campos redundantes (`foto`, `jefe_enfermeria_id`, `disponible`)
-- ✅ **Campos adicionales** - `apellido`, `dni`, `diploma_path`, `direccion`, `fecha_nacimiento`, `sexo`, `observaciones`
-- ✅ **Estructura hospitalaria** - `pisos`, `modulos_enfermeria`, `habitaciones`, `consultorios`, `salas_procedimientos`
-- ✅ **Sistema de notificaciones** - `notificaciones_sistema` y `notifications` (Laravel nativo)
-- ✅ **Orden de ejecución** - Todas las dependencias respetadas
+- **Porcentaje real de avance estimado:** ~55–60 %. Hay base sólida (modelos, rutas, roles, dashboards por rol) pero varias vistas referenciadas por controladores no existen, una ruta apunta a un método inexistente, y el recurso `ConsultaController` está vacío aunque enlazado a rutas.
 
-#### **Seeders Actualizados:**
-- ✅ **UsersTableSeeder** - Usuarios base del sistema
-- ✅ **HabitacionesSeeder** - Estructura hospitalaria completa
-- ✅ **CajaUserSeeder** - Usuario de caja faltante agregado
-- ✅ **DatabaseSeeder** - Orden de ejecución optimizado
+- **Qué funciona hoy si corrés `php artisan serve`:**
+  - Página pública `/`, login y registro (Jetstream/Fortify).
+  - Redirección por rol desde `/dashboard` (admin, recepcionista, medico_general, medico_especialista, jefe_enfermeria, auxiliar_enfermeria, caja).
+  - Dashboards por rol que devuelven vistas existentes: admin, recepcion, medico_general, medico_especialista, jefe_enfermeria, auxiliar_enfermeria, caja.
+  - Recepción: listado/crear/editar/ver/derivar pacientes, salidas, encuestas (vistas en `recepcion/` y `dashboard/recepcion`).
+  - Médico general/especialista: dashboards, pacientes, ver paciente, crear consulta, hospitalizaciones, atender consulta (vistas en `medico_general/`, `medico_especialista/`).
+  - Notificaciones: listado y marcar leídas (`notificaciones/index`).
+  - Admin: dashboard, usuarios (index, crear, editar, ver), reportes (vistas en `admin/`).
+  - Pisos: index, show, create, edit (vistas en `pisos/`).
+  - Caja: dashboard, ver factura, procesar pago (vistas en `caja/`).
+  - Perfil de usuario y layouts (app, guest).
 
-#### **Factories Compatibles:**
-- ✅ **UserFactory** - Compatible con nuevos campos
-- ✅ **PacienteFactory** - Estructura actualizada
-- ✅ **HospitalizacionFactory** - Relaciones correctas
+- **Qué explota o está roto:**
+  - **Ruta rota:** `POST /recepcion/pacientes/{paciente}/completar-salida` llama a `RecepcionistaController::completarSalida`, pero el controlador solo tiene `confirmarSalida`. Error de método inexistente al enviar el formulario de completar salida.
+  - **Vistas inexistentes** a las que apuntan controladores (generan error 500 o View not found):
+    - FacturaController: `facturas.index`, `facturas.create`, `facturas.show`, `facturas.imprimir`, `facturas.reporte` (no existe carpeta `resources/views/facturas/`).
+    - EncuestaSatisfaccionController: `encuestas.index`, `encuestas.create`, `encuestas.show`, `encuestas.estadisticas` (no existe carpeta `encuestas/`).
+    - HospitalizacionController: `hospitalizaciones.index`, `hospitalizaciones.create`, `hospitalizaciones.show` (no existe carpeta `hospitalizaciones/`).
+    - HabitacionController: `habitaciones.index`, `habitaciones.show`, `habitaciones.create`, `habitaciones.edit`, `habitaciones.disponibles` (no existe carpeta `habitaciones/`).
+    - ConsultorioController: `consultorios.index`, `consultorios.show`, `consultorios.create`, `consultorios.edit` (no existe carpeta `consultorios/`).
+    - ModuloEnfermeriaController: `modulos.show`, `modulos.create`, `modulos.edit` (solo existe `modulos/index.blade.php`).
+    - AdminController: `admin.asignaciones.medicos`, `admin.asignaciones.jefes-enfermeria`, `admin.asignaciones.auxiliares`, `admin.balance-personal`, `admin.balance-ingresos` (no existen carpetas `admin/asignaciones/` ni vistas `admin/balance-personal.blade.php`, `admin/balance-ingresos.blade.php`).
+    - JefeEnfermeriaController: `jefe-enfermeria.hospitalizaciones.ver`, `jefe-enfermeria.modulos.auxiliares`.
+    - AuxiliarEnfermeriaController: `auxiliar-enfermeria.hospitalizaciones.ver`, `auxiliar-enfermeria.procedimientos.index`, `auxiliar-enfermeria.hospitalizaciones.historial-comentarios`, `auxiliar-enfermeria.modulos.index`.
+    - CajaController: `caja.reportes.ingresos`, `caja.facturas.buscar`.
+  - **ConsultaController:** está registrado como recurso en rutas de medico_general y medico_especialista; todos sus métodos (index, create, store, show, edit, update, destroy) están vacíos (solo comentarios o `//`). No retorna vistas ni datos.
+  - **FacturaController:** en `index()` usa `case 'recepcion'` pero el rol en el sistema es `recepcionista`, por lo que recepcionistas nunca entran en ese case y obtendrían colección vacía si se usara esa vista.
+  - **Modelo EquipoEnfermeria:** define `jefe_enfermeria_id` y relación con User como jefe; la tabla `equipos_enfermeria` en migración tiene `modulo_id` y `auxiliar_enfermeria_id` (pivot módulo–auxiliar). El modelo no refleja la estructura real de la BD.
+  - **Consultorio:** modelo tiene `hasMany(Cita::class)` pero la tabla `citas` no tiene `consultorio_id` en la migración; la relación no es usable.
+  - **Paciente:** no define `hospitalizaciones()` ni `facturas()` ni `encuestasSatisfaccion()`; la BD sí tiene FKs. Relaciones faltantes en el modelo.
 
-### 🎯 **2. VISTAS CORRESPONDIDAS CON CONTROLADORES Y ROLES**
+---
 
-#### **Vistas Implementadas por Rol:**
+## 2. MODELOS (app/Models/)
 
-| Rol | Controlador | Vista Principal | Estado |
-|-----|-------------|-----------------|--------|
-| **Admin** | AdminController | `admin/usuarios/index.blade.php` | ✅ Completo |
-| **Recepcionista** | RecepcionistaController | `recepcion/pacientes/index.blade.php` | ✅ Existente |
-| **Médico General** | MedicoGeneralController | `medico_general/dashboard.blade.php` | ✅ Existente |
-| **Médico Especialista** | MedicoEspecialistaController | `medico_especialista/dashboard.blade.php` | ✅ Existente |
-| **Jefe Enfermería** | JefeEnfermeriaController | `jefe-enfermeria/dashboard.blade.php` | ✅ Nuevo |
-| **Auxiliar Enfermería** | AuxiliarEnfermeriaController | `auxiliar-enfermeria/dashboard.blade.php` | ✅ Nuevo |
-| **Caja** | CajaController | `caja/dashboard.blade.php` | ✅ Nuevo |
+| Archivo | Tabla | Relaciones Eloquent | Fillable completo | ¿Falta relación según BD? |
+|---------|--------|----------------------|-------------------|----------------------------|
+| Paciente.php | pacientes | citas (hasMany), historiaClinica (hasOne), consultas (hasMany) | ✅ | ❌ Faltan: hospitalizaciones, facturas, encuestasSatisfaccion |
+| User.php | users | citasComoMedico, citasComoRecepcionista, consultas, hospitalizacionesComoMedicoGeneral, hospitalizacionesComoJefeEnfermeria, hospitalizacionesComoAuxiliar, facturasComoCaja, encuestasSatisfaccionComoRecepcion, notificacionesEnviadas/Recibidas/NoLeidas, modulosComoJefe, modulosComoAuxiliar, equiposEnfermeria | ✅ | ✅ No evidente |
+| Cita.php | citas | paciente, medico, recepcionista, canceladaPor (belongsTo); consulta (hasOne) | ✅ | ✅ No evidente (consultorio_id no existe en BD) |
+| Consulta.php | consultas | historiaClinica, cita, medico, paciente (belongsTo); tratamientos, formulasMedicas, procedimientos (hasMany); encuestaSatisfaccion (hasOne) | ✅ | ✅ No evidente |
+| Hospitalizacion.php | hospitalizaciones | paciente, habitacion, medicoGeneral, jefeEnfermeria, auxiliarEnfermeria (belongsTo); tratamientos, facturas, encuestasSatisfaccion (hasMany) | ✅ | ✅ No evidente |
+| Habitacion.php | habitaciones | modulo (belongsTo ModuloEnfermeria), hospitalizaciones, hospitalizacionesActivas (hasMany) | ✅ | ✅ No evidente |
+| Factura.php | facturas | paciente, hospitalizacion, consulta, caja (belongsTo) | ✅ | ✅ No evidente |
+| HistoriaClinica.php | historias_clinicas | paciente (belongsTo), consultas (hasMany) | ✅ | ✅ No evidente |
+| EncuestaSatisfaccion.php | encuestas_satisfaccion | paciente, hospitalizacion, consulta, recepcion (belongsTo User) | ✅ | ✅ No evidente |
+| NotificacionSistema.php | notificaciones_sistema | usuarioEmisor, usuarioReceptor (belongsTo User) | ✅ | ✅ No evidente |
+| Piso.php | pisos | consultorios, modulosEnfermeria (hasMany); habitaciones (hasManyThrough ModuloEnfermeria) | ✅ | ✅ No evidente |
+| ModuloEnfermeria.php | modulos_enfermeria | piso, jefeEnfermeria (belongsTo); auxiliares (belongsToMany equipos_enfermeria), habitaciones, salasProcedimientos (hasMany); hospitalizaciones (hasManyThrough Habitacion) | ✅ | ✅ No evidente |
+| Consultorio.php | consultorios | piso (belongsTo), citas (hasMany) | ✅ | ❌ Citas no tiene consultorio_id en BD; relación inválida |
+| Tratamiento.php | tratamientos | consulta, hospitalizacion, completadoPor, revisadoPor (belongsTo) | ✅ | ✅ No evidente |
+| FormulaMedica.php | formulas_medicas | consulta (belongsTo) | ✅ | ✅ No evidente |
+| Procedimiento.php | procedimientos | consulta (belongsTo) | ✅ | ✅ No hay sala_id en procedimientos |
+| SalaProcedimiento.php | salas_procedimientos | modulo (belongsTo), procedimientos (hasMany) | ✅ | ❌ Tabla procedimientos no tiene sala_id; relación inválida |
+| EquipoEnfermeria.php | equipos_enfermeria | jefeEnfermeria, auxiliarEnfermeria (belongsTo User) | ✅ | ❌ Tabla tiene modulo_id y auxiliar_enfermeria_id; no tiene jefe_enfermeria_id. Modelo desalineado con BD |
 
-#### **Estructura de Vistas Organizada:**
-```
-resources/views/
-├── admin/
-│   ├── dashboard.blade.php
-│   └── usuarios/
-│       └── index.blade.php
-├── caja/
-│   └── dashboard.blade.php
-├── jefe-enfermeria/
-│   └── dashboard.blade.php
-├── auxiliar-enfermeria/
-│   └── dashboard.blade.php
-├── recepcion/
-│   └── pacientes/
-│       ├── index.blade.php
-│       ├── crear.blade.php
-│       ├── editar.blade.php
-│       └── ver.blade.php
-└── dashboard/
-    ├── admin.blade.php
-    ├── recepcion.blade.php
-    ├── medico-general.blade.php
-    ├── medico-especialista.blade.php
-    ├── jefe-enfermeria.blade.php
-    ├── auxiliar-enfermeria.blade.php
-    └── caja.blade.php
-```
+---
 
-### 🔐 **3. LOGIN Y REDIRECCIÓN POR ROL**
+## 3. CONTROLADORES (app/Http/Controllers/)
 
-#### **DashboardController Optimizado:**
-```php
-public function index()
-{
-    $user = Auth::user();
-    
-    // Redirigir según el rol del usuario
-    switch ($user->role) {
-        case 'admin':
-            return redirect()->route('admin.dashboard');
-        case 'recepcionista':
-            return redirect()->route('recepcion.dashboard');
-        case 'medico_general':
-            return redirect()->route('medico-general.dashboard');
-        case 'medico_especialista':
-            return redirect()->route('medico-especialista.dashboard');
-        case 'jefe_enfermeria':
-            return redirect()->route('jefe-enfermeria.dashboard');
-        case 'auxiliar_enfermeria':
-            return redirect()->route('auxiliar-enfermeria.dashboard');
-        case 'caja':
-            return redirect()->route('caja.dashboard');
-        default:
-            return view('dashboard.basic', compact('user'));
-    }
-}
-```
+| Controlador | Métodos principales | ¿Conectado a rutas? | ¿Lógica real o vacío/stub? |
+|-------------|---------------------|----------------------|-----------------------------|
+| AdminController | index, usuarios, crearUsuario, guardarUsuario, verUsuario, editarUsuario, actualizarUsuario, eliminarUsuario, reactivar, asignarMedicos, asignarJefesEnfermeria, asignarAuxiliares, reportes, balancePersonal, balanceIngresos | ✅ | ✅ Lógica real; varias vistas que devuelve no existen |
+| AuxiliarEnfermeriaController | index, verHospitalizacion, verProcedimientos, completarProcedimiento, agregarComentario, verHistorialComentarios, verModulos | ✅ | ✅ Lógica real; vistas hospitalizaciones.ver, procedimientos.index, historial-comentarios, modulos.index no existen |
+| CajaController | index, procesarPago, verFactura, imprimirFactura, mostrarFormularioPago, confirmarPago, reporteIngresos, buscarFacturas, cerrarCaja | ✅ | ✅ Lógica real; vistas reportes.ingresos y facturas.buscar no existen |
+| ConsultaController | index, create, store, show, edit, update, destroy | ✅ (recurso en medico_general y medico_especialista) | ❌ Todos vacíos (stub) |
+| ConsultorioController | index, show, create, store, edit, update, destroy | ✅ | ✅ Lógica real; vistas consultorios.* no existen |
+| DashboardController | index, dashboardAdmin, dashboardRecepcion, etc. | ✅ | ✅ Redirige por rol; vistas dashboard.* existen |
+| EncuestaSatisfaccionController | index, create, store, show, estadisticas, buscarPaciente | ✅ | ✅ Lógica real; vistas encuestas.* no existen |
+| FacturaController | index, create, store, show, imprimir, buscarPaciente, calcularCosto, reporteIngresos | ✅ | ✅ Lógica real; case 'recepcion' debería ser 'recepcionista'; vistas facturas.* no existen |
+| HabitacionController | index, show, create, store, edit, update, destroy, disponibles | ✅ | ✅ Lógica real; vistas habitaciones.* no existen |
+| HospitalizacionController | index, create, store, show, asignarAuxiliar, darAltaMedica, darAltaEnfermeria, completarAlta, habitacionesDisponibles | ✅ | ✅ Lógica real; vistas hospitalizaciones.* no existen |
+| JefeEnfermeriaController | index, verHospitalizacion, revisarTratamiento, asignarAuxiliar, darAltaEnfermeria, verAuxiliares | ✅ | ✅ Lógica real; vistas hospitalizaciones.ver y modulos.auxiliares no existen |
+| MedicoEspecialistaController | index, pacientes, verPaciente, crearConsulta, storeConsulta, estadisticas, hospitalizaciones | ✅ | ✅ Lógica real |
+| MedicoGeneralController | index, pacientes, verPaciente, crearConsulta, storeConsulta, hospitalizaciones, crearHospitalizacion, storeHospitalizacion, atenderConsulta, finalizarConsulta | ✅ | ✅ Lógica real |
+| ModuloEnfermeriaController | index, show, create, store, edit, update, destroy, asignarAuxiliar, desasignarAuxiliar | ✅ | ✅ Lógica real; vistas modulos.show, create, edit no existen |
+| NotificacionController | index, marcarLeida, marcarTodasLeidas | ✅ | ✅ Lógica real |
+| PisoController | index, show, create, store, edit, update, destroy | ✅ | ✅ Lógica real |
+| RecepcionistaController | dashboard, index, crear, store, show, edit, update, destroy, buscarPorDni, derivarPaciente, crearConsulta, salidas, procesarSalida, confirmarSalida | ✅ | ✅ Lógica real; ruta completar-salida apunta a completarSalida que no existe |
 
-#### **Rutas de Login Configuradas:**
-- ✅ **Ruta principal** - `/dashboard` redirige según rol
-- ✅ **Rutas específicas** - Cada rol tiene su dashboard dedicado
-- ✅ **Middleware aplicado** - Protección por rol en todas las rutas
+---
 
-### 👥 **4. TABLA USUARIOS Y ASIGNACIÓN DE ROLES**
+## 4. COMPONENTES LIVEWIRE (app/Livewire/)
 
-#### **Estructura Final de `users`:**
-```sql
--- Campos principales
-id, name, apellido, dni, email, password, role, activo
--- Campos profesionales
-especialidad, numero_licencia, telefono, direccion
--- Campos personales
-fecha_nacimiento, sexo, observaciones
--- Campos de archivos
-diploma_path, profile_photo_path
--- Campos del sistema
-email_verified_at, two_factor_secret, two_factor_recovery_codes, 
-two_factor_confirmed_at, remember_token, current_team_id, 
-created_at, updated_at
-```
+| Componente | Módulo | Funcionalidades | ¿Vista en resources/views/livewire/? |
+|------------|--------|-----------------|---------------------------------------|
+| Pacientes\ListarPacientes | Pacientes | Búsqueda, paginación, listado activos | ✅ listar-pacientes.blade.php |
+| Pacientes\VerPaciente | Pacientes | Ver detalle con historiaClinica, citas, consultas | ✅ ver-paciente.blade.php |
+| Pacientes\CrearPaciente | Pacientes | Formulario crear + HistoriaClinica, validación | ✅ crear-paciente.blade.php |
+| Pacientes\EditarPaciente | Pacientes | Editar paciente, foto | ✅ editar-paciente.blade.php |
 
-#### **Usuarios Creados por Rol:**
-- ✅ **Admin** - 1 usuario (admin@clinicaeden.com)
-- ✅ **Médico General** - 1 usuario (medico.general@clinicaeden.com)
-- ✅ **Médico Especialista** - 1 usuario (medico.especialista@clinicaeden.com)
-- ✅ **Recepcionista** - 2 usuarios (recepcion@clinicaeden.com, test@example.com)
-- ✅ **Jefe Enfermería** - 4 usuarios (jefe.enfermeria1-4@clinicaeden.com)
-- ✅ **Auxiliar Enfermería** - 36 usuarios (auxiliar.enfermeria1-36@clinicaeden.com)
-- ✅ **Caja** - 1 usuario (caja@clinicaeden.com)
+---
 
-### 🗄️ **5. BASE DE DATOS OPTIMIZADA**
+## 5. VISTAS (resources/views/)
 
-#### **Columnas Eliminadas (Redundantes):**
-- ❌ `foto` - Redundante con `profile_photo_path`
-- ❌ `jefe_enfermeria_id` - No pertenece aquí, está en `modulos_enfermeria`
-- ❌ `disponible` - Redundante con `activo`
+- **Existen para cada controlador:** Solo parcialmente. Recepción, medico_general, medico_especialista, admin (dashboard, usuarios, reportes), pisos, caja (dashboard, facturas/ver, facturas/procesar-pago), notificaciones, livewire/pacientes.
+- **Layouts:** app.blade.php, guest.blade.php, adminlte.blade.php.
+- **Vistas huérfanas o sin uso directo:** recepcionista/dashboard.blade.php; terms.blade.php, policy.blade.php (estáticas).
+- **Carpetas/vistas faltantes:** facturas/, encuestas/, hospitalizaciones/, habitaciones/, consultorios/; admin/asignaciones/, admin/balance-personal.blade.php, admin/balance-ingresos.blade.php; jefe-enfermeria/hospitalizaciones/, jefe-enfermeria/modulos/; auxiliar-enfermeria/hospitalizaciones/, auxiliar-enfermeria/procedimientos/, auxiliar-enfermeria/modulos/; caja/reportes/, caja/facturas/buscar; modulos/show, create, edit; pisos/create, edit (verificar si existen).
 
-#### **Foreign Keys Optimizadas:**
-- ✅ **Eliminada** - `users_jefe_enfermeria_id_foreign` (incorrecta)
-- ✅ **Mantenidas** - Todas las relaciones correctas entre tablas
-- ✅ **Cascadas** - `ON DELETE CASCADE` donde corresponde
+---
 
-#### **Índices Optimizados:**
-- ✅ **Únicos** - `dni`, `email` en tabla `users`
-- ✅ **Compuestos** - Para consultas frecuentes
-- ✅ **Foreign Keys** - Todas las relaciones indexadas
+## 6. RUTAS (routes/web.php y api.php)
 
-### 🔔 **6. SISTEMA DE NOTIFICACIONES FUNCIONAL**
+- **Total:** Muchas rutas web agrupadas por auth y role; api solo GET /user (auth:sanctum).
+- **Middleware de roles:** Sí; RoleMiddleware con roles admin, recepcionista, medico_general, medico_especialista, jefe_enfermeria, auxiliar_enfermeria, caja.
+- **Rutas rotas o vacías:** POST completar-salida → método completarSalida inexistente. Recurso consultas → ConsultaController con métodos vacíos.
+- **Rutas faltantes por módulo:** No; lo que falta son vistas para rutas ya definidas.
 
-#### **Dos Sistemas Implementados:**
+---
 
-**1. Sistema Personalizado (`notificaciones_sistema`):**
-```php
-// Crear notificación
-NotificacionSistema::create([
-    'usuario_emisor_id' => Auth::id(),
-    'usuario_receptor_id' => $receptorId,
-    'titulo' => 'Título de la notificación',
-    'mensaje' => 'Mensaje detallado',
-    'tipo' => 'tipo_especifico',
-    'leida' => false,
-    'data' => ['datos' => 'adicionales']
-]);
-```
+## 7. BASE DE DATOS (database/migrations/ y seeders/)
 
-**2. Sistema Laravel Nativo (`notifications`):**
-```php
-// Usar notificaciones Laravel
-$user->notify(new SolicitudGeneral($usuario, $asunto, $mensaje, $tipo));
-```
+| Tabla / concepto | ¿Migración? | ¿Seeder? | ¿Model? |
+|------------------|-------------|---------|--------|
+| pacientes | ✅ | ❌ | ✅ |
+| users (medico/enfermería) | ✅ | ✅ UsersTableSeeder, HabitacionesSeeder (jefes/auxiliares), CajaUserSeeder | ✅ |
+| especialidad | N/A (campo en users) | N/A | N/A |
+| citas | ✅ | ❌ | ✅ |
+| historias_clinicas | ✅ | ❌ | ✅ |
+| diagnostico | N/A (campo en consultas) | N/A | N/A |
+| hospitalizaciones | ✅ | ❌ | ✅ |
+| habitaciones | ✅ | ✅ HabitacionesSeeder | ✅ |
+| tipo_habitacion | N/A (enum en habitaciones) | N/A | N/A |
+| facturas | ✅ | ❌ | ✅ |
+| detalle_fact | ❌ | ❌ | ❌ |
 
-#### **Flujos de Notificación Implementados:**
+Otras tablas: consultas, tratamientos, formulas_medicas, procedimientos, encuestas_satisfaccion, notificaciones_sistema, notifications, pisos, modulos_enfermeria, equipos_enfermeria, salas_procedimientos, consultorios. Seeders: DatabaseSeeder llama UsersTableSeeder, HabitacionesSeeder, CajaUserSeeder.
 
-**Proceso de Alta Completa:**
-1. **Médico** → Da alta médica → Notifica a **Jefe Enfermería**
-2. **Jefe Enfermería** → Da alta enfermería → Notifica a **Recepcionista**
-3. **Caja** → Procesa pago → Notifica a **Recepcionista**
-4. **Recepcionista** → Completa salida → Notifica a **Admin**
+---
 
-**Proceso de Tratamientos:**
-1. **Médico** → Prescribe tratamiento → Notifica a **Jefe Enfermería**
-2. **Jefe Enfermería** → Revisa y asigna → Notifica a **Auxiliar**
-3. **Auxiliar** → Completa procedimiento → Notifica a **Jefe Enfermería**
+## 8. AUTENTICACIÓN Y ROLES
 
-### 🚀 **7. SISTEMA COMPLETAMENTE FUNCIONAL**
+- **RBAC:** Middleware RoleMiddleware (alias `role`). Sin Gates ni Policies para roles.
+- **7 roles:** admin, recepcionista, medico_general, medico_especialista, jefe_enfermeria, auxiliar_enfermeria, caja. Cada uno tiene dashboard/panel propio en rutas y vista de dashboard existente.
 
-#### **Funcionalidades por Rol:**
+---
 
-**👑 ADMINISTRADOR:**
-- ✅ CRUD completo de usuarios
-- ✅ Gestión de roles y asignaciones
-- ✅ Balance de personal e ingresos
-- ✅ Reportes y estadísticas
+## 9. MÓDULOS POR ESTADO
 
-**📋 RECEPCIONISTA:**
-- ✅ CRUD de pacientes
-- ✅ Gestión de salida (solo con alta médica + pago)
-- ✅ Encuestas de satisfacción
-- ✅ Verificación de estados
+| Módulo            | Modelo | Migración | Controlador | Livewire | Vistas | Rutas | Estado    |
+|-------------------|--------|-----------|-------------|----------|--------|-------|-----------|
+| Pacientes         | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | 🔶 Parcial (relaciones modelo; ruta completarSalida) |
+| Consultas/Citas   | ✅ | ✅ | 🔶 | ❌ | 🔶 | ✅ | 🔶 Parcial |
+| Historial Médico  | ✅ | ✅ | N/A | ❌ | 🔶 | ✅ | 🔶 Parcial |
+| Hospitalización   | ✅ | ✅ | ✅ | ❌ | ❌ | ✅ | 🔶 Parcial |
+| Habitaciones      | ✅ | ✅ | ✅ | ❌ | ❌ | ✅ | 🔶 Parcial |
+| Facturación       | ✅ | ✅ | ✅ | ❌ | ❌ | ✅ | 🔶 Parcial |
+| Personal Médico   | ✅ | ✅ | ✅ | ❌ | ✅ | ✅ | ✅ Completo |
+| Especialidades    | ❌ | N/A | N/A | ❌ | N/A | N/A | ❌ Sin implementar |
+| Reportes          | N/A | N/A | ✅ | ❌ | 🔶 | ✅ | 🔶 Parcial |
+| Notificaciones    | ✅ | ✅ | ✅ | ❌ | ✅ | ✅ | ✅ Completo |
 
-**🩺 MÉDICO GENERAL:**
-- ✅ Ver pacientes y registrar signos vitales
-- ✅ Atención primaria y derivaciones
-- ✅ Notificaciones de derivaciones
+Estados: ✅ Completo | 🔶 Parcial | ❌ Sin implementar
 
-**🔬 MÉDICO ESPECIALISTA:**
-- ✅ Recibir notificaciones
-- ✅ Realizar visitas especializadas
-- ✅ Dar salida médica
+---
 
-**👩‍⚕️ JEFE DE ENFERMERÍA:**
-- ✅ Revisar tratamientos médicos
-- ✅ Asignar auxiliares
-- ✅ Dar alta de enfermería
-- ✅ Gestión de módulos
+## 10. DEUDA TÉCNICA
 
-**🩹 AUXILIAR DE ENFERMERÍA:**
-- ✅ Ver procedimientos asignados
-- ✅ Completar procedimientos
-- ✅ Comentarios sobre pacientes
-- ✅ Historial de observaciones
+- **TODO en vistas:** medico_general (evolución clínica, detalle consulta, tipo consulta, búsqueda pacientes, adjuntos); medico_especialista (detalle consulta, laboratorios, acciones, agenda, métricas por especialidad, mostrar especialidad).
+- **Métodos vacíos o null:** ConsultaController todos los métodos; User getEdadAttribute/getDiplomaUrlAttribute retornan null cuando corresponde.
+- **N+1:** No auditado exhaustivamente; en varios listados hay with().
+- **Validaciones:** confirmarSalida usa nombres de campo distintos al modelo EncuestaSatisfaccion en parte.
+- **Inconsistencias:** FacturaController 'recepcion' vs rol 'recepcionista'; EquipoEnfermeria vs tabla; Consultorio->citas y SalaProcedimiento->procedimientos sin FK; ruta completar-salida.
 
-**💰 CAJA:**
-- ✅ Procesar pagos y facturas
-- ✅ Notificar a recepción
-- ✅ Reportes de ingresos
-- ✅ Cierre de caja
+---
 
-### 📝 **8. DOCUMENTACIÓN EN CÓDIGO**
+## 11. PRÓXIMOS 3 PASOS (ordenados por prioridad)
 
-#### **Comentarios Implementados:**
-- ✅ **Controladores** - Métodos documentados en español
-- ✅ **Modelos** - Relaciones y métodos explicados
-- ✅ **Migraciones** - Propósito de cada campo documentado
-- ✅ **Rutas** - Agrupación por funcionalidad comentada
-- ✅ **Middleware** - Lógica de seguridad explicada
+**Paso 1:** Corregir la ruta de salida: que `pacientes.completar-salida` apunte a `confirmarSalida` o implementar `completarSalida` que use la lógica actual de confirmación. Así el flujo de completar salida no rompe.
 
-#### **Ejemplo de Documentación:**
-```php
-/**
- * Procesar pago de factura y notificar a recepción
- * Solo se puede procesar si la factura está en estado 'pendiente'
- * Al procesar, se cambia el estado de la hospitalización si corresponde
- */
-public function procesarPago(Request $request, Factura $factura)
-{
-    // Validación de datos...
-    // Procesamiento del pago...
-    // Notificación a recepción...
-}
-```
+**Paso 2:** Crear las vistas faltantes que provocan View not found: facturas/, encuestas/, hospitalizaciones/, habitaciones/, consultorios/; admin asignaciones y balance-personal, balance-ingresos; jefe-enfermeria (hospitalizaciones/ver, modulos/auxiliares); auxiliar-enfermeria (hospitalizaciones/ver, procedimientos/index, historial-comentarios, modulos/index); caja (facturas/buscar, reportes/ingresos); modulos (show, create, edit) según uso real.
 
-## 🎯 **RESULTADO FINAL**
+**Paso 3:** Alinear modelos con la BD y corregir bugs: (1) Paciente: añadir hospitalizaciones(), facturas(), encuestasSatisfaccion(). (2) EquipoEnfermeria: reflejar tabla (modulo_id, auxiliar_enfermeria_id). (3) Revisar Consultorio->citas y SalaProcedimiento->procedimientos (FK o quitar relación). (4) FacturaController::index() usar 'recepcionista'. (5) Implementar o quitar resource ConsultaController de rutas.
 
-### ✅ **SISTEMA COMPLETAMENTE FUNCIONAL:**
-- **Base de datos** optimizada y sin redundancias
-- **Todos los roles** implementados con sus funcionalidades
-- **Sistema de notificaciones** funcionando entre roles
-- **Vistas organizadas** por rol y funcionalidad
-- **Login y redirección** correctos por rol
-- **Documentación completa** en español
-- **Sin dependencias** de SQLite - Solo MySQL
+═══════════════════════════════════════
 
-### 🚀 **LISTO PARA PRODUCCIÓN:**
-El sistema está completamente funcional y optimizado para entorno MySQL, con todos los flujos de trabajo implementados y documentados.
+*Reporte basado únicamente en lectura del código. Solo se documenta lo que existe en el proyecto.*

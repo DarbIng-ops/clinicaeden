@@ -64,7 +64,7 @@
                     <li class="nav-item">
                         <a href="{{ route('medico_general.dashboard') }}" class="nav-link {{ request()->routeIs('medico_general.dashboard') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-tachometer-alt"></i>
-                            <p>Dashboard</p>
+                            <p>Inicio</p>
                         </a>
                     </li>
                     <li class="nav-item">
@@ -92,7 +92,7 @@
                     <li class="nav-item">
                         <a href="{{ route('medico_especialista.dashboard') }}" class="nav-link {{ request()->routeIs('medico_especialista.dashboard') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-tachometer-alt"></i>
-                            <p>Dashboard</p>
+                            <p>Inicio</p>
                         </a>
                     </li>
                     <li class="nav-item">
@@ -120,7 +120,7 @@
     <li class="nav-item">
         <a href="{{ route('recepcion.dashboard') }}" class="nav-link {{ request()->routeIs('recepcion.dashboard') ? 'active' : '' }}">
             <i class="nav-icon fas fa-tachometer-alt"></i>
-            <p>Dashboard</p>
+            <p>Inicio</p>
         </a>
     </li>
     <li class="nav-item">

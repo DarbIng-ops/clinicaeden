@@ -57,21 +57,21 @@ class Paciente extends Model
         
         // Mutators automáticos al crear/actualizar
         static::creating(function ($paciente) {
-            $paciente->dni = strtoupper(trim($paciente->dni));
-            $paciente->nombres = ucwords(strtolower(trim($paciente->nombres)));
-            $paciente->apellidos = ucwords(strtolower(trim($paciente->apellidos)));
-            $paciente->email = strtolower(trim($paciente->email));
-            $paciente->ciudad = ucwords(strtolower(trim($paciente->ciudad)));
-            $paciente->contacto_emergencia_nombre = ucwords(strtolower(trim($paciente->contacto_emergencia_nombre)));
+            $paciente->dni = strtoupper(trim($paciente->dni ?? ''));
+            $paciente->nombres = ucwords(strtolower(trim($paciente->nombres ?? '')));
+            $paciente->apellidos = ucwords(strtolower(trim($paciente->apellidos ?? '')));
+            $paciente->email = strtolower(trim($paciente->email ?? ''));
+            $paciente->ciudad = ucwords(strtolower(trim($paciente->ciudad ?? '')));
+            $paciente->contacto_emergencia_nombre = ucwords(strtolower(trim($paciente->contacto_emergencia_nombre ?? '')));
         });
-        
+
         static::updating(function ($paciente) {
-            $paciente->dni = strtoupper(trim($paciente->dni));
-            $paciente->nombres = ucwords(strtolower(trim($paciente->nombres)));
-            $paciente->apellidos = ucwords(strtolower(trim($paciente->apellidos)));
-            $paciente->email = strtolower(trim($paciente->email));
-            $paciente->ciudad = ucwords(strtolower(trim($paciente->ciudad)));
-            $paciente->contacto_emergencia_nombre = ucwords(strtolower(trim($paciente->contacto_emergencia_nombre)));
+            $paciente->dni = strtoupper(trim($paciente->dni ?? ''));
+            $paciente->nombres = ucwords(strtolower(trim($paciente->nombres ?? '')));
+            $paciente->apellidos = ucwords(strtolower(trim($paciente->apellidos ?? '')));
+            $paciente->email = strtolower(trim($paciente->email ?? ''));
+            $paciente->ciudad = ucwords(strtolower(trim($paciente->ciudad ?? '')));
+            $paciente->contacto_emergencia_nombre = ucwords(strtolower(trim($paciente->contacto_emergencia_nombre ?? '')));
         });
     }
 

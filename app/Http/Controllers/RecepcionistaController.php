@@ -613,4 +613,29 @@ class RecepcionistaController extends Controller
 
         return redirect()->route('recepcion.salidas')->with('success', 'Salida procesada exitosamente');
     }
+
+    /**
+     * Acción rápida de salida desde el dashboard de recepción.
+     *
+     * Verifica que el paciente tenga una factura pagada y redirige al flujo
+     * completo de procesarSalida para registrar la encuesta de satisfacción.
+     *
+     * @param \App\Models\Paciente $paciente Paciente que se da de alta
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function darSalida(Paciente $paciente)
+    {
+        $factura = \App\Models\Factura::where('paciente_id', $paciente->id)
+            ->where('estado', 'pagado')
+            ->latest()
+            ->first();
+
+        if (!$factura) {
+            return redirect()->route('recepcion.dashboard')
+                ->with('error', 'No se encontró factura pagada para este paciente.');
+        }
+
+        return redirect()->route('recepcion.procesar-salida', $paciente)
+            ->with('success', 'Paciente listo para salida. Complete el proceso.');
+    }
 }

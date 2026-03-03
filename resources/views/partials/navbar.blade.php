@@ -15,27 +15,28 @@
         
         <!-- Notifications Dropdown -->
         <li class="nav-item dropdown">
+            @php $notifCount = auth()->user()->notificacionesNoLeidas()->count(); @endphp
             <a class="nav-link" data-toggle="dropdown" href="#">
                 <i class="far fa-bell"></i>
-                @if(auth()->user()->unreadNotifications->count() > 0)
-                    <span class="badge badge-danger navbar-badge">{{ auth()->user()->unreadNotifications->count() }}</span>
+                @if($notifCount > 0)
+                    <span class="badge badge-danger navbar-badge">{{ $notifCount }}</span>
                 @endif
             </a>
             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                 <span class="dropdown-item dropdown-header">
-                    {{ auth()->user()->unreadNotifications->count() }} Notificaciones
+                    {{ $notifCount }} Notificaciones
                 </span>
-                
+
                 <div class="dropdown-divider"></div>
-                
-                @forelse(auth()->user()->unreadNotifications->take(5) as $notification)
-                    <a href="{{ $notification->data['url'] ?? '#' }}" 
-                       class="dropdown-item" 
-                       onclick="marcarComoLeida('{{ $notification->id }}')">
-                        <i class="fas fa-envelope mr-2"></i> 
-                        {{ Str::limit($notification->data['mensaje'] ?? 'Notificación', 50) }}
+
+                @forelse(auth()->user()->notificacionesNoLeidas()->latest()->take(5)->get() as $notificacion)
+                    <a href="{{ route('notificaciones.index') }}"
+                       class="dropdown-item"
+                       onclick="marcarComoLeida('{{ $notificacion->id }}')">
+                        <i class="fas fa-envelope mr-2"></i>
+                        {{ Str::limit($notificacion->mensaje, 50) }}
                         <span class="float-right text-muted text-sm">
-                            {{ $notification->created_at->diffForHumans() }}
+                            {{ $notificacion->created_at->diffForHumans() }}
                         </span>
                     </a>
                     <div class="dropdown-divider"></div>
@@ -43,8 +44,8 @@
                     <span class="dropdown-item text-center text-muted">No hay notificaciones</span>
                     <div class="dropdown-divider"></div>
                 @endforelse
-                
-                @if(auth()->user()->unreadNotifications->count() > 0)
+
+                @if($notifCount > 0)
                     <a href="{{ route('notificaciones.index') }}" class="dropdown-item dropdown-footer">
                         Ver todas las notificaciones
                     </a>

@@ -51,7 +51,7 @@
                                 <span class="text-sm font-bold text-green-600">${{ number_format($factura->total, 2) }}</span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                                {{ $factura->fecha_pago->format('d/m/Y H:i') }}
+                                {{ $factura->fecha_pago ? $factura->fecha_pago->format('d/m/Y H:i') : '--:--' }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm">
                                 <a href="{{ route('recepcion.procesar-salida', $factura->paciente->id) }}" 

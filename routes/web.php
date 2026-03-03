@@ -109,6 +109,7 @@ Route::middleware(['auth', 'role:recepcionista'])->prefix('recepcion')->name('re
     
     // Gestión de salida de pacientes
     Route::get('/salidas', [RecepcionistaController::class, 'salidas'])->name('salidas');
+    Route::get('/pacientes/{paciente}/salida', [RecepcionistaController::class, 'darSalida'])->name('pacientes.salida');
     Route::get('/pacientes/{paciente}/procesar-salida', [RecepcionistaController::class, 'procesarSalida'])->name('procesar-salida');
     Route::post('/pacientes/{paciente}/confirmar-salida', [RecepcionistaController::class, 'confirmarSalida'])->name('confirmar-salida');
 

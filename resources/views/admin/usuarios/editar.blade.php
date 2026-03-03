@@ -13,6 +13,11 @@
 <div><label class="block text-sm font-medium mb-1">Password</label><input name="password" type="password" class="w-full border rounded px-3 py-2" placeholder="Dejar vacío para mantener actual"></div>
 <div><label class="block text-sm font-medium mb-1">Rol</label><select name="role" class="w-full border rounded px-3 py-2" required><option value="admin" {{ $usuario->role == 'admin' ? 'selected' : '' }}>Admin</option><option value="recepcionista" {{ $usuario->role == 'recepcionista' ? 'selected' : '' }}>Recepcionista</option><option value="medico_general" {{ $usuario->role == 'medico_general' ? 'selected' : '' }}>Médico General</option><option value="medico_especialista" {{ $usuario->role == 'medico_especialista' ? 'selected' : '' }}>Médico Especialista</option><option value="jefe_enfermeria" {{ $usuario->role == 'jefe_enfermeria' ? 'selected' : '' }}>Jefe Enfermería</option><option value="auxiliar_enfermeria" {{ $usuario->role == 'auxiliar_enfermeria' ? 'selected' : '' }}>Auxiliar Enfermería</option><option value="caja" {{ $usuario->role == 'caja' ? 'selected' : '' }}>Caja</option></select></div>
 <div><label class="block text-sm font-medium mb-1">Teléfono</label><input name="telefono" value="{{ $usuario->telefono }}" class="w-full border rounded px-3 py-2"></div>
+<div>
+    <label class="block text-sm font-medium mb-1">Correo Personal</label>
+    <input type="email" name="email_personal" value="{{ $usuario->email_personal }}" placeholder="ejemplo@gmail.com" class="w-full border rounded px-3 py-2">
+    <p class="text-xs text-gray-400 mt-1">Opcional. No se usa para el login.</p>
+</div>
 <div><label class="block text-sm font-medium mb-1">Fecha Nacimiento</label><input name="fecha_nacimiento" type="date" value="{{ $usuario->fecha_nacimiento }}" class="w-full border rounded px-3 py-2"></div>
 <div><label class="block text-sm font-medium mb-1">Sexo</label><select name="sexo" class="w-full border rounded px-3 py-2"><option value="M" {{ $usuario->sexo == 'M' ? 'selected' : '' }}>Masculino</option><option value="F" {{ $usuario->sexo == 'F' ? 'selected' : '' }}>Femenino</option></select></div>
 </div>

@@ -193,18 +193,24 @@ class AdminController extends Controller
      */
     public function guardarUsuario(Request $request)
     {
+        // Construir email completo desde el prefijo institucional
+        if ($request->filled('email_prefix')) {
+            $request->merge(['email' => $request->email_prefix . '@clinicaeden.com']);
+        }
+
         $request->validate([
-            'name' => 'required|string|max:255',
-            'apellido' => 'required|string|max:255',
-            'dni' => 'required|string|max:20|unique:users,dni',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:8',
-            'role' => 'required|string',
-            'foto' => 'nullable|image|max:2048',
-            'diploma' => 'nullable|file|mimes:pdf|max:5120'
+            'name'           => 'required|string|max:255',
+            'apellido'       => 'required|string|max:255',
+            'dni'            => 'required|string|max:20|unique:users,dni',
+            'email'          => 'required|email|unique:users,email',
+            'password'       => 'required|string|min:8',
+            'role'           => 'required|string',
+            'email_personal' => 'nullable|email',
+            'foto'           => 'nullable|image|max:2048',
+            'diploma'        => 'nullable|file|mimes:pdf|max:5120',
         ]);
 
-        $data = $request->except(['foto', 'diploma']);
+        $data = $request->except(['foto', 'diploma', 'email_prefix']);
         $data['password'] = bcrypt($request->password);
         
         if ($request->hasFile('foto')) {
@@ -286,13 +292,14 @@ class AdminController extends Controller
     public function actualizarUsuario(Request $request, User $usuario)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'apellido' => 'required|string|max:255',
-            'dni' => 'required|string|max:20|unique:users,dni,' . $usuario->id,
-            'email' => 'required|email|unique:users,email,' . $usuario->id,
-            'password' => 'nullable|string|min:8',
-            'foto' => 'nullable|image|max:2048',
-            'diploma' => 'nullable|file|mimes:pdf|max:5120'
+            'name'           => 'required|string|max:255',
+            'apellido'       => 'required|string|max:255',
+            'dni'            => 'required|string|max:20|unique:users,dni,' . $usuario->id,
+            'email'          => 'required|email|unique:users,email,' . $usuario->id,
+            'password'       => 'nullable|string|min:8',
+            'email_personal' => 'nullable|email',
+            'foto'           => 'nullable|image|max:2048',
+            'diploma'        => 'nullable|file|mimes:pdf|max:5120',
         ]);
 
         $data = $request->except(['foto', 'diploma', 'password']);

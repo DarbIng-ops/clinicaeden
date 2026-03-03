@@ -229,7 +229,7 @@ class MedicoGeneralController extends Controller
      */
     public function crearHospitalizacion()
     {
-        $pacientes = Paciente::where('activo', true)->get();
+        $pacientes = Paciente::where('activo', true)->select('id', 'nombres', 'apellidos', 'dni')->get();
         $habitaciones = Habitacion::with(['modulo.piso'])->disponibles()->get();
         
         return view('medico_general.crear-hospitalizacion', compact('pacientes', 'habitaciones'));

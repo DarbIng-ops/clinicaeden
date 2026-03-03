@@ -54,10 +54,10 @@ class HospitalizacionController extends Controller
      */
     public function create()
     {
-        $pacientes = Paciente::where('activo', true)->get();
+        $pacientes = Paciente::where('activo', true)->select('id', 'nombres', 'apellidos', 'dni')->get();
         $habitaciones = Habitacion::disponibles()->get();
-        $jefesEnfermeria = User::where('role', 'jefe_enfermeria')->where('activo', true)->get();
-        $auxiliares = User::where('role', 'auxiliar_enfermeria')->where('activo', true)->get();
+        $jefesEnfermeria = User::where('role', 'jefe_enfermeria')->where('activo', true)->select('id', 'name', 'apellido')->get();
+        $auxiliares = User::where('role', 'auxiliar_enfermeria')->where('activo', true)->select('id', 'name', 'apellido')->get();
 
         return view('hospitalizaciones.create', compact('pacientes', 'habitaciones', 'jefesEnfermeria', 'auxiliares'));
     }

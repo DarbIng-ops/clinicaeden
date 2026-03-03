@@ -31,6 +31,7 @@ class User extends Authenticatable
         'apellido',
         'dni',
         'email',
+        'email_personal',
         'password',
         'role',
         'profile_photo_path',

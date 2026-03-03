@@ -3,11 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\MedicoController;
 use App\Http\Controllers\MedicoGeneralController;
 use App\Http\Controllers\MedicoEspecialistaController;
 use App\Http\Controllers\RecepcionistaController;
-use App\Http\Controllers\DashboardRedirectController;
 use App\Http\Controllers\NotificacionController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HospitalizacionController;
@@ -35,19 +33,14 @@ Route::get('/', function () {
 Route::middleware(['auth', 'verified'])->get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 // ============================================================
-// Notificaciones: accesibles para cualquier usuario autenticado
-// ============================================================
-// ============================================================
-// Perfil de usuario: para todos los roles autenticados
+// Perfil y notificaciones: todos los roles autenticados
 // ============================================================
 Route::middleware(['auth'])->group(function () {
     Route::get('/user/profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::put('/user/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::put('/user/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
     Route::post('/user/profile/photo', [ProfileController::class, 'updatePhoto'])->name('profile.photo');
-});
 
-Route::middleware(['auth'])->group(function () {
     Route::get('/notificaciones', [NotificacionController::class, 'index'])->name('notificaciones.index');
     Route::post('/notificaciones/{id}/marcar-leida', [NotificacionController::class, 'marcarLeida'])->name('notificaciones.marcar-leida');
     Route::post('/notificaciones/marcar-todas-leidas', [NotificacionController::class, 'marcarTodasLeidas'])->name('notificaciones.marcar-todas-leidas');

@@ -32,6 +32,9 @@ class Factura extends Model
         'subtotal',
         'impuestos',
         'total',
+        'descuento_porcentaje',
+        'descuento_monto',
+        'motivo_descuento',
         'metodo_pago',
         'monto_recibido',
         'estado',
@@ -45,11 +48,13 @@ class Factura extends Model
      * @var array<string, string> Conversión de tipos para atributos
      */
     protected $casts = [
-        'subtotal' => 'decimal:2',
-        'impuestos' => 'decimal:2',
-        'total' => 'decimal:2',
-        'fecha_emision' => 'datetime',
-        'fecha_pago' => 'datetime',
+        'subtotal'              => 'decimal:2',
+        'impuestos'             => 'decimal:2',
+        'total'                 => 'decimal:2',
+        'descuento_porcentaje'  => 'decimal:2',
+        'descuento_monto'       => 'decimal:2',
+        'fecha_emision'         => 'datetime',
+        'fecha_pago'            => 'datetime',
     ];
 
     // Relaciones
@@ -91,6 +96,16 @@ class Factura extends Model
     public function caja()
     {
         return $this->belongsTo(User::class, 'caja_id');
+    }
+
+    /**
+     * Relación: líneas de detalle de la factura.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function detalles()
+    {
+        return $this->hasMany(DetalleFactura::class);
     }
 
     // Scopes

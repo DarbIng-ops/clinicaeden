@@ -17,6 +17,23 @@
                     <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                         Inicio
                     </x-nav-link>
+
+                    {{-- Enlace exclusivo para cajero --}}
+                    @if(auth()->user()->role === 'caja')
+                        @php
+                            $pendientesCaja = \App\Models\Factura::where('estado', 'pendiente')->count();
+                        @endphp
+                        <x-nav-link href="{{ route('caja.panel') }}" :active="request()->routeIs('caja.panel')">
+                            <i class="fas fa-cash-register mr-1"></i>
+                            Panel de Cobro
+                            @if($pendientesCaja > 0)
+                                <span class="ml-1.5 inline-flex items-center justify-center h-5 px-1.5 text-xs font-bold text-white rounded-full"
+                                      style="background:#E67E22;min-width:1.25rem">
+                                    {{ $pendientesCaja > 9 ? '9+' : $pendientesCaja }}
+                                </span>
+                            @endif
+                        </x-nav-link>
+                    @endif
                 </div>
             </div>
 
@@ -166,6 +183,21 @@
             <x-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                 Inicio
             </x-responsive-nav-link>
+
+            {{-- Panel de cobro (solo cajero) --}}
+            @if(auth()->user()->role === 'caja')
+                @php $pendientesCajaMobile = \App\Models\Factura::where('estado', 'pendiente')->count(); @endphp
+                <x-responsive-nav-link href="{{ route('caja.panel') }}" :active="request()->routeIs('caja.panel')">
+                    <i class="fas fa-cash-register mr-1"></i>
+                    Panel de Cobro
+                    @if($pendientesCajaMobile > 0)
+                        <span class="ml-1.5 inline-flex items-center justify-center h-5 px-1.5 text-xs font-bold text-white rounded-full"
+                              style="background:#E67E22">
+                            {{ $pendientesCajaMobile > 9 ? '9+' : $pendientesCajaMobile }}
+                        </span>
+                    @endif
+                </x-responsive-nav-link>
+            @endif
         </div>
 
         <!-- Responsive Settings Options -->

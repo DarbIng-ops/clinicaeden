@@ -17,6 +17,7 @@ use App\Http\Controllers\ModuloEnfermeriaController;
 use App\Http\Controllers\ConsultorioController;
 use App\Http\Controllers\HabitacionController;
 use App\Http\Controllers\CajaController;
+use App\Livewire\Caja\PanelCajero;
 use App\Http\Controllers\JefeEnfermeriaController;
 use App\Http\Controllers\AuxiliarEnfermeriaController;
 use App\Http\Controllers\ProfileController;
@@ -255,4 +256,7 @@ Route::middleware(['auth', 'role:caja'])->prefix('caja')->name('caja.')->group(f
     
     // Cierre de caja
     Route::post('/cerrar-caja', [CajaController::class, 'cerrarCaja'])->name('cerrar-caja');
+
+    // Panel de cobro Livewire
+    Route::get('/panel', PanelCajero::class)->name('panel');
 });

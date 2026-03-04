@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UsersTableSeeder::class,    // 7 usuarios, uno por rol
             HabitacionesSeeder::class,  // pisos, módulos y habitaciones
+            TarifasSeeder::class,       // 22 tarifas en COP por categoría
         ]);
     }
 }

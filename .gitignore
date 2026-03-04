@@ -1,6 +1,8 @@
 *.log
 .DS_Store
 .env
+.env.*
+!.env.example
 .env.backup
 .env.production
 .phpactor.json
@@ -25,6 +27,7 @@ Thumbs.db
 npm-debug.log
 yarn-error.log
 *.sqlite*
+clinicaeden
 
 # SQL dumps y archivos de datos
 *.sql

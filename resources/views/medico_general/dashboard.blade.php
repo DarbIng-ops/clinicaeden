@@ -2,37 +2,11 @@
 
 @section('content')
 <div class="container mx-auto px-4 py-8">
-    {{-- ── Banner de bienvenida ─────────────────────────────────────── --}}
-    <div class="relative overflow-hidden rounded-xl mb-8 text-white"
-         style="background:linear-gradient(135deg,#1A2E4A 0%,#2D5F8A 100%);">
-        <div class="absolute rounded-full pointer-events-none"
-             style="top:-40px;right:-40px;width:200px;height:200px;background:rgba(255,255,255,.06)"></div>
-        <div class="absolute rounded-full pointer-events-none"
-             style="bottom:-60px;right:60px;width:280px;height:280px;background:rgba(255,255,255,.04)"></div>
-        <div class="relative z-10 px-8 pt-8 pb-6">
-            <div class="flex justify-between items-start">
-                <div>
-                    <h2 class="text-3xl font-bold mb-1">¡Bienvenido/a, Dr(a). {{ auth()->user()->name }}!</h2>
-                    <p class="text-base mb-1" style="opacity:.9;">
-                        Revisa tus consultas pendientes y pacientes asignados
-                    </p>
-                    <p class="mb-1" style="font-size:1rem;opacity:.9;">
-                        "Cada consulta es una oportunidad de cambiar una vida."
-                    </p>
-                    <p class="text-sm mb-0" style="opacity:.7;">
-                        <i class="far fa-calendar-alt mr-1"></i>
-                        {{ \Carbon\Carbon::now()->locale('es')->isoFormat('dddd, D [de] MMMM [de] YYYY') }}
-                    </p>
-                </div>
-                <div class="hidden md:block flex-shrink-0">
-                    <img src="{{ asset('images/logoGrande.png') }}" alt="Clínica Eden"
-                         class="h-20 w-auto"
-                         style="opacity:.85;filter:brightness(0) invert(1);"
-                         onerror="this.style.display='none'">
-                </div>
-            </div>
-        </div>
-    </div>
+    <x-banner-bienvenida
+        nombre="Doctor/a"
+        subtitulo="Tu vocación salva vidas cada día"
+        emoji="🩺"
+    />
 
     <!-- Consultas Pendientes -->
     <div class="bg-white rounded-lg shadow-md p-6 mb-6">

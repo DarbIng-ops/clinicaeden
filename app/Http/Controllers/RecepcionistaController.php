@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * RecepcionistaController.php
+ *
+ * Panel de recepción: gestión de pacientes, citas, derivaciones y encuestas de salida.
+ *
+ * @package ClinicaEden
+ * @author  Alirio Portilla
+ * @version 3.0.0
+ */
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -416,17 +425,17 @@ class RecepcionistaController extends Controller
      */
     public function buscarPorDni(Request $request)
     {
-        try {
-            $validated = $request->validate([
-                'dni' => 'required|string|max:20|regex:/^[0-9]{7,8}$/'
-            ]);
+        $validated = $request->validate([
+            'dni' => 'required|string|max:20|regex:/^[0-9]{7,8}$/'
+        ]);
 
+        try {
             $paciente = Paciente::where('dni', $validated['dni'])->first();
-            
+
             if (!$paciente) {
                 return response()->json(['error' => 'Paciente no encontrado'], 404);
             }
-            
+
             return response()->json([
                 'paciente' => [
                     'id' => $paciente->id,
@@ -439,7 +448,7 @@ class RecepcionistaController extends Controller
                     'alergias' => $paciente->alergias,
                 ]
             ]);
-            
+
         } catch (\Exception $e) {
             Log::error('Error al buscar paciente por DNI: ' . $e->getMessage());
             return response()->json(['error' => 'Error interno del servidor'], 500);

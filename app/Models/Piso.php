@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * Piso.php
+ *
+ * Representa los pisos o plantas del edificio hospitalario.
+ *
+ * @package ClinicaEden
+ * @author  Alirio Portilla
+ * @version 3.0.0
+ */
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;

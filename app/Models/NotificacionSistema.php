@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * NotificacionSistema.php
+ *
+ * Notificaciones internas del sistema enviadas entre roles (p. ej. derivaciones).
+ *
+ * @package ClinicaEden
+ * @author  Alirio Portilla
+ * @version 3.0.0
+ */
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;

@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * Cita.php
+ *
+ * Representa las citas o turnos programados para pacientes con un médico.
+ *
+ * @package ClinicaEden
+ * @author  Alirio Portilla
+ * @version 3.0.0
+ */
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;

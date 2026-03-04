@@ -26,5 +26,30 @@ npm-debug.log
 yarn-error.log
 *.sqlite*
 
-# Claude Code CLI configuration
+# SQL dumps y archivos de datos
+*.sql
+*.sql.gz
+
+# Archivos de respaldo y temporales
+*_backup*
+*_backup.*
+*_old*
+*_old.*
+*_copy*
+*_temp*
+*_bak*
+*.bak
+*.tmp
+
+# Cache de framework (Laravel)
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
+
+# Claude Code — archivos de sesión y contexto
 .claude/
+CLAUDE.md
+.claudeignore
+*.claude
+.claude_files
+claude_context/

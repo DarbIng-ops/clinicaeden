@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * MedicoEspecialistaController.php
+ *
+ * Panel del médico especialista: consultas, hospitalizaciones y estadísticas por especialidad.
+ *
+ * @package ClinicaEden
+ * @author  Alirio Portilla
+ * @version 3.0.0
+ */
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -65,8 +74,8 @@ class MedicoEspecialistaController extends Controller
     public function pacientes()
     {
         $user = Auth::user();
-        
-        $pacientes = Paciente::whereHas('consultas', function($query) use ($user) {
+
+        $pacientesEspecialidad = Paciente::whereHas('consultas', function($query) use ($user) {
             $query->where('medico_id', $user->id)
                   ->where('tipo_consulta', 'especializada');
         })->with(['consultas' => function($query) use ($user) {
@@ -74,7 +83,23 @@ class MedicoEspecialistaController extends Controller
                   ->where('tipo_consulta', 'especializada');
         }])->paginate(15);
 
-        return view('medico_especialista.pacientes', compact('pacientes'));
+        $consultasEspecializadas = Consulta::with(['paciente', 'historiaClinica'])
+            ->where('medico_id', $user->id)
+            ->where('tipo_consulta', 'especializada')
+            ->whereDate('fecha_consulta', today())
+            ->get();
+
+        $tratamientosEspecializados = Consulta::with(['paciente'])
+            ->where('medico_id', $user->id)
+            ->where('tipo_consulta', 'especializada')
+            ->where('estado', 'pendiente')
+            ->get();
+
+        return view('medico_especialista.pacientes', compact(
+            'pacientesEspecialidad',
+            'consultasEspecializadas',
+            'tratamientosEspecializados'
+        ));
     }
 
     /**

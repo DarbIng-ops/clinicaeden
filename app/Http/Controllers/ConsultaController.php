@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * ConsultaController.php
+ *
+ * CRUD de consultas médicas: creación, visualización, edición y cierre de consultas.
+ *
+ * @package ClinicaEden
+ * @author  Alirio Portilla
+ * @version 3.0.0
+ */
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;

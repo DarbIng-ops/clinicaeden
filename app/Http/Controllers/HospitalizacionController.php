@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * HospitalizacionController.php
+ *
+ * Gestiona el ciclo completo de hospitalización: ingreso, evolución y alta médica/enfermería.
+ *
+ * @package ClinicaEden
+ * @author  Alirio Portilla
+ * @version 3.0.0
+ */
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -134,8 +143,30 @@ class HospitalizacionController extends Controller
      * @param \App\Models\Hospitalizacion $hospitalizacion Hospitalización seleccionada
      * @return \Illuminate\Contracts\View\View Vista con información clínica y personal asignado
      */
-    public function show(Hospitalizacion $hospitalizacion)
+    public function show(Hospitalizacion $hospitalizacione)
     {
+        $hospitalizacion = $hospitalizacione;
+        $user = Auth::user();
+
+        if ($user->role !== 'admin') {
+            $role = trim($user->role);
+            $uid  = (int) $user->id;
+
+            if ($role === 'medico_general' || $role === 'medico_especialista') {
+                $autorizado = (int) $hospitalizacion->medico_general_id === $uid;
+            } elseif ($role === 'jefe_enfermeria') {
+                $autorizado = (int) $hospitalizacion->jefe_enfermeria_id === $uid;
+            } elseif ($role === 'auxiliar_enfermeria') {
+                $autorizado = (int) $hospitalizacion->auxiliar_enfermeria_id === $uid;
+            } else {
+                $autorizado = false;
+            }
+
+            if (!$autorizado) {
+                abort(403, 'No autorizado para ver esta hospitalización.');
+            }
+        }
+
         $hospitalizacion->load(['paciente', 'habitacion', 'medicoGeneral', 'jefeEnfermeria', 'auxiliarEnfermeria', 'tratamientos']);
         return view('hospitalizaciones.show', compact('hospitalizacion'));
     }
@@ -149,6 +180,12 @@ class HospitalizacionController extends Controller
      */
     public function asignarAuxiliar(Request $request, Hospitalizacion $hospitalizacion)
     {
+        $user = Auth::user();
+
+        if ($user->role !== 'admin' && $hospitalizacion->jefe_enfermeria_id != $user->id) {
+            abort(403, 'No autorizado para asignar auxiliares en esta hospitalización.');
+        }
+
         $request->validate([
             'auxiliar_enfermeria_id' => 'required|exists:users,id',
         ]);
@@ -185,6 +222,12 @@ class HospitalizacionController extends Controller
      */
     public function darAltaMedica(Hospitalizacion $hospitalizacion)
     {
+        $user = Auth::user();
+
+        if ($user->role !== 'admin' && $hospitalizacion->medico_general_id != $user->id) {
+            abort(403, 'Solo el médico tratante puede autorizar el alta médica.');
+        }
+
         $hospitalizacion->update(['estado' => 'alta_medica']);
 
         // Notificar al jefe de enfermería
@@ -213,6 +256,12 @@ class HospitalizacionController extends Controller
      */
     public function darAltaEnfermeria(Hospitalizacion $hospitalizacion)
     {
+        $user = Auth::user();
+
+        if ($user->role !== 'admin' && $hospitalizacion->jefe_enfermeria_id != $user->id) {
+            abort(403, 'Solo el jefe de enfermería asignado puede autorizar el alta de enfermería.');
+        }
+
         $hospitalizacion->update(['estado' => 'alta_enfermeria']);
 
         // Notificar a recepción

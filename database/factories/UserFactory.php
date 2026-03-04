@@ -27,10 +27,13 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->name(),
+            'name' => fake()->firstName(),
+            'apellido' => fake()->lastName(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
+            'role' => 'admin',
+            'activo' => true,
             'two_factor_secret' => null,
             'two_factor_recovery_codes' => null,
             'remember_token' => Str::random(10),
@@ -47,6 +50,46 @@ class UserFactory extends Factory
         return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
         ]);
+    }
+
+    public function admin(): static
+    {
+        return $this->state(['role' => 'admin', 'activo' => true]);
+    }
+
+    public function recepcionista(): static
+    {
+        return $this->state(['role' => 'recepcionista', 'activo' => true]);
+    }
+
+    public function medicoGeneral(): static
+    {
+        return $this->state(['role' => 'medico_general', 'activo' => true]);
+    }
+
+    public function medicoEspecialista(): static
+    {
+        return $this->state(['role' => 'medico_especialista', 'activo' => true]);
+    }
+
+    public function jefeEnfermeria(): static
+    {
+        return $this->state(['role' => 'jefe_enfermeria', 'activo' => true]);
+    }
+
+    public function auxiliarEnfermeria(): static
+    {
+        return $this->state(['role' => 'auxiliar_enfermeria', 'activo' => true]);
+    }
+
+    public function caja(): static
+    {
+        return $this->state(['role' => 'caja', 'activo' => true]);
+    }
+
+    public function inactivo(): static
+    {
+        return $this->state(['activo' => false]);
     }
 
     /**

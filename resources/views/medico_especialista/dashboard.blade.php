@@ -31,25 +31,6 @@
                          onerror="this.style.display='none'">
                 </div>
             </div>
-            {{-- Tarjetas rápidas --}}
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-6">
-                <div class="rounded-lg px-4 py-3" style="background:rgba(255,255,255,.12);">
-                    <p class="text-2xl font-bold leading-tight">{{ $consultasEspecializadas->count() }}</p>
-                    <p class="text-xs uppercase tracking-wide mt-1" style="opacity:.85;">Consultas Pendientes</p>
-                </div>
-                <div class="rounded-lg px-4 py-3" style="background:rgba(255,255,255,.12);">
-                    <p class="text-2xl font-bold leading-tight">{{ $pacientesEspecialidad->count() }}</p>
-                    <p class="text-xs uppercase tracking-wide mt-1" style="opacity:.85;">Mis Pacientes</p>
-                </div>
-                <div class="rounded-lg px-4 py-3" style="background:rgba(255,255,255,.12);">
-                    <p class="text-2xl font-bold leading-tight">{{ $tratamientosEspecializados->count() }}</p>
-                    <p class="text-xs uppercase tracking-wide mt-1" style="opacity:.85;">Tratamientos</p>
-                </div>
-                <div class="rounded-lg px-4 py-3" style="background:rgba(255,255,255,.12);">
-                    <p class="text-2xl font-bold leading-tight">{{ $notificacionesNoLeidas }}</p>
-                    <p class="text-xs uppercase tracking-wide mt-1" style="opacity:.85;">Notificaciones</p>
-                </div>
-            </div>
         </div>
     </div>
 

@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * DashboardController.php
+ *
+ * Redirige al dashboard específico del rol autenticado.
+ *
+ * @package ClinicaEden
+ * @author  Alirio Portilla
+ * @version 3.0.0
+ */
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;

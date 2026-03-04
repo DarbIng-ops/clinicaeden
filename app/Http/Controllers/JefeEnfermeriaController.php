@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * JefeEnfermeriaController.php
+ *
+ * Panel del jefe de enfermería: supervisión de hospitalizaciones, auxiliares y módulos.
+ *
+ * @package ClinicaEden
+ * @author  Alirio Portilla
+ * @version 3.0.0
+ */
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -246,7 +255,7 @@ class JefeEnfermeriaController extends Controller
             }
 
             // Verificar que el médico haya dado alta médica primero
-            if (!$hospitalizacion->fecha_alta_medica) {
+            if ($hospitalizacion->estado !== 'alta_medica') {
                 return redirect()->back()
                     ->withErrors(['error' => 'El médico debe dar alta médica antes del alta de enfermería.']);
             }
@@ -309,7 +318,7 @@ class JefeEnfermeriaController extends Controller
      */
     private function puedeAccederHospitalizacion(Hospitalizacion $hospitalizacion)
     {
-        return $hospitalizacion->habitacion->modulo->jefe_enfermeria_id === Auth::id();
+        return (int) $hospitalizacion->habitacion->modulo->jefe_enfermeria_id === (int) Auth::id();
     }
 
     /**

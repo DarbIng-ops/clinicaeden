@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * ModuloEnfermeria.php
+ *
+ * Representa un módulo de enfermería dentro de un piso, con jefe asignado.
+ *
+ * @package ClinicaEden
+ * @author  Alirio Portilla
+ * @version 3.0.0
+ */
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;

@@ -12,13 +12,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Primero, actualizar todos los usuarios con role='recepcion' a 'recepcionista'
+        // Actualizar usuarios con role='recepcion' a 'recepcionista' (compatible con todos los DBs)
         DB::table('users')
             ->where('role', 'recepcion')
             ->update(['role' => 'recepcionista']);
 
-        // Cambiar la columna role a ENUM
-        DB::statement("ALTER TABLE users MODIFY COLUMN role ENUM('admin', 'medico_general', 'medico_especialista', 'recepcionista', 'auxiliar_enfermeria', 'jefe_enfermeria', 'caja') NOT NULL DEFAULT 'recepcionista'");
+        // MySQL soporta ENUM; SQLite almacena como texto y omite este cambio de tipo
+        if (DB::getDriverName() === 'mysql') {
+            DB::statement("ALTER TABLE users MODIFY COLUMN role ENUM('admin', 'medico_general', 'medico_especialista', 'recepcionista', 'auxiliar_enfermeria', 'jefe_enfermeria', 'caja') NOT NULL DEFAULT 'recepcionista'");
+        }
     }
 
     /**
@@ -26,7 +28,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        // Volver la columna role a VARCHAR/STRING
-        DB::statement("ALTER TABLE users MODIFY COLUMN role VARCHAR(255) NOT NULL DEFAULT 'recepcionista'");
+        if (DB::getDriverName() === 'mysql') {
+            DB::statement("ALTER TABLE users MODIFY COLUMN role VARCHAR(255) NOT NULL DEFAULT 'recepcionista'");
+        }
     }
 };

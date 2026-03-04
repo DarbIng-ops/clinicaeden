@@ -40,7 +40,6 @@
                                 @if($consulta->tratamiento)
                                     <p class="mt-2 text-sm text-gray-700"><span class="font-medium text-gray-900">Tratamiento:</span> {{ Str::limit($consulta->tratamiento, 160) }}</p>
                                 @endif
-                                {{-- TODO: enlazar a detalle completo de consulta especializada --}}
                             </div>
                         @endforeach
                     </div>
@@ -57,7 +56,6 @@
                     <h2 class="text-lg font-semibold text-gray-900 flex items-center">
                         <i class="fas fa-flask text-indigo-600 mr-2"></i>Pruebas y exámenes recientes
                     </h2>
-                    {{-- TODO: integrar resultados de laboratorios/imagen --}}
                 </header>
                 <div class="p-6">
                     <p class="text-sm text-gray-500">Aún no se han cargado resultados de pruebas especializadas.</p>
@@ -120,7 +118,6 @@
                     <li class="flex items-center"><i class="fas fa-share text-indigo-500 mr-2"></i>Coordinar interconsulta</li>
                     <li class="flex items-center"><i class="fas fa-file-signature text-indigo-500 mr-2"></i>Actualizar plan terapéutico</li>
                 </ul>
-                {{-- TODO: convertir acciones sugeridas en enlaces prácticos --}}
             </div>
         </aside>
     </div>

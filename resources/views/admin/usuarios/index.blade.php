@@ -169,7 +169,7 @@
             </table>
         </div>
         <div class="card-footer">
-            {{ $usuarios->links() }}
+            {{ $usuarios->links('vendor.pagination.bootstrap-4') }}
         </div>
     </div>
 

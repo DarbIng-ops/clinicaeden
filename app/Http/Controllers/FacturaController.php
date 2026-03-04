@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * FacturaController.php
+ *
+ * Gestiona la emisión, visualización e impresión de facturas médicas.
+ *
+ * @package ClinicaEden
+ * @author  Alirio Portilla
+ * @version 3.0.0
+ */
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;

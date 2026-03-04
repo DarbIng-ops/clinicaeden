@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * Consultorio.php
+ *
+ * Representa los consultorios físicos donde se atienden las consultas médicas.
+ *
+ * @package ClinicaEden
+ * @author  Alirio Portilla
+ * @version 3.0.0
+ */
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;

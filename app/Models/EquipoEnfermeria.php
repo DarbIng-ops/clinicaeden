@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * EquipoEnfermeria.php
+ *
+ * Representa la asignación de auxiliares de enfermería a módulos o turnos.
+ *
+ * @package ClinicaEden
+ * @author  Alirio Portilla
+ * @version 3.0.0
+ */
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;

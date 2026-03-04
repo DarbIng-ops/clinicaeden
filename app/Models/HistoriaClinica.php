@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * HistoriaClinica.php
+ *
+ * Historial clínico del paciente: agrupa consultas, tratamientos y hospitalizaciones.
+ *
+ * @package ClinicaEden
+ * @author  Alirio Portilla
+ * @version 3.0.0
+ */
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;

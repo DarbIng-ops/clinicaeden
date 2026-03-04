@@ -1,5 +1,15 @@
 <?php
 
+/**
+ * HabitacionesSeeder.php
+ *
+ * Puebla la base de datos con la estructura hospitalaria de prueba:
+ * pisos, módulos de enfermería y habitaciones para desarrollo/testing.
+ *
+ * @package ClinicaEden
+ * @author  Alirio Portilla
+ * @version 3.0.0
+ */
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;

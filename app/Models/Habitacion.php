@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * Habitacion.php
+ *
+ * Representa las habitaciones disponibles para hospitalización en cada módulo.
+ *
+ * @package ClinicaEden
+ * @author  Alirio Portilla
+ * @version 3.0.0
+ */
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;

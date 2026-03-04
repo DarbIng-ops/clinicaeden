@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * EditarPaciente.php
+ *
+ * Componente Livewire para la edición en tiempo real de los datos de un paciente.
+ *
+ * @package ClinicaEden
+ * @author  Alirio Portilla
+ * @version 3.0.0
+ */
 namespace App\Livewire\Pacientes;
 
 use Livewire\Component;
@@ -29,6 +38,12 @@ class EditarPaciente extends Component
     public $foto;
     public $foto_actual;
 
+    /**
+     * Carga el paciente y pre-popula todas las propiedades del formulario.
+     *
+     * @param  int  $pacienteId
+     * @return void
+     */
     public function mount($pacienteId)
     {
         $this->paciente = Paciente::findOrFail($pacienteId);
@@ -72,6 +87,11 @@ class EditarPaciente extends Component
         ];
     }
 
+    /**
+     * Valida y persiste los cambios del paciente; reemplaza la foto si se cargó una nueva.
+     *
+     * @return \Illuminate\Http\RedirectResponse|void
+     */
     public function actualizar()
     {
         $this->validate();
@@ -114,6 +134,11 @@ class EditarPaciente extends Component
         }
     }
 
+    /**
+     * Renderiza el formulario de edición del paciente.
+     *
+     * @return \Illuminate\View\View
+     */
     public function render()
     {
         return view('livewire.pacientes.editar-paciente');

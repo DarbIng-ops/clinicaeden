@@ -11,7 +11,6 @@
             <a href="{{ route('medico_general.pacientes.index') }}" class="inline-flex items-center px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg transition">
                 <i class="fas fa-arrow-left mr-2"></i>Volver a mis pacientes
             </a>
-            {{-- TODO: acciones para evolución clínica o notas rápidas --}}
         </div>
     </div>
 
@@ -80,7 +79,6 @@
                                             {{ Str::limit($consulta->diagnostico, 140) }}
                                         </p>
                                     @endif
-                                    {{-- TODO: enlazar a vista detallada de consulta cuando exista --}}
                                 </div>
                             @endforeach
                         </div>
@@ -163,7 +161,6 @@
                             Sin consultas pendientes
                         </span>
                     @endif
-                    {{-- TODO: Añadir acciones adicionales (crear nota, solicitar exámenes, etc.) --}}
                 </div>
             </div>
         </aside>

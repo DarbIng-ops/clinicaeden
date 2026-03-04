@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * CrearPaciente.php
+ *
+ * Componente Livewire para el formulario reactivo de creación de nuevos pacientes.
+ *
+ * @package ClinicaEden
+ * @author  Alirio Portilla
+ * @version 3.0.0
+ */
 namespace App\Livewire\Pacientes;
 
 use Livewire\Component;
@@ -45,6 +54,11 @@ class CrearPaciente extends Component
         'foto' => 'nullable|image|max:2048',
     ];
 
+    /**
+     * Valida los datos del formulario, crea el paciente y genera su historia clínica.
+     *
+     * @return \Illuminate\Http\RedirectResponse|void
+     */
     public function guardar()
     {
         $this->validate();
@@ -85,6 +99,11 @@ class CrearPaciente extends Component
         }
     }
 
+    /**
+     * Renderiza el formulario de creación de paciente.
+     *
+     * @return \Illuminate\View\View
+     */
     public function render()
     {
         return view('livewire.pacientes.crear-paciente');

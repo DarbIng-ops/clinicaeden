@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * AuxiliarEnfermeriaController.php
+ *
+ * Panel del auxiliar de enfermería: procedimientos, registro de salida de pacientes y turnos.
+ *
+ * @package ClinicaEden
+ * @author  Alirio Portilla
+ * @version 3.0.0
+ */
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;

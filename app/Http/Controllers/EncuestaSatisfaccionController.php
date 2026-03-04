@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * EncuestaSatisfaccionController.php
+ *
+ * Gestiona las encuestas de satisfacción: creación, listado y estadísticas.
+ *
+ * @package ClinicaEden
+ * @author  Alirio Portilla
+ * @version 3.0.0
+ */
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -11,6 +20,11 @@ use Illuminate\Support\Facades\Auth;
 
 class EncuestaSatisfaccionController extends Controller
 {
+    /**
+     * Lista todas las encuestas de satisfacción ordenadas por fecha descendente.
+     *
+     * @return \Illuminate\View\View
+     */
     public function index()
     {
         $encuestas = EncuestaSatisfaccion::with(['paciente', 'hospitalizacion', 'consulta'])
@@ -20,6 +34,12 @@ class EncuestaSatisfaccionController extends Controller
         return view('encuestas.index', compact('encuestas'));
     }
 
+    /**
+     * Muestra el formulario de nueva encuesta, opcionalmente pre-cargado con paciente/hospitalización/consulta.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\View\View
+     */
     public function create(Request $request)
     {
         $paciente = null;
@@ -41,6 +61,12 @@ class EncuestaSatisfaccionController extends Controller
         return view('encuestas.create', compact('paciente', 'hospitalizacion', 'consulta'));
     }
 
+    /**
+     * Valida y almacena una nueva encuesta de satisfacción en la base de datos.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function store(Request $request)
     {
         $request->validate([
@@ -78,12 +104,23 @@ class EncuestaSatisfaccionController extends Controller
         return redirect()->route('encuestas.show', $encuesta)->with('success', 'Encuesta de satisfacción registrada exitosamente.');
     }
 
+    /**
+     * Muestra el detalle completo de una encuesta de satisfacción.
+     *
+     * @param  \App\Models\EncuestaSatisfaccion  $encuesta
+     * @return \Illuminate\View\View
+     */
     public function show(EncuestaSatisfaccion $encuesta)
     {
         $encuesta->load(['paciente', 'hospitalizacion', 'consulta', 'recepcion']);
         return view('encuestas.show', compact('encuesta'));
     }
 
+    /**
+     * Calcula y muestra estadísticas agregadas de todas las encuestas de satisfacción.
+     *
+     * @return \Illuminate\View\View
+     */
     public function estadisticas()
     {
         $totalEncuestas = EncuestaSatisfaccion::count();
@@ -137,6 +174,12 @@ class EncuestaSatisfaccionController extends Controller
         ));
     }
 
+    /**
+     * Busca un paciente por DNI y retorna sus hospitalizaciones y consultas recientes (JSON).
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function buscarPaciente(Request $request)
     {
         $dni = $request->input('dni');

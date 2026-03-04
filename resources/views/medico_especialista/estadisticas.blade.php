@@ -36,7 +36,6 @@
         <article class="bg-white rounded-lg shadow p-6">
             <header class="flex justify-between items-center mb-4">
                 <h2 class="text-lg font-semibold text-gray-900 flex items-center"><i class="fas fa-calendar-check text-indigo-600 mr-2"></i>Agenda próxima</h2>
-                {{-- TODO: integrar agenda real de consultas --}}
             </header>
             <p class="text-sm text-gray-500">Próximamente se mostrarán consultas programadas y prioridades clínicas.</p>
         </article>
@@ -44,7 +43,6 @@
         <article class="bg-white rounded-lg shadow p-6">
             <header class="flex justify-between items-center mb-4">
                 <h2 class="text-lg font-semibold text-gray-900 flex items-center"><i class="fas fa-chart-line text-indigo-600 mr-2"></i>Indicadores clave</h2>
-                {{-- TODO: agregar métricas específicas por especialidad --}}
             </header>
             <ul class="space-y-3 text-sm text-gray-700">
                 <li class="flex justify-between"><span>Tasa de continuidad de tratamiento</span><span class="text-gray-500">Pendiente</span></li>

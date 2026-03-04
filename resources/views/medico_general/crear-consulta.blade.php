@@ -14,7 +14,6 @@
                 <h1 class="text-2xl font-bold text-gray-900">Nueva consulta</h1>
                 <p class="text-sm text-gray-500">Paciente: {{ $paciente->nombre_completo }} ({{ $paciente->dni }})</p>
             </div>
-            {{-- TODO: permitir seleccionar tipo de consulta (presencial, virtual, etc.) --}}
         </div>
 
         <form method="POST" action="{{ route('medico_general.pacientes.store-consulta', $paciente) }}" class="px-6 py-6 space-y-6">

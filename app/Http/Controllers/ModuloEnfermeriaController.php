@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * ModuloEnfermeriaController.php
+ *
+ * CRUD de módulos de enfermería: gestiona módulos, asignación de jefes y auxiliares.
+ *
+ * @package ClinicaEden
+ * @author  Alirio Portilla
+ * @version 3.0.0
+ */
 namespace App\Http\Controllers;
 
 use App\Models\ModuloEnfermeria;
@@ -9,6 +18,11 @@ use Illuminate\Http\Request;
 
 class ModuloEnfermeriaController extends Controller
 {
+    /**
+     * Lista todos los módulos de enfermería activos con su estructura completa.
+     *
+     * @return \Illuminate\View\View
+     */
     public function index()
     {
         $modulos = ModuloEnfermeria::activos()
@@ -20,6 +34,12 @@ class ModuloEnfermeriaController extends Controller
         return view('modulos.index', compact('modulos'));
     }
 
+    /**
+     * Muestra el detalle de un módulo con jefe, auxiliares, habitaciones y salas.
+     *
+     * @param  \App\Models\ModuloEnfermeria  $modulo
+     * @return \Illuminate\View\View
+     */
     public function show(ModuloEnfermeria $modulo)
     {
         $modulo->load([
@@ -33,6 +53,11 @@ class ModuloEnfermeriaController extends Controller
         return view('modulos.show', compact('modulo'));
     }
 
+    /**
+     * Muestra el formulario para crear un nuevo módulo de enfermería.
+     *
+     * @return \Illuminate\View\View
+     */
     public function create()
     {
         $pisos = Piso::activos()->orderBy('numero')->get();
@@ -44,6 +69,12 @@ class ModuloEnfermeriaController extends Controller
         return view('modulos.create', compact('pisos', 'jefesEnfermeria'));
     }
 
+    /**
+     * Almacena un nuevo módulo de enfermería validado en la base de datos.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function store(Request $request)
     {
         $request->validate([
@@ -60,6 +91,12 @@ class ModuloEnfermeriaController extends Controller
             ->with('success', 'Módulo de enfermería creado exitosamente.');
     }
 
+    /**
+     * Muestra el formulario de edición de un módulo de enfermería existente.
+     *
+     * @param  \App\Models\ModuloEnfermeria  $modulo
+     * @return \Illuminate\View\View
+     */
     public function edit(ModuloEnfermeria $modulo)
     {
         $pisos = Piso::activos()->orderBy('numero')->get();
@@ -71,6 +108,13 @@ class ModuloEnfermeriaController extends Controller
         return view('modulos.edit', compact('modulo', 'pisos', 'jefesEnfermeria'));
     }
 
+    /**
+     * Actualiza los datos de un módulo de enfermería en la base de datos.
+     *
+     * @param  \Illuminate\Http\Request      $request
+     * @param  \App\Models\ModuloEnfermeria  $modulo
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function update(Request $request, ModuloEnfermeria $modulo)
     {
         $request->validate([
@@ -87,6 +131,12 @@ class ModuloEnfermeriaController extends Controller
             ->with('success', 'Módulo de enfermería actualizado exitosamente.');
     }
 
+    /**
+     * Elimina un módulo de enfermería del sistema.
+     *
+     * @param  \App\Models\ModuloEnfermeria  $modulo
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function destroy(ModuloEnfermeria $modulo)
     {
         $modulo->delete();
@@ -95,6 +145,13 @@ class ModuloEnfermeriaController extends Controller
             ->with('success', 'Módulo de enfermería eliminado exitosamente.');
     }
 
+    /**
+     * Asigna un auxiliar de enfermería a un módulo mediante tabla pivote.
+     *
+     * @param  \Illuminate\Http\Request      $request
+     * @param  \App\Models\ModuloEnfermeria  $modulo
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function asignarAuxiliar(Request $request, ModuloEnfermeria $modulo)
     {
         $request->validate([
@@ -107,6 +164,13 @@ class ModuloEnfermeriaController extends Controller
             ->with('success', 'Auxiliar asignado exitosamente.');
     }
 
+    /**
+     * Desactiva la asignación de un auxiliar a un módulo (soft-remove en pivot).
+     *
+     * @param  \App\Models\ModuloEnfermeria  $modulo
+     * @param  \App\Models\User              $auxiliar
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function desasignarAuxiliar(ModuloEnfermeria $modulo, User $auxiliar)
     {
         $modulo->auxiliares()->updateExistingPivot($auxiliar->id, ['activo' => false]);

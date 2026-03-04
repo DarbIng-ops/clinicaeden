@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * EncuestaSatisfaccion.php
+ *
+ * Almacena las respuestas de encuestas de satisfacción realizadas por pacientes.
+ *
+ * @package ClinicaEden
+ * @author  Alirio Portilla
+ * @version 3.0.0
+ */
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;

@@ -14,7 +14,6 @@
             <p class="text-sm text-gray-500">Completa la información para registrar una nueva hospitalización.</p>
         </div>
 
-        {{-- TODO: Actualizar acción del formulario cuando se defina la ruta de almacenamiento --}}
         <form method="POST" action="{{ route('medico_general.hospitalizaciones.store') }}" class="px-6 py-6 space-y-6">
             @csrf
 
@@ -31,7 +30,6 @@
                     @error('paciente_id')
                         <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
                     @enderror
-                    {{-- TODO: habilitar búsqueda rápida de pacientes --}}
                 </div>
 
                 <div>
@@ -85,7 +83,6 @@
                 <textarea id="indicaciones_iniciales" name="indicaciones_iniciales" rows="3"
                           class="w-full rounded-md border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring focus:ring-blue-200"
                           placeholder="Tratamientos, observaciones para enfermería, signos a monitorear..."></textarea>
-                {{-- TODO: evaluar agregar adjuntos (p.e. órdenes médicas) --}}
             </div>
 
             <div class="flex justify-end space-x-3 border-t pt-4">

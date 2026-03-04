@@ -31,25 +31,6 @@
                          onerror="this.style.display='none'">
                 </div>
             </div>
-            {{-- Tarjetas rápidas --}}
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-6">
-                <div class="rounded-lg px-4 py-3" style="background:rgba(255,255,255,.12);">
-                    <p class="text-2xl font-bold leading-tight">{{ $totalFacturasPendientes }}</p>
-                    <p class="text-xs uppercase tracking-wide mt-1" style="opacity:.85;">Facturas Pendientes</p>
-                </div>
-                <div class="rounded-lg px-4 py-3" style="background:rgba(255,255,255,.12);">
-                    <p class="text-2xl font-bold leading-tight">{{ $facturasPagadasHoy }}</p>
-                    <p class="text-xs uppercase tracking-wide mt-1" style="opacity:.85;">Pagadas Hoy</p>
-                </div>
-                <div class="rounded-lg px-4 py-3" style="background:rgba(255,255,255,.12);">
-                    <p class="text-xl font-bold leading-tight">${{ number_format($ingresosHoy, 0) }}</p>
-                    <p class="text-xs uppercase tracking-wide mt-1" style="opacity:.85;">Ingresos Hoy</p>
-                </div>
-                <div class="rounded-lg px-4 py-3" style="background:rgba(255,255,255,.12);">
-                    <p class="text-xl font-bold leading-tight">${{ number_format($ingresosMes, 0) }}</p>
-                    <p class="text-xs uppercase tracking-wide mt-1" style="opacity:.85;">Ingresos del Mes</p>
-                </div>
-            </div>
         </div>
     </div>
 

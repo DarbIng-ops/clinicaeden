@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * HabitacionController.php
+ *
+ * CRUD de habitaciones: administra las habitaciones de hospitalización por módulo.
+ *
+ * @package ClinicaEden
+ * @author  Alirio Portilla
+ * @version 3.0.0
+ */
 namespace App\Http\Controllers;
 
 use App\Models\Habitacion;
@@ -8,6 +17,11 @@ use Illuminate\Http\Request;
 
 class HabitacionController extends Controller
 {
+    /**
+     * Lista todas las habitaciones ordenadas por módulo y número.
+     *
+     * @return \Illuminate\View\View
+     */
     public function index()
     {
         $habitaciones = Habitacion::with(['modulo.piso'])
@@ -18,6 +32,12 @@ class HabitacionController extends Controller
         return view('habitaciones.index', compact('habitaciones'));
     }
 
+    /**
+     * Muestra el detalle de una habitación con sus hospitalizaciones.
+     *
+     * @param  \App\Models\Habitacion  $habitacion
+     * @return \Illuminate\View\View
+     */
     public function show(Habitacion $habitacion)
     {
         $habitacion->load([
@@ -29,6 +49,11 @@ class HabitacionController extends Controller
         return view('habitaciones.show', compact('habitacion'));
     }
 
+    /**
+     * Muestra el formulario para crear una nueva habitación.
+     *
+     * @return \Illuminate\View\View
+     */
     public function create()
     {
         $modulos = ModuloEnfermeria::activos()
@@ -40,6 +65,12 @@ class HabitacionController extends Controller
         return view('habitaciones.create', compact('modulos'));
     }
 
+    /**
+     * Almacena una nueva habitación validada en la base de datos.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function store(Request $request)
     {
         $request->validate([
@@ -56,6 +87,12 @@ class HabitacionController extends Controller
             ->with('success', 'Habitación creada exitosamente.');
     }
 
+    /**
+     * Muestra el formulario de edición de una habitación existente.
+     *
+     * @param  \App\Models\Habitacion  $habitacion
+     * @return \Illuminate\View\View
+     */
     public function edit(Habitacion $habitacion)
     {
         $modulos = ModuloEnfermeria::activos()
@@ -67,6 +104,13 @@ class HabitacionController extends Controller
         return view('habitaciones.edit', compact('habitacion', 'modulos'));
     }
 
+    /**
+     * Actualiza los datos de una habitación en la base de datos.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Habitacion    $habitacion
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function update(Request $request, Habitacion $habitacion)
     {
         $request->validate([
@@ -83,6 +127,12 @@ class HabitacionController extends Controller
             ->with('success', 'Habitación actualizada exitosamente.');
     }
 
+    /**
+     * Elimina una habitación del sistema.
+     *
+     * @param  \App\Models\Habitacion  $habitacion
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function destroy(Habitacion $habitacion)
     {
         $habitacion->delete();
@@ -91,6 +141,11 @@ class HabitacionController extends Controller
             ->with('success', 'Habitación eliminada exitosamente.');
     }
 
+    /**
+     * Lista las habitaciones disponibles con capacidad libre para nuevas hospitalizaciones.
+     *
+     * @return \Illuminate\View\View
+     */
     public function disponibles()
     {
         $habitaciones = Habitacion::disponibles()

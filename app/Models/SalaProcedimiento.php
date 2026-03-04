@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * SalaProcedimiento.php
+ *
+ * Representa las salas habilitadas para procedimientos médicos específicos.
+ *
+ * @package ClinicaEden
+ * @author  Alirio Portilla
+ * @version 3.0.0
+ */
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;

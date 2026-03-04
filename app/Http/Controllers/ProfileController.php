@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * ProfileController.php
+ *
+ * Muestra y actualiza el perfil del usuario autenticado.
+ *
+ * @package ClinicaEden
+ * @author  Alirio Portilla
+ * @version 3.0.0
+ */
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;

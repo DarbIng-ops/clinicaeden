@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * CajaController.php
+ *
+ * Gestiona las operaciones de caja: facturas, pagos, reportes de ingresos y cierre de caja.
+ *
+ * @package ClinicaEden
+ * @author  Alirio Portilla
+ * @version 3.0.0
+ */
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;

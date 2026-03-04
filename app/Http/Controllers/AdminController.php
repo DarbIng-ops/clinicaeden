@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * AdminController.php
+ *
+ * Gestiona el panel de administración: dashboard, usuarios, reportes y configuración del sistema.
+ *
+ * @package ClinicaEden
+ * @author  Alirio Portilla
+ * @version 3.0.0
+ */
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -11,8 +20,6 @@ use App\Models\Hospitalizacion;
 use App\Models\Factura;
 use App\Models\ModuloEnfermeria;
 use App\Models\Tratamiento;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;

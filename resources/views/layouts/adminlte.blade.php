@@ -40,18 +40,6 @@
             <!-- Main content -->
             <section class="content">
                 <div class="container-fluid">
-                    {{-- Aviso sesión expirada (ISO 27001) --}}
-                    @if(session('session_expired'))
-                        <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert">
-                            <i class="fas fa-shield-alt mr-1"></i>
-                            <strong>Sesión expirada:</strong> Su sesión expiró por inactividad (ISO 27001).
-                            Por favor inicie sesión nuevamente.
-                            <button type="button" class="close" data-dismiss="alert">
-                                <span>&times;</span>
-                            </button>
-                        </div>
-                    @endif
-
                     @yield('content')
                 </div>
             </section>

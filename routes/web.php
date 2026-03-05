@@ -18,7 +18,6 @@ use App\Http\Controllers\ConsultorioController;
 use App\Http\Controllers\HabitacionController;
 use App\Http\Controllers\CajaController;
 use App\Livewire\Caja\PanelCajero;
-use App\Livewire\Admin\AuditoriaSeguridad;
 use App\Http\Controllers\JefeEnfermeriaController;
 use App\Http\Controllers\AuxiliarEnfermeriaController;
 use App\Http\Controllers\ProfileController;
@@ -82,8 +81,6 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('/balance-personal', [AdminController::class, 'balancePersonal'])->name('balance-personal');
     Route::get('/balance-ingresos', [AdminController::class, 'balanceIngresos'])->name('balance-ingresos');
 
-    // Auditoría ISO 27001
-    Route::get('/auditoria', AuditoriaSeguridad::class)->name('auditoria');
 });
 
 // ============================================================

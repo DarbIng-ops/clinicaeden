@@ -57,6 +57,12 @@
                             <p>Reportes</p>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="{{ route('admin.auditoria') }}" class="nav-link {{ request()->routeIs('admin.auditoria') ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-shield-alt" style="color:#27AE60"></i>
+                            <p>Auditoría ISO 27001</p>
+                        </a>
+                    </li>
                 @endif
 
                 @if(auth()->user()->role === 'medico_general')

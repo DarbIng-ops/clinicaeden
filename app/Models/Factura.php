@@ -192,4 +192,20 @@ class Factura extends Model
         $this->save();
         return $this->total;
     }
+
+    /**
+     * Recalcular subtotal y total desde las líneas de detalle.
+     * Usar cuando se agregan/modifican ítems de la factura.
+     */
+    public function recalcularTotal(): void
+    {
+        $total = (float) $this->detalles()
+            ->selectRaw('SUM(precio_unitario * cantidad) as total')
+            ->value('total');
+
+        $this->update([
+            'subtotal' => $total,
+            'total'    => $total,
+        ]);
+    }
 }

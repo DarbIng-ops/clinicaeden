@@ -38,6 +38,16 @@
                 </header>
             @endif
 
+            <!-- Aviso sesión expirada (ISO 27001) -->
+            @if(session('session_expired'))
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
+                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded text-sm">
+                        ⚠️ Su sesión expiró por inactividad (ISO 27001).
+                        Por favor inicie sesión nuevamente.
+                    </div>
+                </div>
+            @endif
+
             <!-- Page Content -->
             <main>
                 @yield('content')

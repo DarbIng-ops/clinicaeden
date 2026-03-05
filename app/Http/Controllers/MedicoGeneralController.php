@@ -397,28 +397,51 @@ class MedicoGeneralController extends Controller
 
         if ($request->accion === 'caja') {
             try {
+                // Determinar tarifa según tipo de consulta
+                $tipo = strtolower($consulta->tipo_consulta ?? '');
+                $nombreTarifa = match(true) {
+                    str_contains($tipo, 'especialista') => 'Consulta médica especialista',
+                    str_contains($tipo, 'urgencia')     => 'Consulta de urgencias',
+                    str_contains($tipo, 'control')      => 'Control / seguimiento',
+                    default                             => 'Consulta médica general',
+                };
+                $tarifa = \App\Models\Tarifa::where('nombre', $nombreTarifa)->first();
+                $precioConsulta = (float) ($tarifa?->precio ?? 35000);
+
                 // Generar número de factura único usando timestamp para evitar colisiones
                 $numeroFactura = 'FAC-' . str_pad($consulta->id, 6, '0', STR_PAD_LEFT) . '-' . now()->format('His');
 
-                \App\Models\Factura::create([
+                $factura = \App\Models\Factura::create([
                     'paciente_id'    => $consulta->paciente_id,
                     'consulta_id'    => $consulta->id,
                     'numero_factura' => $numeroFactura,
-                    'subtotal'       => 1000,
+                    'subtotal'       => $precioConsulta,
                     'impuestos'      => 0,
-                    'total'          => 1000,
+                    'total'          => $precioConsulta,
                     'metodo_pago'    => null,
                     'estado'         => 'pendiente',
                     'fecha_emision'  => now(),
                 ]);
 
+                // Crear línea de detalle con el precio real de la tarifa
+                \App\Models\DetalleFactura::create([
+                    'factura_id'      => $factura->id,
+                    'tarifa_id'       => $tarifa?->id,
+                    'concepto'        => $nombreTarifa,
+                    'tipo'            => 'consulta',
+                    'cantidad'        => 1,
+                    'precio_unitario' => $precioConsulta,
+                    'subtotal'        => $precioConsulta,
+                ]);
+
+                $totalFormateado = '$ ' . number_format($precioConsulta, 0, ',', '.');
                 $usuariosCaja = \App\Models\User::where('role', 'caja')->where('activo', 1)->get();
                 foreach ($usuariosCaja as $caja) {
                     \App\Models\NotificacionSistema::create([
                         'usuario_emisor_id'   => auth()->id(),
                         'usuario_receptor_id' => $caja->id,
                         'titulo'  => 'Paciente derivado a Caja',
-                        'mensaje' => 'Paciente: ' . $consulta->paciente->nombres . ' ' . $consulta->paciente->apellidos . ' debe realizar pago de $1000',
+                        'mensaje' => 'Paciente: ' . $consulta->paciente->nombres . ' ' . $consulta->paciente->apellidos . ' debe realizar pago de ' . $totalFormateado,
                         'tipo'    => 'derivacion_caja',
                         'leida'   => false,
                     ]);

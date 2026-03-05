@@ -152,7 +152,8 @@ class PanelCajero extends Component
 
     public function getSubtotalProperty(): float
     {
-        return (float) ($this->facturaActiva?->subtotal ?? 0);
+        // Sumar desde los ítems (detalles reales o reconstruidos) para garantizar exactitud
+        return (float) $this->itemsFactura->sum(fn ($item) => $item->subtotal);
     }
 
     public function getDescuentoMontoProperty(): float
@@ -248,6 +249,9 @@ class PanelCajero extends Component
 
     public function render()
     {
-        return view('livewire.caja.panel-cajero');
+        // .extends() usa @extends/@yield, compatible con layouts/app.blade.php tradicional
+        return view('livewire.caja.panel-cajero')
+            ->extends('layouts.app')
+            ->section('content');
     }
 }

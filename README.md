@@ -511,3 +511,15 @@ Si este proyecto te pareció útil o interesante:
 - Seguime en [LinkedIn](https://linkedin.com/in/tu-perfil) para más proyectos
 
 **¡Gracias por tu interés!** 🚀
+
+## Licenciamiento
+
+Este proyecto opera bajo licencia dual:
+
+- **GPL v3** — libre para uso educativo y no comercial.
+  Ver archivo [LICENSE](./LICENSE).
+- **Licencia Comercial** — para implementaciones comerciales sin obligación
+  de revelar código fuente modificado.
+  Contacto: **alirioportilla96@gmail.com**
+
+© 2026 Alirio Portilla. Todos los derechos reservados sobre la marca ClinicaEden.

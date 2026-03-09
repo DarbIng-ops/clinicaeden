@@ -21,7 +21,7 @@ class PanelCajero extends Component
     public string $motivo_descuento = '';
 
     /** @var string Método de pago seleccionado */
-    public string $metodo_pago = '';
+    public string $metodo_pago = 'efectivo';
 
     // ── Computed: lista de espera ─────────────────────────────
 

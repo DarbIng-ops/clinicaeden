@@ -15,7 +15,7 @@ use Illuminate\Http\Request;
 use App\Models\Hospitalizacion;
 use App\Models\Paciente;
 use App\Models\Factura;
-use App\Models\EncuestaSatisfaccion;
+// use App\Models\EncuestaSatisfaccion; // DEPRECATED — encuesta eliminada del flujo clínico
 use App\Models\Habitacion;
 use App\Models\NotificacionSistema;
 use Illuminate\Support\Facades\Auth;
@@ -77,9 +77,6 @@ class DashboardController extends Controller
             ->where('estado', 'pagado')
             ->sum('total');
 
-        // Satisfacción del cliente
-        $satisfaccionPromedio = \App\Models\EncuestaSatisfaccion::avg('calidad_general') ?? 0;
-
         // Ocupación por piso - Consulta optimizada para MySQL
         $ocupacionPorPiso = DB::table('habitaciones')
             ->join('modulos_enfermeria', 'habitaciones.modulo_id', '=', 'modulos_enfermeria.id')
@@ -118,7 +115,6 @@ class DashboardController extends Controller
             'totalHabitaciones',
             'habitacionesDisponibles',
             'ingresosMes',
-            'satisfaccionPromedio',
             'ocupacionPorPiso',
             'pacientesPorEspecialidad',
             'notificaciones'
@@ -143,18 +139,14 @@ class DashboardController extends Controller
         // Facturas pendientes de pago
         $facturasPendientes = Factura::where('estado', 'pendiente')->count();
 
-        // Pacientes listos para salida
+        // Pacientes listos para salida (con estado pendiente_salida)
         $pacientesListosParaSalida = Factura::where('estado', 'pagado')
-            ->whereHas('consulta', function($q) {
-                $q->where('estado', 'completada');
+            ->whereHas('paciente', function($q) {
+                $q->where('estado', 'pendiente_salida');
             })
-            ->whereDoesntHave('consulta.encuestaSatisfaccion')
             ->whereDate('fecha_pago', '>=', now()->subDays(1))
             ->count();
-        
-        // Encuestas pendientes
-        $encuestasPendientes = $pacientesListosParaSalida;
-        
+
         // Notificaciones
         $notificaciones = NotificacionSistema::where('usuario_receptor_id', Auth::id())
             ->orderBy('created_at', 'desc')
@@ -166,7 +158,6 @@ class DashboardController extends Controller
             'hospitalizacionesPendientes',
             'facturasPendientes',
             'pacientesListosParaSalida',
-            'encuestasPendientes',
             'notificaciones'
         ));
     }

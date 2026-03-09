@@ -122,16 +122,6 @@ class Hospitalizacion extends Model
         return $this->hasMany(Factura::class);
     }
 
-    /**
-     * Relación: encuestas de satisfacción vinculadas al alta.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function encuestasSatisfaccion()
-    {
-        return $this->hasMany(EncuestaSatisfaccion::class);
-    }
-
     // Scopes
     /**
      * Scope para hospitalizaciones activas.

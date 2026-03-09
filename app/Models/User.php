@@ -160,16 +160,6 @@ class User extends Authenticatable
     }
 
     /**
-     * Relación: encuestas de satisfacción registradas desde recepción.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function encuestasSatisfaccionComoRecepcion()
-    {
-        return $this->hasMany(EncuestaSatisfaccion::class, 'recepcion_id');
-    }
-
-    /**
      * Relación: notificaciones emitidas por el usuario.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

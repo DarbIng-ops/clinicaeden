@@ -15,7 +15,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Paciente;
 use App\Models\Consulta;
-use App\Models\EncuestaSatisfaccion;
+// use App\Models\EncuestaSatisfaccion; // DEPRECATED — encuesta eliminada del flujo clínico
 use App\Models\Hospitalizacion;
 use App\Models\Factura;
 use App\Models\ModuloEnfermeria;
@@ -585,25 +585,7 @@ class AdminController extends Controller
         ));
     }
 
-    public function reporteSatisfaccion(Request $request)
-    {
-        [$fechaInicio, $fechaFin] = $this->periodoDesdeRequest($request);
-
-        $encuestas = EncuestaSatisfaccion::with('paciente')
-            ->whereBetween('created_at', [$fechaInicio, $fechaFin . ' 23:59:59'])
-            ->orderBy('created_at', 'desc')
-            ->get();
-
-        $promedioGeneral = $encuestas->isNotEmpty()
-            ? round($encuestas->avg('calidad_general'), 2)
-            : 0;
-
-        $recomendarian = $encuestas->where('recomendaria', true)->count();
-
-        return view('admin.reportes.satisfaccion', compact(
-            'encuestas', 'promedioGeneral', 'recomendarian', 'fechaInicio', 'fechaFin'
-        ));
-    }
+    // DEPRECATED: reporteSatisfaccion() eliminado — encuesta de satisfacción removida del flujo clínico
 
     public function reporteMedicamentos(Request $request)
     {

@@ -14,6 +14,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+// Modelo deprecado — encuesta eliminada del flujo clínico
 class EncuestaSatisfaccion extends Model
 {
     use HasFactory;

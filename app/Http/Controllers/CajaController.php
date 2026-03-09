@@ -203,7 +203,7 @@ class CajaController extends Controller
                     'usuario_emisor_id' => Auth::id(),
                     'usuario_receptor_id' => $recepcionista->id,
                     'titulo' => 'Pago Completado - Paciente Listo para Salida',
-                    'mensaje' => "El paciente {$hospitalizacion->paciente->getNombreCompletoAttribute()} ha completado el pago y está listo para la salida. Por favor, procede con la encuesta de satisfacción y el alta final.",
+                    'mensaje' => "El paciente {$hospitalizacion->paciente->getNombreCompletoAttribute()} ha completado el pago y está listo para el alta final.",
                     'tipo' => 'pago_completado',
                     'leida' => false,
                     'data' => [

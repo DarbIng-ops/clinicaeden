@@ -60,85 +60,6 @@
             <form method="POST" action="{{ route('recepcion.confirmar-salida', $paciente->id) }}">
                 @csrf
                 
-                <!-- Encuesta de Satisfacción -->
-                <div class="bg-white border border-gray-200 rounded-lg overflow-hidden mb-6">
-
-                    <div class="flex items-center gap-2 px-6 py-3 bg-gray-50 border-b border-gray-200">
-                        <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color:#2D5F8A">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                        <h2 class="text-sm font-semibold uppercase tracking-wide text-gray-700">Encuesta de Satisfacción</h2>
-                    </div>
-
-                    <div class="px-6 pb-6 pt-4 space-y-4">
-                    <p class="text-xs text-gray-500">Solicite al paciente que califique su experiencia</p>
-
-                    <!-- Calidad de Atención Médica -->
-                    <div class="space-y-1">
-                        <label class="text-xs font-medium text-gray-600">
-                            Calidad de Atención Médica <span class="text-red-400">*</span>
-                        </label>
-                        <div class="flex gap-1" id="atencion-medica">
-                            @foreach(['1' => 'Muy Mala', '2' => 'Mala', '3' => 'Regular', '4' => 'Buena', '5' => 'Excelente'] as $val => $label)
-                            <button type="button"
-                                    onclick="setRating('atencion_medica', {{ $val }})"
-                                    data-value="{{ $val }}"
-                                    class="rating-btn flex-1 py-2 px-1 text-xs rounded border border-gray-200 bg-white text-gray-500 transition-all duration-150 hover:border-eden-azul-medio hover:text-eden-azul-medio">
-                                {{ $label }}
-                            </button>
-                            @endforeach
-                        </div>
-                        <input type="hidden" name="atencion_medica" id="atencion_medica_value" required>
-                    </div>
-
-                    <!-- Tiempo de Espera -->
-                    <div class="space-y-1">
-                        <label class="text-xs font-medium text-gray-600">
-                            Tiempo de Espera <span class="text-red-400">*</span>
-                        </label>
-                        <div class="flex gap-1" id="tiempo-espera">
-                            @foreach(['1' => 'Muy Largo', '2' => 'Largo', '3' => 'Aceptable', '4' => 'Rápido', '5' => 'Muy Rápido'] as $val => $label)
-                            <button type="button"
-                                    onclick="setRating('tiempo_espera', {{ $val }})"
-                                    data-value="{{ $val }}"
-                                    class="rating-btn flex-1 py-2 px-1 text-xs rounded border border-gray-200 bg-white text-gray-500 transition-all duration-150 hover:border-eden-azul-medio hover:text-eden-azul-medio">
-                                {{ $label }}
-                            </button>
-                            @endforeach
-                        </div>
-                        <input type="hidden" name="tiempo_espera" id="tiempo_espera_value" required>
-                    </div>
-
-                    <!-- Trato del Personal -->
-                    <div class="space-y-1">
-                        <label class="text-xs font-medium text-gray-600">
-                            Trato del Personal <span class="text-red-400">*</span>
-                        </label>
-                        <div class="flex gap-1" id="trato-personal">
-                            @foreach(['1' => 'Muy Malo', '2' => 'Malo', '3' => 'Regular', '4' => 'Bueno', '5' => 'Excelente'] as $val => $label)
-                            <button type="button"
-                                    onclick="setRating('trato_personal', {{ $val }})"
-                                    data-value="{{ $val }}"
-                                    class="rating-btn flex-1 py-2 px-1 text-xs rounded border border-gray-200 bg-white text-gray-500 transition-all duration-150 hover:border-eden-azul-medio hover:text-eden-azul-medio">
-                                {{ $label }}
-                            </button>
-                            @endforeach
-                        </div>
-                        <input type="hidden" name="trato_personal" id="trato_personal_value" required>
-                    </div>
-
-                    <!-- Comentarios Adicionales -->
-                    <div class="space-y-1">
-                        <label class="text-xs font-medium text-gray-600">Comentarios o Sugerencias <span class="text-gray-400">(Opcional)</span></label>
-                        <textarea name="comentarios_encuesta" rows="3"
-                                  class="w-full border border-gray-200 rounded px-3 py-2 text-sm text-gray-700 focus:ring-1 focus:ring-eden-azul-medio focus:border-eden-azul-medio outline-none"
-                                  placeholder="El paciente puede compartir comentarios adicionales..."></textarea>
-                    </div>
-
-                    </div>{{-- /px-6 --}}
-                </div>
-
                 <div class="mb-6">
                     <label class="block text-sm font-medium text-gray-700 mb-2">
                         Observaciones de Salida (Opcional)
@@ -163,38 +84,5 @@
     </div>
 </div>
 
-<script>
-function setRating(category, value) {
-    const containerId = category.replace(/_/g, '-');
-
-    // Restaurar todos los botones del grupo al estado inactivo
-    document.querySelectorAll(`#${containerId} .rating-btn`).forEach(btn => {
-        btn.classList.remove('bg-eden-azul-medio', 'text-white', 'border-eden-azul-medio', 'font-semibold');
-        btn.classList.add('bg-white', 'text-gray-500', 'border-gray-200');
-    });
-
-    // Activar el botón seleccionado
-    const selected = document.querySelector(`#${containerId} [data-value="${value}"]`);
-    if (selected) {
-        selected.classList.remove('bg-white', 'text-gray-500', 'border-gray-200');
-        selected.classList.add('bg-eden-azul-medio', 'text-white', 'border-eden-azul-medio', 'font-semibold');
-    }
-
-    // Guardar valor en hidden input
-    const input = document.getElementById(`${category}_value`);
-    if (input) input.value = value;
-}
-
-// Validar antes de enviar
-document.querySelector('form').addEventListener('submit', function(e) {
-    const required = ['atencion_medica', 'tiempo_espera', 'trato_personal'];
-    const missing = required.filter(f => !document.getElementById(`${f}_value`).value);
-
-    if (missing.length) {
-        e.preventDefault();
-        alert('Por favor complete todas las calificaciones de la encuesta:\n- ' + missing.map(f => f.replace(/_/g, ' ')).join('\n- '));
-    }
-});
-</script>
 @endsection
 

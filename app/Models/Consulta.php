@@ -127,16 +127,6 @@ class Consulta extends Model
     }
 
     /**
-     * Relación: encuesta de satisfacción vinculada a la consulta.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
-    public function encuestaSatisfaccion()
-    {
-        return $this->hasOne(EncuestaSatisfaccion::class, 'consulta_id');
-    }
-
-    /**
      * Relación: factura emitida para esta consulta.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasOne

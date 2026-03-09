@@ -76,7 +76,8 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('/reportes/consultas', [AdminController::class, 'reporteConsultas'])->name('reportes.consultas');
     Route::get('/reportes/hospitalizaciones', [AdminController::class, 'reporteHospitalizaciones'])->name('reportes.hospitalizaciones');
     Route::get('/reportes/financiero', [AdminController::class, 'reporteFinanciero'])->name('reportes.financiero');
-    Route::get('/reportes/satisfaccion', [AdminController::class, 'reporteSatisfaccion'])->name('reportes.satisfaccion');
+    // DEPRECATED: ruta reportes.satisfaccion eliminada — encuesta removida del flujo clínico
+    // Route::get('/reportes/satisfaccion', [AdminController::class, 'reporteSatisfaccion'])->name('reportes.satisfaccion');
     Route::get('/reportes/medicamentos', [AdminController::class, 'reporteMedicamentos'])->name('reportes.medicamentos');
     Route::get('/balance-personal', [AdminController::class, 'balancePersonal'])->name('balance-personal');
     Route::get('/balance-ingresos', [AdminController::class, 'balanceIngresos'])->name('balance-ingresos');
@@ -156,14 +157,12 @@ Route::middleware(['auth', 'role:admin,caja'])->group(function () {
     Route::get('facturas/reporte/ingresos', [FacturaController::class, 'reporteIngresos'])->name('facturas.reporte-ingresos');
 });
 
-// ============================================================
-// Encuestas de satisfacción: registro y estadísticas
-// ============================================================
-Route::middleware(['auth', 'role:admin,recepcionista'])->group(function () {
-    Route::resource('encuestas', EncuestaSatisfaccionController::class);
-    Route::get('encuestas/estadisticas', [EncuestaSatisfaccionController::class, 'estadisticas'])->name('encuestas.estadisticas');
-    Route::get('api/encuestas/buscar-paciente', [EncuestaSatisfaccionController::class, 'buscarPaciente'])->name('api.encuestas.buscar-paciente');
-});
+// DEPRECATED: rutas de encuestas de satisfacción eliminadas — feature removida del flujo clínico
+// Route::middleware(['auth', 'role:admin,recepcionista'])->group(function () {
+//     Route::resource('encuestas', EncuestaSatisfaccionController::class);
+//     Route::get('encuestas/estadisticas', [EncuestaSatisfaccionController::class, 'estadisticas'])->name('encuestas.estadisticas');
+//     Route::get('api/encuestas/buscar-paciente', [EncuestaSatisfaccionController::class, 'buscarPaciente'])->name('api.encuestas.buscar-paciente');
+// });
 
 // ============================================================
 // Rutas específicas por rol - Dashboards especializados

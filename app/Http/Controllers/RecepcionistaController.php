@@ -40,21 +40,15 @@ class RecepcionistaController extends Controller
         // Facturas pendientes de pago
         $facturasPendientes = \App\Models\Factura::where('estado', 'pendiente')->count();
         
-        // Encuestas pendientes
-        $encuestasPendientes = 0; // Se puede implementar lógica específica
-        
-        // Pacientes listos para salida (optimizado para evitar N+1)
+        // Pacientes listos para salida
         $pacientesListosParaSalida = \App\Models\Factura::where('estado', 'pagado')
-            ->with(['paciente', 'consulta.encuestaSatisfaccion'])
+            ->with(['paciente', 'consulta'])
             ->whereHas('consulta', function($q) {
                 $q->where('estado', 'completada');
             })
             ->whereDate('fecha_pago', '>=', now()->subDays(7))
             ->orderBy('fecha_pago', 'desc')
-            ->get()
-            ->filter(function($factura) {
-                return $factura->consulta && !$factura->consulta->encuestaSatisfaccion;
-            });
+            ->get();
         
         // Notificaciones
         $notificaciones = \App\Models\NotificacionSistema::where('usuario_receptor_id', Auth::id())
@@ -66,7 +60,6 @@ class RecepcionistaController extends Controller
             'pacientesHoy',
             'hospitalizacionesPendientes',
             'facturasPendientes',
-            'encuestasPendientes',
             'pacientesListosParaSalida',
             'notificaciones'
         ));
@@ -533,7 +526,6 @@ class RecepcionistaController extends Controller
             ->whereHas('consulta', function($q) {
                 $q->where('estado', 'completada');
             })
-            ->whereDoesntHave('consulta.encuestaSatisfaccion')
             ->whereHas('paciente', function($q) {
                 $q->where('estado', 'pendiente_salida');
             })
@@ -584,45 +576,6 @@ class RecepcionistaController extends Controller
     public function confirmarSalida(\Illuminate\Http\Request $request, $id)
     {
         $paciente = \App\Models\Paciente::findOrFail($id);
-        
-        $consulta = \App\Models\Consulta::where('paciente_id', $paciente->id)
-            ->where('estado', 'completada')
-            ->latest()
-            ->first();
-        
-        if ($consulta) {
-            // Validar datos de la encuesta
-            $request->validate([
-                'atencion_medica' => 'required|integer|min:1|max:5',
-                'tiempo_espera' => 'required|integer|min:1|max:5',
-                'trato_personal' => 'required|integer|min:1|max:5',
-                'comentarios_encuesta' => 'nullable|string',
-                'observaciones_salida' => 'nullable|string'
-            ]);
-
-            // Calcular calidad general solo si todos los valores están presentes
-            $calidad = null;
-            if ($request->atencion_medica && $request->tiempo_espera && $request->trato_personal) {
-                $calidad = round(($request->atencion_medica + $request->tiempo_espera + $request->trato_personal) / 3, 1);
-            }
-
-            // Guardar encuesta de satisfacción
-            \App\Models\EncuestaSatisfaccion::create([
-                'paciente_id' => $paciente->id,
-                'consulta_id' => $consulta->id,
-                'recepcion_id' => Auth::id(),
-                'atencion_medica' => $request->atencion_medica,
-                'atencion_enfermeria' => null,
-                'limpieza_habitacion' => null,
-                'comida' => null,
-                'personal_recepcion' => $request->trato_personal,
-                'tiempo_espera' => $request->tiempo_espera,
-                'calidad_general' => $calidad,
-                'comentarios' => $request->comentarios_encuesta,
-                'recomendaria' => 1,
-                'fecha_encuesta' => now()
-            ]);
-        }
 
         // Marcar paciente como egresado
         $paciente->update(['estado' => 'egresado']);

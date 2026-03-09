@@ -182,25 +182,6 @@
         </div>
 
         {{-- Satisfacción --}}
-        <div class="col-12 col-sm-6 col-lg-4">
-            <div class="card card-outline card-pink" style="border-top-color: #e83e8c;">
-                <div class="card-header">
-                    <h3 class="card-title"><i class="fas fa-star mr-1"></i> Satisfacción</h3>
-                    <div class="card-tools">
-                        <span class="badge" style="background:#e83e8c;color:#fff;">Disponible</span>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <p class="text-muted">Encuestas de satisfacción, calificaciones promedio y nivel de recomendación.</p>
-                </div>
-                <div class="card-footer">
-                    <a href="{{ route('admin.reportes.satisfaccion') }}?{{ $qs }}"
-                       class="btn btn-sm btn-block text-white" style="background:#e83e8c;">
-                        <i class="fas fa-eye mr-1"></i> Ver Reporte →
-                    </a>
-                </div>
-            </div>
-        </div>
 
         {{-- Medicamentos / Tratamientos --}}
         <div class="col-12 col-sm-6 col-lg-4">

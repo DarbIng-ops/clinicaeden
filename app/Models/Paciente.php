@@ -249,8 +249,4 @@ class Paciente extends Model
         return $this->hasMany(Factura::class);
     }
 
-    public function encuestasSatisfaccion()
-    {
-        return $this->hasMany(EncuestaSatisfaccion::class);
-    }
 }

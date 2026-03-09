@@ -101,6 +101,7 @@ class RecepcionistaController extends Controller
                 ->when($request->ciudad, function ($query, $ciudad) {
                     return $query->where('ciudad', 'like', "%{$ciudad}%");
                 })
+                ->whereNotIn('estado', ['egresado', 'pendiente_salida'])
                 ->whereDoesntHave('consultas', function($q) {
                     $q->where('estado', 'pendiente');
                 })
@@ -533,6 +534,9 @@ class RecepcionistaController extends Controller
                 $q->where('estado', 'completada');
             })
             ->whereDoesntHave('consulta.encuestaSatisfaccion')
+            ->whereHas('paciente', function($q) {
+                $q->where('estado', 'pendiente_salida');
+            })
             ->with(['paciente', 'consulta'])
             ->whereDate('fecha_pago', '>=', now()->subDays(7))
             ->orderBy('fecha_pago', 'desc')

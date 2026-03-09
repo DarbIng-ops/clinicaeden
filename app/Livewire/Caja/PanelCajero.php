@@ -14,8 +14,8 @@ class PanelCajero extends Component
     /** @var int|null Factura activa seleccionada */
     public ?int $factura_id = null;
 
-    /** @var float Porcentaje de descuento 0-100 */
-    public float $descuento_porcentaje = 0;
+    /** @var string Porcentaje de descuento 0-100 (string para tolerar input vacío en Livewire 3) */
+    public string $descuento_porcentaje = '0';
 
     /** @var string Justificación del descuento */
     public string $motivo_descuento = '';
@@ -158,11 +158,11 @@ class PanelCajero extends Component
 
     public function getDescuentoMontoProperty(): float
     {
-        if ($this->descuento_porcentaje <= 0) {
+        if ((float) $this->descuento_porcentaje <= 0) {
             return 0;
         }
 
-        return round($this->subtotal * ($this->descuento_porcentaje / 100), 2);
+        return round($this->subtotal * ((float) $this->descuento_porcentaje / 100), 2);
     }
 
     public function getTotalFinalProperty(): float
@@ -175,7 +175,7 @@ class PanelCajero extends Component
     public function seleccionarFactura(int $facturaId): void
     {
         $this->factura_id          = $facturaId;
-        $this->descuento_porcentaje = 0;
+        $this->descuento_porcentaje = '0';
         $this->motivo_descuento    = '';
         $this->metodo_pago         = '';
     }
@@ -194,7 +194,7 @@ class PanelCajero extends Component
             'descuento_porcentaje'  => 'numeric|min:0|max:100',
         ];
 
-        if ($this->descuento_porcentaje > 0) {
+        if ((float) $this->descuento_porcentaje > 0) {
             $rules['motivo_descuento'] = 'required|min:5|max:500';
         }
 
@@ -212,7 +212,7 @@ class PanelCajero extends Component
             return;
         }
 
-        $descuentoMonto = round($factura->subtotal * ($this->descuento_porcentaje / 100), 2);
+        $descuentoMonto = round($factura->subtotal * ((float) $this->descuento_porcentaje / 100), 2);
         $totalFinal     = max(0, $factura->subtotal - $descuentoMonto);
 
         DB::transaction(function () use ($factura, $descuentoMonto, $totalFinal) {
@@ -220,7 +220,7 @@ class PanelCajero extends Component
                 'estado'                => 'pagado',
                 'metodo_pago'           => $this->metodo_pago,
                 'total'                 => $totalFinal,
-                'descuento_porcentaje'  => $this->descuento_porcentaje,
+                'descuento_porcentaje'  => (float) $this->descuento_porcentaje,
                 'descuento_monto'       => $descuentoMonto,
                 'motivo_descuento'      => $this->motivo_descuento ?: null,
                 'caja_id'               => auth()->id(),

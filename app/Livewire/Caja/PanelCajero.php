@@ -227,8 +227,12 @@ class PanelCajero extends Component
                 'fecha_pago'            => now(),
             ]);
 
-            // Notificación al cajero (no crítica)
+            // PASO B — marcar paciente como pendiente de salida
+            $factura->paciente?->update(['estado' => 'pendiente_salida']);
+
+            // Notificaciones (no críticas)
             try {
+                // Al cajero
                 NotificacionSistema::create([
                     'user_id' => auth()->id(),
                     'titulo'  => 'Pago procesado',
@@ -236,8 +240,20 @@ class PanelCajero extends Component
                                . 'Total: $ ' . number_format($totalFinal, 0, ',', '.'),
                     'leida'   => false,
                 ]);
+
+                // A recepción: paciente listo para salida
+                $nombrePaciente = trim(($factura->paciente?->nombres ?? '') . ' ' . ($factura->paciente?->apellidos ?? ''));
+                $recepcionistas = \App\Models\User::where('role', 'recepcionista')->where('activo', 1)->get();
+                foreach ($recepcionistas as $rec) {
+                    NotificacionSistema::create([
+                        'user_id' => $rec->id,
+                        'titulo'  => 'Paciente pendiente de salida',
+                        'mensaje' => "{$nombrePaciente} completó su pago y está listo para ser dado de alta.",
+                        'leida'   => false,
+                    ]);
+                }
             } catch (\Throwable) {
-                // Notificación no crítica, no detiene el flujo
+                // Notificaciones no críticas
             }
         });
 

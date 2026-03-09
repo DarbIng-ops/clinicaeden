@@ -620,6 +620,9 @@ class RecepcionistaController extends Controller
             ]);
         }
 
+        // Marcar paciente como egresado
+        $paciente->update(['estado' => 'egresado']);
+
         return redirect()->route('recepcion.salidas')->with('success', 'Salida procesada exitosamente');
     }
 

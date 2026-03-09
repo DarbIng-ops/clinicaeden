@@ -36,6 +36,7 @@ class Paciente extends Model
         'contacto_emergencia_telefono',
         'foto',
         'activo',
+        'estado',
     ];
 
     /**

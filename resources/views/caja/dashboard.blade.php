@@ -152,9 +152,9 @@
                             {{ $factura->fecha_emision->format('d/m/Y') }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                            <a href="{{ route('caja.facturas.ver', $factura) }}" 
+                            <a href="{{ route('caja.facturas.ver', $factura) }}"
                                class="text-blue-600 hover:text-blue-900 mr-3">Ver</a>
-                            <a href="{{ route('caja.facturas.procesar-pago', $factura) }}" 
+                            <a href="{{ route('caja.panel') }}"
                                class="text-green-600 hover:text-green-900">Procesar Pago</a>
                         </td>
                     </tr>

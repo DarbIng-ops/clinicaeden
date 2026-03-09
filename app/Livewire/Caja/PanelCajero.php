@@ -23,6 +23,9 @@ class PanelCajero extends Component
     /** @var string Método de pago seleccionado */
     public string $metodo_pago = 'efectivo';
 
+    /** @var string Monto recibido en efectivo (para calculador de cambio) */
+    public string $monto_recibido = '0';
+
     // ── Computed: lista de espera ─────────────────────────────
 
     public function getPacientesPendientesProperty(): Collection
@@ -177,12 +180,13 @@ class PanelCajero extends Component
         $this->factura_id          = $facturaId;
         $this->descuento_porcentaje = '0';
         $this->motivo_descuento    = '';
-        $this->metodo_pago         = '';
+        $this->metodo_pago         = 'efectivo';
+        $this->monto_recibido      = '0';
     }
 
     public function cancelarSeleccion(): void
     {
-        $this->reset(['factura_id', 'descuento_porcentaje', 'motivo_descuento', 'metodo_pago']);
+        $this->reset(['factura_id', 'descuento_porcentaje', 'motivo_descuento', 'metodo_pago', 'monto_recibido']);
     }
 
     public function procesarPago(): void

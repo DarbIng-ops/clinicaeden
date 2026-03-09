@@ -317,6 +317,20 @@
                                     </label>
                                 @endforeach
                             </div>
+
+                            {{-- Calculador de cambio — solo efectivo --}}
+                            <div x-show="$wire.metodo_pago === 'efectivo'" x-cloak class="mt-3 space-y-2">
+                                <label class="text-xs font-medium text-gray-600">Monto recibido</label>
+                                <input type="number"
+                                       wire:model.live="monto_recibido"
+                                       min="0" step="1000"
+                                       class="w-40 border border-gray-300 rounded px-3 py-1.5 text-sm"
+                                       placeholder="0">
+                                <p class="text-sm font-semibold"
+                                   style="color:#2D5F8A"
+                                   x-text="'Cambio: $ ' + Math.max(0, parseFloat($wire.monto_recibido || 0) - {{ $this->totalFinal }}).toLocaleString('es-CO')">
+                                </p>
+                            </div>
                         </div>
 
                         {{-- ── Botones ────────────────────────── --}}

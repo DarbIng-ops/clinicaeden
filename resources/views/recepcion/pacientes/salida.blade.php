@@ -3,7 +3,7 @@
 @section('content')
 <div class="max-w-4xl mx-auto p-6">
     <div class="bg-white rounded-lg shadow-md">
-        <div class="bg-green-600 text-white px-6 py-4 rounded-t-lg">
+        <div class="text-white px-6 py-4 rounded-t-lg" style="background:#1A2E4A">
             <h1 class="text-2xl font-bold">Procesar Salida del Paciente</h1>
         </div>
 
@@ -32,8 +32,14 @@
             </div>
 
             <!-- Información de Pago -->
-            <div class="bg-green-50 rounded-lg p-4 border-l-4 border-green-500">
-                <h2 class="text-lg font-bold text-gray-900 mb-3">✓ Pago Confirmado</h2>
+            <div class="rounded-lg p-4 border" style="background:#EBF3FA; border-color:#A8C8E8">
+                <h2 class="text-lg font-bold mb-3 flex items-center gap-2" style="color:#1A2E4A">
+                    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color:#2D5F8A">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    Pago Confirmado
+                </h2>
                 <div class="grid grid-cols-3 gap-4">
                     <div>
                         <span class="text-sm text-gray-600">Factura:</span>
@@ -41,7 +47,7 @@
                     </div>
                     <div>
                         <span class="text-sm text-gray-600">Monto Pagado:</span>
-                        <p class="font-medium text-green-600">${{ number_format($factura->total, 2) }}</p>
+                        <p class="font-semibold" style="color:#2D5F8A">${{ number_format($factura->total, 2) }}</p>
                     </div>
                     <div>
                         <span class="text-sm text-gray-600">Método:</span>
@@ -55,16 +61,17 @@
                 @csrf
                 
                 <!-- Encuesta de Satisfacción -->
-                <div class="bg-white border border-gray-200 rounded-lg p-6 space-y-5 mb-6">
+                <div class="bg-white border border-gray-200 rounded-lg overflow-hidden mb-6">
 
-                    <div class="flex items-center gap-2 border-b border-gray-100 pb-4">
-                        <svg class="w-4 h-4 text-eden-azul-medio flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="flex items-center gap-2 px-6 py-3 bg-gray-50 border-b border-gray-200">
+                        <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color:#2D5F8A">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                   d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
-                        <h2 class="text-sm font-semibold text-gray-700 uppercase tracking-wide">Encuesta de Satisfacción</h2>
+                        <h2 class="text-sm font-semibold uppercase tracking-wide text-gray-700">Encuesta de Satisfacción</h2>
                     </div>
 
+                    <div class="px-6 pb-6 pt-4 space-y-4">
                     <p class="text-xs text-gray-500">Solicite al paciente que califique su experiencia</p>
 
                     <!-- Calidad de Atención Médica -->
@@ -129,8 +136,9 @@
                                   placeholder="El paciente puede compartir comentarios adicionales..."></textarea>
                     </div>
 
+                    </div>{{-- /px-6 --}}
                 </div>
-                
+
                 <div class="mb-6">
                     <label class="block text-sm font-medium text-gray-700 mb-2">
                         Observaciones de Salida (Opcional)

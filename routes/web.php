@@ -109,6 +109,9 @@ Route::middleware(['auth', 'role:recepcionista'])->prefix('recepcion')->name('re
     Route::get('/pacientes/{paciente}/procesar-salida', [RecepcionistaController::class, 'procesarSalida'])->name('procesar-salida');
     Route::post('/pacientes/{paciente}/confirmar-salida', [RecepcionistaController::class, 'confirmarSalida'])->name('confirmar-salida');
 
+    // Historial de pacientes egresados con reactivación
+    Route::get('/historial', \App\Livewire\Recepcion\HistorialPacientes::class)->name('historial');
+
     // Rutas AJAX para búsquedas
     Route::get('/api/buscar-paciente-dni', [RecepcionistaController::class, 'buscarPorDni'])->name('api.buscar-paciente-dni');
 });

@@ -94,7 +94,7 @@ class RecepcionistaController extends Controller
                 ->when($request->ciudad, function ($query, $ciudad) {
                     return $query->where('ciudad', 'like', "%{$ciudad}%");
                 })
-                ->whereNotIn('estado', ['egresado', 'pendiente_salida'])
+                ->where('estado', 'activo')
                 ->whereDoesntHave('consultas', function($q) {
                     $q->where('estado', 'pendiente');
                 })

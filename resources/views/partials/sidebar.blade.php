@@ -135,6 +135,12 @@
             <p>Salidas</p>
         </a>
     </li>
+    <li class="nav-item">
+        <a href="{{ route('recepcion.historial') }}" class="nav-link {{ request()->routeIs('recepcion.historial') ? 'active' : '' }}">
+            <i class="nav-icon fas fa-history"></i>
+            <p>Historial</p>
+        </a>
+    </li>
 @endif
 
             </ul>

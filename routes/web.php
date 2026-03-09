@@ -249,7 +249,8 @@ Route::middleware(['auth', 'role:caja'])->prefix('caja')->name('caja.')->group(f
     
     // Gestión de facturas y pagos
     Route::get('/facturas', [CajaController::class, 'buscarFacturas'])->name('facturas.buscar');
-    Route::get('/facturas/{factura}', [CajaController::class, 'verFactura'])->name('facturas.ver');
+    // DEPRECATED: ver factura eliminado — acceso directo a PanelCajero
+    // Route::get('/facturas/{factura}', [CajaController::class, 'verFactura'])->name('facturas.ver');
     // DEPRECATED: reemplazado por /caja/panel (PanelCajero Livewire) — ver commit unificación
     // Route::get('/facturas/{factura}/procesar-pago', [CajaController::class, 'mostrarFormularioPago'])->name('facturas.procesar-pago');
     // Route::post('/facturas/{factura}/confirmar-pago', [CajaController::class, 'confirmarPago'])->name('facturas.confirmar-pago');

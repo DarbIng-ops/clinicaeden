@@ -103,9 +103,8 @@
                             {{ $factura->fecha_emision->format('d/m/Y') }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                            <a href="{{ route('caja.facturas.ver', $factura) }}" class="text-blue-600 hover:text-blue-900">Ver</a>
                             @if($factura->estado === 'pendiente')
-                                <a href="{{ route('caja.facturas.procesar-pago', $factura) }}" class="text-green-600 hover:text-green-900">Pagar</a>
+                                <a href="{{ route('caja.panel') }}" class="text-green-600 hover:text-green-900">Pagar</a>
                             @endif
                             @if($factura->estado === 'pagado')
                                 <a href="{{ route('caja.facturas.imprimir', $factura) }}" class="text-gray-600 hover:text-gray-900" target="_blank">Imprimir</a>

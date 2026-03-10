@@ -32,8 +32,7 @@ class HistorialPacientes extends Component
 
     public function render()
     {
-        $pacientes = Paciente::where('estado', 'egresado')
-            ->withCount('consultas')
+        $pacientes = Paciente::withCount('consultas')
             ->with(['consultas' => fn($q) => $q->latest()->limit(1)])
             ->when($this->buscar, fn($q) => $q->where(function ($q) {
                 $q->where('nombres', 'like', "%{$this->buscar}%")
@@ -41,7 +40,7 @@ class HistorialPacientes extends Component
                   ->orWhere('dni', 'like', "%{$this->buscar}%");
             }))
             ->latest('updated_at')
-            ->paginate(15);
+            ->paginate(10);
 
         return view('livewire.recepcion.historial-pacientes', compact('pacientes'))
             ->extends('layouts.adminlte')

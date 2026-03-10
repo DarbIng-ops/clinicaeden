@@ -139,7 +139,7 @@
                 <span class="text-sm text-green-700 mt-1">Gestionar salida de pacientes</span>
             </a>
 
-            <a href="{{ route('recepcion.historial') }}"
+            <a href="#historial-pacientes"
                class="block p-6 bg-amber-50 border border-amber-200 rounded-xl hover:bg-amber-100 transition-colors text-center">
                 <svg class="w-8 h-8 mx-auto mb-2 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
@@ -152,7 +152,7 @@
     </div>
 
     <!-- Base de Pacientes Registrados -->
-    <div class="mt-6">
+    <div id="historial-pacientes" class="mt-6 bg-white rounded-xl border border-gray-200 p-6">
         @livewire('recepcion.historial-pacientes')
     </div>
 

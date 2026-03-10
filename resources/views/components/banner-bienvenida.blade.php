@@ -24,8 +24,8 @@
             </p>
         </div>
         <div class="hidden md:block" style="position:relative;z-index:1;">
-            <img src="{{ asset('images/logoGrande.png') }}"
-                 alt="Clínica Eden"
+            <img src="{{ asset(config('clinica.logo')) }}"
+                 alt="{{ config('clinica.nombre_largo') }}"
                  style="height:80px;width:auto;opacity:.85;filter:brightness(0) invert(1)"
                  onerror="this.style.display='none'">
         </div>

@@ -150,8 +150,8 @@
             </p>
         </div>
         <div class="d-none d-md-block" style="position:relative;z-index:1;">
-            <img src="{{ asset('images/logoGrande.png') }}"
-                 alt="Clínica Eden"
+            <img src="{{ asset(config('clinica.logo')) }}"
+                 alt="{{ config('clinica.nombre_largo') }}"
                  class="header-logo"
                  onerror="this.style.display='none'">
         </div>

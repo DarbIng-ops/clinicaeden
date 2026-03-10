@@ -18,7 +18,7 @@
 @section('content')
 
     <div class="print-header text-center mb-4">
-        <h2>Clínica Eden — Reporte de Medicamentos y Tratamientos</h2>
+        <h2>{{ config('clinica.nombre_largo') }} — Reporte de Medicamentos y Tratamientos</h2>
         <p>Período: {{ \Carbon\Carbon::parse($fechaInicio)->format('d/m/Y') }} al {{ \Carbon\Carbon::parse($fechaFin)->format('d/m/Y') }}</p>
         <p>Generado: {{ now()->format('d/m/Y H:i') }}</p>
         <hr>

@@ -30,7 +30,7 @@
                     <i class="fas fa-calendar-alt mr-1"></i>{{ now()->isoFormat('dddd, D [de] MMMM [de] YYYY') }}
                 </small>
             </div>
-            <img src="{{ asset('images/icono.png') }}" alt="Eden"
+            <img src="{{ asset(config('clinica.icono')) }}" alt="{{ config('clinica.nombre_largo') }}"
                  style="height:60px;opacity:0.25;" onerror="this.style.display='none'">
         </div>
     </div>

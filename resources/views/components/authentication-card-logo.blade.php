@@ -1,5 +1,5 @@
 <a href="/">
-    <img src="{{ asset('images/logoGrande.png') }}"
-         alt="Sanatorio Eden"
+    <img src="{{ asset(config('clinica.logo')) }}"
+         alt="{{ config('clinica.nombre_largo') }}"
          class="w-48 h-48 mx-auto mb-4">
 </a>

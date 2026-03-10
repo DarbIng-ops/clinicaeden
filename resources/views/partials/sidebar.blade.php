@@ -9,9 +9,9 @@
         };
     @endphp
     <a href="{{ $homeRoute }}" class="brand-link">
-        <img src="{{ asset('images/icono.png') }}" alt="Clínica Eden"
+        <img src="{{ asset(config('clinica.icono')) }}" alt="{{ config('clinica.nombre_largo') }}"
              class="brand-image img-circle elevation-3" style="opacity:.85">
-        <span class="brand-text font-weight-light">Clínica <strong>Eden</strong></span>
+        <span class="brand-text font-weight-light">{{ config('clinica.nombre_largo') }}</span>
     </a>
 
     <!-- Sidebar -->

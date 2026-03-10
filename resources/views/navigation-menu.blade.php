@@ -6,8 +6,8 @@
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('dashboard') }}">
-                        <img src="{{ asset('images/icono.png') }}"
-                             alt="Sanatorio Eden"
+                        <img src="{{ asset(config('clinica.icono')) }}"
+                             alt="{{ config('clinica.nombre_largo') }}"
                              class="h-14 w-auto">
                     </a>
                 </div>

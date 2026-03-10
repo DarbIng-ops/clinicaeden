@@ -21,7 +21,7 @@
                 </p>
             </div>
             <div class="d-none d-md-block">
-                <img src="{{ asset('images/logoGrande.png') }}" alt="Clínica Eden"
+                <img src="{{ asset(config('clinica.logo')) }}" alt="{{ config('clinica.nombre_largo') }}"
                      style="height:70px;opacity:.85;filter:brightness(0) invert(1)"
                      onerror="this.style.display='none'">
             </div>

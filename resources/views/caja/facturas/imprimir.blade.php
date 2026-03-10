@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Factura #{{ $factura->numero_factura ?? $factura->id }} - Clínica Eden</title>
+    <title>Factura #{{ $factura->numero_factura ?? $factura->id }} - {{ config('clinica.nombre_largo') }}</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Arial', sans-serif; font-size: 13px; color: #222; background: #fff; }
@@ -43,7 +43,7 @@
         <!-- Encabezado -->
         <div class="header">
             <div class="logo-area">
-                <h1>Clínica Eden</h1>
+                <h1>{{ config('clinica.nombre_largo') }}</h1>
                 <p>Sistema de Gestión Hospitalaria</p>
                 <p>Tel: (0261) 000-0000 | clinicaeden@ejemplo.com</p>
             </div>
@@ -160,7 +160,7 @@
 
         <!-- Pie de página -->
         <div class="footer">
-            <p>Clínica Eden &mdash; Gracias por confiar en nuestros servicios</p>
+            <p>{{ config('clinica.nombre_largo') }} &mdash; Gracias por confiar en nuestros servicios</p>
             <p style="margin-top:4px">Este documento es un comprobante válido de pago. Consérvelo para sus registros.</p>
             <p style="margin-top:4px">Impreso el {{ now()->format('d/m/Y H:i') }}</p>
         </div>

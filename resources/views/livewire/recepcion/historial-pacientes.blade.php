@@ -34,6 +34,7 @@
                     <th class="px-4 py-3 text-left">Paciente</th>
                     <th class="px-4 py-3 text-left">DNI</th>
                     <th class="px-4 py-3 text-left">Consultas previas</th>
+                    <th class="px-4 py-3 text-left">Última atención</th>
                     <th class="px-4 py-3 text-left">Último egreso</th>
                     <th class="px-4 py-3 text-left">Acciones</th>
                 </tr>
@@ -53,6 +54,9 @@
                             {{ $paciente->consultas_count }} consulta(s)
                         </span>
                     </td>
+                    <td class="px-4 py-3 text-xs text-gray-500">
+                        {{ $paciente->consultas->first()?->created_at?->format('d/m/Y') ?? '—' }}
+                    </td>
                     <td class="px-4 py-3 text-gray-500 text-xs">
                         {{ $paciente->updated_at->format('d/m/Y') }}
                     </td>
@@ -66,7 +70,7 @@
                             </a>
                             {{-- Reactivar --}}
                             <button wire:click="reactivar({{ $paciente->id }})"
-                                    wire:confirm="¿Reactivar a {{ $paciente->nombres }}? Podrá derivarse a médico con su historial previo."
+                                    wire:confirm="¿{{ $paciente->nombres }} ya fue atendido {{ $paciente->consultas_count }} vez/veces. ¿Reactivar para nueva consulta?"
                                     class="text-xs text-white px-3 py-1 rounded hover:opacity-90 transition-opacity"
                                     style="background:#2D5F8A">
                                 Reactivar
@@ -76,7 +80,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="5" class="px-4 py-8 text-center text-gray-400 text-sm">
+                    <td colspan="6" class="px-4 py-8 text-center text-gray-400 text-sm">
                         No hay pacientes egresados registrados.
                     </td>
                 </tr>

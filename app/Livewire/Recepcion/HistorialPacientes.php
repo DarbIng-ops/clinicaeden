@@ -33,12 +33,13 @@ class HistorialPacientes extends Component
     public function render()
     {
         $pacientes = Paciente::where('estado', 'egresado')
+            ->withCount('consultas')
+            ->with(['consultas' => fn($q) => $q->latest()->limit(1)])
             ->when($this->buscar, fn($q) => $q->where(function ($q) {
                 $q->where('nombres', 'like', "%{$this->buscar}%")
                   ->orWhere('apellidos', 'like', "%{$this->buscar}%")
                   ->orWhere('dni', 'like', "%{$this->buscar}%");
             }))
-            ->withCount('consultas')
             ->latest('updated_at')
             ->paginate(15);
 

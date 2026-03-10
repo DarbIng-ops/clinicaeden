@@ -122,7 +122,7 @@
     <!-- Acciones Rápidas -->
     <div class="bg-white rounded-lg shadow p-6 mb-8">
         <h3 class="text-lg font-semibold text-gray-900 mb-4">Acciones Rápidas</h3>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <a href="{{ route('recepcion.pacientes.index') }}" class="flex flex-col items-center p-6 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors shadow-sm">
                 <svg class="w-12 h-12 text-blue-600 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
@@ -137,6 +137,16 @@
                 </svg>
                 <span class="text-lg font-semibold text-green-900">Procesar Salidas</span>
                 <span class="text-sm text-green-700 mt-1">Gestionar salida de pacientes</span>
+            </a>
+
+            <a href="{{ route('recepcion.historial') }}"
+               class="block p-6 bg-amber-50 border border-amber-200 rounded-xl hover:bg-amber-100 transition-colors text-center">
+                <svg class="w-8 h-8 mx-auto mb-2 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                          d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.966 8.966 0 00-6 2.292m0-14.25v14.25"/>
+                </svg>
+                <p class="font-semibold text-amber-700">Base de Pacientes</p>
+                <p class="text-xs text-amber-600 mt-1">Historial completo — reactivar pacientes previos</p>
             </a>
         </div>
     </div>

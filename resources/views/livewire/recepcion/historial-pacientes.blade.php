@@ -3,10 +3,7 @@
     {{-- Encabezado --}}
     <div class="flex items-center justify-between mb-3">
         <div class="flex items-center gap-2">
-            <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0"/>
-            </svg>
+            <i class="fas fa-history" style="color:#6b7280;font-size:14px"></i>
             <h3 class="text-sm font-semibold text-gray-700">Todos los Pacientes Registrados</h3>
         </div>
         <span class="text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">

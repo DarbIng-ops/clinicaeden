@@ -415,18 +415,25 @@ class AdminController extends Controller
             ->groupBy('role')
             ->get();
 
-        // Ingresos por mes (últimos 12 meses)
+        // Ingresos por mes (últimos 12 meses) — compatible MySQL y SQLite
+        $isSqlite = \Illuminate\Support\Facades\DB::getDriverName() === 'sqlite';
+        $yearF  = $isSqlite ? "strftime('%Y', fecha_emision)" : 'YEAR(fecha_emision)';
+        $monthF = $isSqlite ? "strftime('%m', fecha_emision)" : 'MONTH(fecha_emision)';
+
         $ingresosPorMes = Factura::where('estado', 'pagado')
             ->where('fecha_emision', '>=', now()->subMonths(12))
-            ->selectRaw('YEAR(fecha_emision) as año, MONTH(fecha_emision) as mes, SUM(total) as total')
+            ->selectRaw("{$yearF} as año, {$monthF} as mes, SUM(total) as total")
             ->groupBy('año', 'mes')
             ->orderBy('año', 'desc')
             ->orderBy('mes', 'desc')
             ->get();
 
         // Pacientes por mes
+        $yearC  = $isSqlite ? "strftime('%Y', created_at)" : 'YEAR(created_at)';
+        $monthC = $isSqlite ? "strftime('%m', created_at)" : 'MONTH(created_at)';
+
         $pacientesPorMes = Paciente::where('created_at', '>=', now()->subMonths(12))
-            ->selectRaw('YEAR(created_at) as año, MONTH(created_at) as mes, COUNT(*) as total')
+            ->selectRaw("{$yearC} as año, {$monthC} as mes, COUNT(*) as total")
             ->groupBy('año', 'mes')
             ->orderBy('año', 'desc')
             ->orderBy('mes', 'desc')

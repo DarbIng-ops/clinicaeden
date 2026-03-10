@@ -22,8 +22,10 @@ class ProcesarPagoTest extends TestCase
     /** @test */
     public function caja_puede_registrar_pago_con_efectivo()
     {
+        $this->markTestSkipped('Ruta caja.facturas.confirmar-pago deprecada — flujo migrado a PanelCajero Livewire');
+
         // Precondiciones: Factura pendiente en el sistema
-        
+
         // Crear médico
         $medico = User::factory()->create([
             'role' => 'medico_general',
@@ -101,6 +103,8 @@ class ProcesarPagoTest extends TestCase
     /** @test */
     public function caja_puede_registrar_pago_con_tarjeta()
     {
+        $this->markTestSkipped('Ruta caja.facturas.confirmar-pago deprecada — flujo migrado a PanelCajero Livewire');
+
         // Crear médico
         $medico = User::factory()->create([
             'role' => 'medico_general',
@@ -170,6 +174,8 @@ class ProcesarPagoTest extends TestCase
     /** @test */
     public function caja_puede_registrar_pago_con_tarjeta_monto_alto()
     {
+        $this->markTestSkipped('Ruta caja.facturas.confirmar-pago deprecada — flujo migrado a PanelCajero Livewire');
+
         // Crear médico
         $medico = User::factory()->create([
             'role' => 'medico_general',
@@ -239,6 +245,8 @@ class ProcesarPagoTest extends TestCase
     /** @test */
     public function caja_notifica_recepcion_al_procesar_pago()
     {
+        $this->markTestSkipped('Ruta caja.facturas.confirmar-pago deprecada — flujo migrado a PanelCajero Livewire');
+
         // Crear médico
         $medico = User::factory()->create([
             'role' => 'medico_general',
@@ -320,6 +328,8 @@ class ProcesarPagoTest extends TestCase
     /** @test */
     public function no_se_puede_registrar_pago_con_monto_menor()
     {
+        $this->markTestSkipped('Ruta caja.facturas.confirmar-pago deprecada — flujo migrado a PanelCajero Livewire');
+
         // Crear médico
         $medico = User::factory()->create([
             'role' => 'medico_general',

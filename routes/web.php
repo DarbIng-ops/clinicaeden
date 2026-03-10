@@ -265,3 +265,14 @@ Route::middleware(['auth', 'role:caja'])->prefix('caja')->name('caja.')->group(f
     // Panel de cobro Livewire
     Route::get('/panel', PanelCajero::class)->name('panel');
 });
+
+// Override logout → redirige a /login
+Route::post('/logout', function () {
+    auth()->logout();
+
+    request()->session()->invalidate();
+
+    request()->session()->regenerateToken();
+
+    return redirect('/login');
+})->name('logout');

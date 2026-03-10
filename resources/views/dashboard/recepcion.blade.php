@@ -1,7 +1,7 @@
 @extends('layouts.adminlte')
 
 @section('content')
-<div class="container mx-auto px-4 py-8">
+<div class="container-fluid px-4 py-4">
     <x-banner-bienvenida
         nombre="Recepcionista"
         subtitulo="Gestiona el registro y salida de pacientes del Sanatorio"

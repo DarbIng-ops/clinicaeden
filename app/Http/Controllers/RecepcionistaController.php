@@ -40,11 +40,14 @@ class RecepcionistaController extends Controller
         // Facturas pendientes de pago
         $facturasPendientes = \App\Models\Factura::where('estado', 'pendiente')->count();
         
-        // Pacientes listos para salida
+        // Pacientes listos para salida (solo pendiente_salida)
         $pacientesListosParaSalida = \App\Models\Factura::where('estado', 'pagado')
             ->with(['paciente', 'consulta'])
             ->whereHas('consulta', function($q) {
                 $q->where('estado', 'completada');
+            })
+            ->whereHas('paciente', function($q) {
+                $q->where('estado', 'pendiente_salida');
             })
             ->whereDate('fecha_pago', '>=', now()->subDays(7))
             ->orderBy('fecha_pago', 'desc')

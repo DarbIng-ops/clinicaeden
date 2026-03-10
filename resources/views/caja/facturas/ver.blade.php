@@ -108,7 +108,7 @@
             <!-- Acciones -->
             <div class="flex gap-4 pt-4 border-t">
                 @if($factura->estado == 'pendiente')
-                <a href="{{ route('caja.facturas.procesar-pago', $factura->id) }}" 
+                <a href="{{ route('caja.panel') }}"
                    class="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg text-center transition">
                     Procesar Pago
                 </a>

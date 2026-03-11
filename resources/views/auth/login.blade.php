@@ -12,6 +12,49 @@
             </div>
         @endsession
 
+        <div style="background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:16px;margin-bottom:20px;">
+            <p style="font-weight:bold;margin-bottom:8px;color:#856404;">
+                🧪 Entorno de demostración
+            </p>
+            <p style="font-size:13px;color:#856404;margin-bottom:10px;">
+                Contraseña para todos los roles: <strong>password</strong>
+            </p>
+            <table style="width:100%;font-size:12px;border-collapse:collapse;">
+                <tr style="background:#ffeeba;">
+                    <th style="padding:4px 8px;text-align:left;border:1px solid #ffc107;">Rol</th>
+                    <th style="padding:4px 8px;text-align:left;border:1px solid #ffc107;">Correo</th>
+                </tr>
+                <tr>
+                    <td style="padding:4px 8px;border:1px solid #ffc107;">Admin</td>
+                    <td style="padding:4px 8px;border:1px solid #ffc107;">admin@clinicaeden.com</td>
+                </tr>
+                <tr style="background:#fffdf0;">
+                    <td style="padding:4px 8px;border:1px solid #ffc107;">Recepcionista</td>
+                    <td style="padding:4px 8px;border:1px solid #ffc107;">recepcion@clinicaeden.com</td>
+                </tr>
+                <tr>
+                    <td style="padding:4px 8px;border:1px solid #ffc107;">Médico General</td>
+                    <td style="padding:4px 8px;border:1px solid #ffc107;">medico.general@clinicaeden.com</td>
+                </tr>
+                <tr style="background:#fffdf0;">
+                    <td style="padding:4px 8px;border:1px solid #ffc107;">Médico Especialista</td>
+                    <td style="padding:4px 8px;border:1px solid #ffc107;">medico.especialista@clinicaeden.com</td>
+                </tr>
+                <tr>
+                    <td style="padding:4px 8px;border:1px solid #ffc107;">Jefe Enfermería</td>
+                    <td style="padding:4px 8px;border:1px solid #ffc107;">jefe.enfermeria@clinicaeden.com</td>
+                </tr>
+                <tr style="background:#fffdf0;">
+                    <td style="padding:4px 8px;border:1px solid #ffc107;">Auxiliar Enfermería</td>
+                    <td style="padding:4px 8px;border:1px solid #ffc107;">auxiliar.enfermeria@clinicaeden.com</td>
+                </tr>
+                <tr>
+                    <td style="padding:4px 8px;border:1px solid #ffc107;">Cajero</td>
+                    <td style="padding:4px 8px;border:1px solid #ffc107;">caja@clinicaeden.com</td>
+                </tr>
+            </table>
+        </div>
+
         <form method="POST" action="{{ route('login') }}">
             @csrf
 

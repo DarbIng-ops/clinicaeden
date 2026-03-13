@@ -1,91 +1,120 @@
 <x-guest-layout>
-    <x-authentication-card>
-        <x-slot name="logo">
-            <x-authentication-card-logo />
-        </x-slot>
+<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:#f0f4f8;padding:20px;">
+    <div style="display:flex;gap:24px;width:100%;max-width:960px;flex-wrap:wrap;align-items:stretch;">
 
-        <x-validation-errors class="mb-4" />
+        {{-- COLUMNA IZQUIERDA: Panel demo --}}
+        <div style="flex:1;min-width:280px;background:#1e293b;border-radius:16px;padding:32px;color:#e2e8f0;">
 
-        @session('status')
-            <div class="mb-4 font-medium text-sm text-green-600">
-                {{ $value }}
+            <div style="margin-bottom:24px;">
+                <span style="background:#0ea5e9;color:white;font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;letter-spacing:1px;">DEMO EN VIVO</span>
+                <h2 style="margin-top:12px;font-size:22px;font-weight:700;color:white;line-height:1.3;">
+                    Explora ClinicaEden<br>sin registrarte
+                </h2>
+                <p style="font-size:13px;color:#94a3b8;margin-top:8px;">
+                    Selecciona cualquier rol y usa las credenciales para explorar el sistema completo.
+                </p>
             </div>
-        @endsession
 
-        <div style="background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:16px;margin-bottom:20px;">
-            <p style="font-weight:bold;margin-bottom:8px;color:#856404;">
-                🧪 Entorno de demostración
-            </p>
-            <p style="font-size:13px;color:#856404;margin-bottom:10px;">
-                Contraseña para todos los roles: <strong>password</strong>
-            </p>
-            <table style="width:100%;font-size:12px;border-collapse:collapse;">
-                <tr style="background:#ffeeba;">
-                    <th style="padding:4px 8px;text-align:left;border:1px solid #ffc107;">Rol</th>
-                    <th style="padding:4px 8px;text-align:left;border:1px solid #ffc107;">Correo</th>
+            <div style="margin-bottom:20px;">
+                <p style="font-size:12px;color:#94a3b8;margin-bottom:6px;text-transform:uppercase;letter-spacing:1px;">Contraseña para todos</p>
+                <div style="background:#0f172a;border-radius:8px;padding:10px 14px;font-family:monospace;font-size:15px;color:#38bdf8;letter-spacing:2px;">
+                    password
+                </div>
+            </div>
+
+            <table style="width:100%;font-size:12px;border-collapse:collapse;margin-bottom:24px;">
+                <tr style="border-bottom:1px solid #334155;">
+                    <th style="padding:6px 4px;text-align:left;color:#64748b;font-weight:600;">ROL</th>
+                    <th style="padding:6px 4px;text-align:left;color:#64748b;font-weight:600;">CORREO</th>
+                </tr>
+                <tr style="border-bottom:1px solid #1e293b;">
+                    <td style="padding:7px 4px;color:#e2e8f0;">Admin</td>
+                    <td style="padding:7px 4px;color:#7dd3fc;font-size:11px;">admin@clinicaeden.com</td>
+                </tr>
+                <tr style="border-bottom:1px solid #1e293b;background:#0f172a20;">
+                    <td style="padding:7px 4px;color:#e2e8f0;">Recepcionista</td>
+                    <td style="padding:7px 4px;color:#7dd3fc;font-size:11px;">recepcion@clinicaeden.com</td>
+                </tr>
+                <tr style="border-bottom:1px solid #1e293b;">
+                    <td style="padding:7px 4px;color:#e2e8f0;">Médico General</td>
+                    <td style="padding:7px 4px;color:#7dd3fc;font-size:11px;">medico.general@clinicaeden.com</td>
                 </tr>
                 <tr>
-                    <td style="padding:4px 8px;border:1px solid #ffc107;">Admin</td>
-                    <td style="padding:4px 8px;border:1px solid #ffc107;">admin@clinicaeden.com</td>
-                </tr>
-                <tr style="background:#fffdf0;">
-                    <td style="padding:4px 8px;border:1px solid #ffc107;">Recepcionista</td>
-                    <td style="padding:4px 8px;border:1px solid #ffc107;">recepcion@clinicaeden.com</td>
-                </tr>
-                <tr>
-                    <td style="padding:4px 8px;border:1px solid #ffc107;">Médico General</td>
-                    <td style="padding:4px 8px;border:1px solid #ffc107;">medico.general@clinicaeden.com</td>
-                </tr>
-                <tr style="background:#fffdf0;">
-                    <td style="padding:4px 8px;border:1px solid #ffc107;">Médico Especialista</td>
-                    <td style="padding:4px 8px;border:1px solid #ffc107;">medico.especialista@clinicaeden.com</td>
-                </tr>
-                <tr>
-                    <td style="padding:4px 8px;border:1px solid #ffc107;">Jefe Enfermería</td>
-                    <td style="padding:4px 8px;border:1px solid #ffc107;">jefe.enfermeria@clinicaeden.com</td>
-                </tr>
-                <tr style="background:#fffdf0;">
-                    <td style="padding:4px 8px;border:1px solid #ffc107;">Auxiliar Enfermería</td>
-                    <td style="padding:4px 8px;border:1px solid #ffc107;">auxiliar.enfermeria@clinicaeden.com</td>
-                </tr>
-                <tr>
-                    <td style="padding:4px 8px;border:1px solid #ffc107;">Cajero</td>
-                    <td style="padding:4px 8px;border:1px solid #ffc107;">caja@clinicaeden.com</td>
+                    <td style="padding:7px 4px;color:#e2e8f0;">Cajero</td>
+                    <td style="padding:7px 4px;color:#7dd3fc;font-size:11px;">caja@clinicaeden.com</td>
                 </tr>
             </table>
+
+            <div style="background:#7f1d1d30;border:1px solid #ef444440;border-radius:8px;padding:12px;font-size:11px;color:#fca5a5;line-height:1.6;">
+                ⚠️ <strong>Aviso importante:</strong><br>
+                No ingrese datos reales de pacientes ni información personal en este entorno.
+                Darbin Tech no se responsabiliza por el uso indebido de datos registrados
+                por terceros en esta demo. Este entorno es exclusivamente para evaluación del sistema.
+            </div>
         </div>
 
-        <form method="POST" action="{{ route('login') }}">
-            @csrf
+        {{-- COLUMNA DERECHA: Formulario login --}}
+        <div style="flex:1;min-width:280px;background:white;border-radius:16px;padding:32px;display:flex;flex-direction:column;justify-content:center;">
 
-            <div>
-                <x-label for="email" value="{{ __('Email') }}" />
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
+            <div style="text-align:center;margin-bottom:28px;">
+                <x-authentication-card-logo />
             </div>
 
-            <div class="mt-4">
-                <x-label for="password" value="{{ __('Password') }}" />
-                <x-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="current-password" />
-            </div>
+            @if (session('status'))
+                <div style="background:#dcfce7;border:1px solid #86efac;border-radius:8px;padding:10px;margin-bottom:16px;font-size:13px;color:#166534;">
+                    {{ session('status') }}
+                </div>
+            @endif
 
-            <div class="block mt-4">
-                <label for="remember_me" class="flex items-center">
-                    <x-checkbox id="remember_me" name="remember" />
-                    <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-                </label>
-            </div>
+            @if ($errors->any())
+                <div style="background:#fee2e2;border:1px solid #fca5a5;border-radius:8px;padding:10px;margin-bottom:16px;font-size:13px;color:#991b1b;">
+                    @foreach ($errors->all() as $error)
+                        <p>{{ $error }}</p>
+                    @endforeach
+                </div>
+            @endif
 
-            <div class="flex items-center justify-end mt-4">
-                @if (Route::has('password.request'))
-                    <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
-                        {{ __('Forgot your password?') }}
-                    </a>
-                @endif
+            <form method="POST" action="{{ route('login') }}">
+                @csrf
 
-                <x-button class="ms-4">
-                    {{ __('Log in') }}
-                </x-button>
-            </div>
-        </form>
-    </x-authentication-card>
+                <div style="margin-bottom:16px;">
+                    <label style="display:block;font-size:13px;font-weight:600;color:#374151;margin-bottom:6px;">
+                        Correo electrónico
+                    </label>
+                    <input type="email" name="email" value="{{ old('email') }}" required autofocus
+                        style="width:100%;padding:10px 12px;border:1px solid #d1d5db;border-radius:8px;font-size:14px;outline:none;box-sizing:border-box;"
+                        placeholder="correo@ejemplo.com">
+                </div>
+
+                <div style="margin-bottom:16px;">
+                    <label style="display:block;font-size:13px;font-weight:600;color:#374151;margin-bottom:6px;">
+                        Contraseña
+                    </label>
+                    <input type="password" name="password" required
+                        style="width:100%;padding:10px 12px;border:1px solid #d1d5db;border-radius:8px;font-size:14px;outline:none;box-sizing:border-box;"
+                        placeholder="••••••••">
+                </div>
+
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+                    <label style="display:flex;align-items:center;gap:6px;font-size:13px;color:#6b7280;cursor:pointer;">
+                        <input type="checkbox" name="remember">
+                        Recuérdame
+                    </label>
+                    @if (Route::has('password.request'))
+                        <a href="{{ route('password.request') }}"
+                            style="font-size:12px;color:#0ea5e9;text-decoration:none;">
+                            ¿Olvidaste tu contraseña?
+                        </a>
+                    @endif
+                </div>
+
+                <button type="submit"
+                    style="width:100%;padding:12px;background:#0ea5e9;color:white;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;">
+                    Acceder
+                </button>
+            </form>
+        </div>
+
+    </div>
+</div>
 </x-guest-layout>

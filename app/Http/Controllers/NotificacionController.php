@@ -5,7 +5,7 @@
  *
  * Gestiona las notificaciones del sistema: listado, marcar leídas y estado del buzón.
  *
- * @package ClinicaEden
+ * @package PulsoCore
  * @author  Alirio Portilla
  * @version 3.0.0
  */

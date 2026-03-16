@@ -5,7 +5,7 @@
  *
  * Gestiona la emisión, visualización e impresión de facturas médicas.
  *
- * @package ClinicaEden
+ * @package PulsoCore
  * @author  Alirio Portilla
  * @version 3.0.0
  */

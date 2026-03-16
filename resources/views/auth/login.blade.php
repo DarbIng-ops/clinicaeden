@@ -8,7 +8,7 @@
             <div style="margin-bottom:24px;">
                 <span style="background:#0ea5e9;color:white;font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;letter-spacing:1px;">DEMO EN VIVO</span>
                 <h2 style="margin-top:12px;font-size:22px;font-weight:700;color:white;line-height:1.3;">
-                    Explora ClinicaEden<br>sin registrarte
+                    Explora PulsoCore<br>sin registrarte
                 </h2>
                 <p style="font-size:13px;color:#94a3b8;margin-top:8px;">
                     Selecciona cualquier rol y usa las credenciales para explorar el sistema completo.
@@ -29,19 +29,19 @@
                 </tr>
                 <tr style="border-bottom:1px solid #1e293b;">
                     <td style="padding:7px 4px;color:#e2e8f0;">Admin</td>
-                    <td style="padding:7px 4px;color:#7dd3fc;font-size:11px;">admin@clinicaeden.com</td>
+                    <td style="padding:7px 4px;color:#7dd3fc;font-size:11px;">admin@pulsocore.com</td>
                 </tr>
                 <tr style="border-bottom:1px solid #1e293b;background:#0f172a20;">
                     <td style="padding:7px 4px;color:#e2e8f0;">Recepcionista</td>
-                    <td style="padding:7px 4px;color:#7dd3fc;font-size:11px;">recepcion@clinicaeden.com</td>
+                    <td style="padding:7px 4px;color:#7dd3fc;font-size:11px;">recepcion@pulsocore.com</td>
                 </tr>
                 <tr style="border-bottom:1px solid #1e293b;">
                     <td style="padding:7px 4px;color:#e2e8f0;">Médico General</td>
-                    <td style="padding:7px 4px;color:#7dd3fc;font-size:11px;">medico.general@clinicaeden.com</td>
+                    <td style="padding:7px 4px;color:#7dd3fc;font-size:11px;">medico.general@pulsocore.com</td>
                 </tr>
                 <tr>
                     <td style="padding:7px 4px;color:#e2e8f0;">Cajero</td>
-                    <td style="padding:7px 4px;color:#7dd3fc;font-size:11px;">caja@clinicaeden.com</td>
+                    <td style="padding:7px 4px;color:#7dd3fc;font-size:11px;">caja@pulsocore.com</td>
                 </tr>
             </table>
 

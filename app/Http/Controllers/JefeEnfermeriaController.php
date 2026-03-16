@@ -5,7 +5,7 @@
  *
  * Panel del jefe de enfermería: supervisión de hospitalizaciones, auxiliares y módulos.
  *
- * @package ClinicaEden
+ * @package PulsoCore
  * @author  Alirio Portilla
  * @version 3.0.0
  */

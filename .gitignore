@@ -26,7 +26,7 @@ Thumbs.db
 npm-debug.log
 yarn-error.log
 *.sqlite*
-clinicaeden
+pulsocore
 
 # SQL dumps y archivos de datos
 *.sql

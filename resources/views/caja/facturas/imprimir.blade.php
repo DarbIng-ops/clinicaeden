@@ -45,7 +45,7 @@
             <div class="logo-area">
                 <h1>{{ config('clinica.nombre_largo') }}</h1>
                 <p>Sistema de Gestión Hospitalaria</p>
-                <p>Tel: (0261) 000-0000 | clinicaeden@ejemplo.com</p>
+                <p>Tel: (0261) 000-0000 | pulsocore@ejemplo.com</p>
             </div>
             <div class="factura-info">
                 <div class="numero">FACTURA #{{ str_pad($factura->id, 8, '0', STR_PAD_LEFT) }}</div>

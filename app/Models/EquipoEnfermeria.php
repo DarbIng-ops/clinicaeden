@@ -5,7 +5,7 @@
  *
  * Representa la asignación de auxiliares de enfermería a módulos o turnos.
  *
- * @package ClinicaEden
+ * @package PulsoCore
  * @author  Alirio Portilla
  * @version 3.0.0
  */

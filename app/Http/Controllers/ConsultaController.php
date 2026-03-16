@@ -5,7 +5,7 @@
  *
  * CRUD de consultas médicas: creación, visualización, edición y cierre de consultas.
  *
- * @package ClinicaEden
+ * @package PulsoCore
  * @author  Alirio Portilla
  * @version 3.0.0
  */

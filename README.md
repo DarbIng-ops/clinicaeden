@@ -1,15 +1,15 @@
-# 🏥 ClinicaEden v3.0.0
+# 🏥 PulsoCore v3.0.0
 
 > Sistema de Información Hospitalaria (SIH) — Plataforma white-label de gestión clínica
 
 ## 📋 Descripción
 
-ClinicaEden es un Sistema de Información Hospitalaria desarrollado para el Sanatorio Edén (Cajamarca, Colombia). Implementa una arquitectura RBAC con 7 perfiles de usuario que cubren la totalidad del flujo clínico: recepción, consulta médica, hospitalización, enfermería y facturación. Desarrollado como proyecto de grado SENA ADSO Ficha 2977408 — CENIGRAF.
+PulsoCore es un Sistema de Información Hospitalaria desarrollado para el Sanatorio Edén (Cajamarca, Colombia). Implementa una arquitectura RBAC con 7 perfiles de usuario que cubren la totalidad del flujo clínico: recepción, consulta médica, hospitalización, enfermería y facturación. Desarrollado como proyecto de grado SENA ADSO Ficha 2977408 — CENIGRAF.
 
 ## 🚀 Demo en producción
 
-- **URL:** https://clinica.darbin.tech
-- **Repositorio:** https://github.com/DarbIng-ops/clinicaeden
+- **URL:** https://pulsocore.darbin.tech
+- **Repositorio:** https://github.com/DarbIng-ops/pulsocore
 
 ## 🛠️ Stack tecnológico
 
@@ -52,8 +52,8 @@ ClinicaEden es un Sistema de Información Hospitalaria desarrollado para el Sana
 
 ```bash
 # 1. Clonar el repositorio
-git clone https://github.com/DarbIng-ops/clinicaeden.git
-cd clinicaeden
+git clone https://github.com/DarbIng-ops/pulsocore.git
+cd pulsocore
 
 # 2. Instalar dependencias PHP
 composer install
@@ -62,7 +62,7 @@ composer install
 cp .env.example .env
 
 # 4. Configurar la base de datos en .env
-# DB_DATABASE=clinicaeden
+# DB_DATABASE=pulsocore
 # DB_USERNAME=root
 # DB_PASSWORD=
 
@@ -100,7 +100,7 @@ Este proyecto opera bajo licencia dual:
 - **GPL v3** — libre para uso educativo y no comercial. Ver archivo [LICENSE](./LICENSE).
 - **Licencia Comercial** — para implementaciones comerciales o white-label sin obligación de revelar código fuente modificado. Contacto: **alirioportilla96@gmail.com**
 
-© 2026 Alirio Portilla. Todos los derechos reservados sobre la marca ClinicaEden.
+© 2026 Alirio Portilla. Todos los derechos reservados sobre la marca PulsoCore.
 
 ## 👨‍💻 Autor
 

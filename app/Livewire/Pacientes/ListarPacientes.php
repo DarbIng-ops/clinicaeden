@@ -5,7 +5,7 @@
  *
  * Componente Livewire con búsqueda y paginación reactiva para listar pacientes.
  *
- * @package ClinicaEden
+ * @package PulsoCore
  * @author  Alirio Portilla
  * @version 3.0.0
  */

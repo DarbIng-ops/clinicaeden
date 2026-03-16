@@ -5,7 +5,7 @@
  *
  * Historial clínico del paciente: agrupa consultas, tratamientos y hospitalizaciones.
  *
- * @package ClinicaEden
+ * @package PulsoCore
  * @author  Alirio Portilla
  * @version 3.0.0
  */

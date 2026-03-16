@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  * Implementación conforme a ISO 27001 — Control de acceso
  * y trazabilidad de operaciones sobre datos sensibles.
  *
- * @package ClinicaEden
+ * @package PulsoCore
  * @author  Alirio Portilla
  * @version 3.0.0
  */

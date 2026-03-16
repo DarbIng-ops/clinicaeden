@@ -5,7 +5,7 @@
  *
  * CRUD de módulos de enfermería: gestiona módulos, asignación de jefes y auxiliares.
  *
- * @package ClinicaEden
+ * @package PulsoCore
  * @author  Alirio Portilla
  * @version 3.0.0
  */

@@ -14,7 +14,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
  * Implementación conforme a ISO 27001 — Control A.12.4.
  * Acceso exclusivo para rol admin.
  *
- * @package ClinicaEden
+ * @package PulsoCore
  * @author  Alirio Portilla
  * @version 3.0.0
  */

@@ -5,7 +5,7 @@
  *
  * Representa las fórmulas médicas (recetas) emitidas durante una consulta.
  *
- * @package ClinicaEden
+ * @package PulsoCore
  * @author  Alirio Portilla
  * @version 3.0.0
  */

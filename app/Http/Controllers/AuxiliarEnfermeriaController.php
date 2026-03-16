@@ -5,7 +5,7 @@
  *
  * Panel del auxiliar de enfermería: procedimientos, registro de salida de pacientes y turnos.
  *
- * @package ClinicaEden
+ * @package PulsoCore
  * @author  Alirio Portilla
  * @version 3.0.0
  */

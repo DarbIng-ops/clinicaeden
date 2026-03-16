@@ -5,7 +5,7 @@
  *
  * Panel de recepción: gestión de pacientes, citas, derivaciones y encuestas de salida.
  *
- * @package ClinicaEden
+ * @package PulsoCore
  * @author  Alirio Portilla
  * @version 3.0.0
  */

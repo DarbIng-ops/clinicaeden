@@ -5,7 +5,7 @@
  *
  * CRUD de habitaciones: administra las habitaciones de hospitalización por módulo.
  *
- * @package ClinicaEden
+ * @package PulsoCore
  * @author  Alirio Portilla
  * @version 3.0.0
  */

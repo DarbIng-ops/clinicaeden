@@ -5,7 +5,7 @@
  *
  * Panel del médico especialista: consultas, hospitalizaciones y estadísticas por especialidad.
  *
- * @package ClinicaEden
+ * @package PulsoCore
  * @author  Alirio Portilla
  * @version 3.0.0
  */

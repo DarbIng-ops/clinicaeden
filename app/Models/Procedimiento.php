@@ -5,7 +5,7 @@
  *
  * Representa los procedimientos médicos realizados en una sala de procedimientos.
  *
- * @package ClinicaEden
+ * @package PulsoCore
  * @author  Alirio Portilla
  * @version 3.0.0
  */

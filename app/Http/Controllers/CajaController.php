@@ -5,7 +5,7 @@
  *
  * Gestiona las operaciones de caja: facturas, pagos, reportes de ingresos y cierre de caja.
  *
- * @package ClinicaEden
+ * @package PulsoCore
  * @author  Alirio Portilla
  * @version 3.0.0
  */

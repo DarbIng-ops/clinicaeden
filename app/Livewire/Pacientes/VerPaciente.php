@@ -5,7 +5,7 @@
  *
  * Componente Livewire para mostrar el perfil completo de un paciente.
  *
- * @package ClinicaEden
+ * @package PulsoCore
  * @author  Alirio Portilla
  * @version 3.0.0
  */

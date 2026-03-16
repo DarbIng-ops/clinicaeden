@@ -5,7 +5,7 @@
  *
  * Muestra y actualiza el perfil del usuario autenticado.
  *
- * @package ClinicaEden
+ * @package PulsoCore
  * @author  Alirio Portilla
  * @version 3.0.0
  */

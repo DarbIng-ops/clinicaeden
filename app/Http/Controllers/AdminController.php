@@ -5,7 +5,7 @@
  *
  * Gestiona el panel de administración: dashboard, usuarios, reportes y configuración del sistema.
  *
- * @package ClinicaEden
+ * @package PulsoCore
  * @author  Alirio Portilla
  * @version 3.0.0
  */
@@ -39,7 +39,7 @@ class AdminController extends Controller
     {
         // Mensaje motivacional aleatorio
         $mensajes = [
-            'Tu liderazgo hace la diferencia en Clínica Eden 💚',
+            'Tu liderazgo hace la diferencia en PulsoCore 💚',
             'Juntos construimos un mejor sistema de salud ⚕️',
             'La excelencia médica comienza con tu gestión 🌟',
             'Cada decisión tuya mejora la vida de nuestros pacientes 💙',
@@ -202,7 +202,7 @@ class AdminController extends Controller
     {
         // Construir email completo desde el prefijo institucional
         if ($request->filled('email_prefix')) {
-            $request->merge(['email' => $request->email_prefix . '@clinicaeden.com']);
+            $request->merge(['email' => $request->email_prefix . '@pulsocore.com']);
         }
 
         $request->validate([

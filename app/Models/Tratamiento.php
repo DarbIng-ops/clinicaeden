@@ -5,7 +5,7 @@
  *
  * Representa los tratamientos y medicamentos prescritos a un paciente.
  *
- * @package ClinicaEden
+ * @package PulsoCore
  * @author  Alirio Portilla
  * @version 3.0.0
  */

@@ -5,7 +5,7 @@
  *
  * Notificaciones internas del sistema enviadas entre roles (p. ej. derivaciones).
  *
- * @package ClinicaEden
+ * @package PulsoCore
  * @author  Alirio Portilla
  * @version 3.0.0
  */

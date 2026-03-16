@@ -1,4 +1,4 @@
-# Licencia Comercial — ClinicaEden
+# Licencia Comercial — PulsoCore
 
 Para uso comercial, white-label o implementaciones privadas que no
 deseen cumplir los términos de GPL v3, se requiere adquirir una

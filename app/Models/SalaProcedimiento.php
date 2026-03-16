@@ -5,7 +5,7 @@
  *
  * Representa las salas habilitadas para procedimientos médicos específicos.
  *
- * @package ClinicaEden
+ * @package PulsoCore
  * @author  Alirio Portilla
  * @version 3.0.0
  */

@@ -5,7 +5,7 @@
  *
  * Almacena las respuestas de encuestas de satisfacción realizadas por pacientes.
  *
- * @package ClinicaEden
+ * @package PulsoCore
  * @author  Alirio Portilla
  * @version 3.0.0
  */

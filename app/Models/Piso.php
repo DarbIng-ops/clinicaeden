@@ -5,7 +5,7 @@
  *
  * Representa los pisos o plantas del edificio hospitalario.
  *
- * @package ClinicaEden
+ * @package PulsoCore
  * @author  Alirio Portilla
  * @version 3.0.0
  */

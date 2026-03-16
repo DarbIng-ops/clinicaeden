@@ -5,7 +5,7 @@
  *
  * Representa las habitaciones disponibles para hospitalización en cada módulo.
  *
- * @package ClinicaEden
+ * @package PulsoCore
  * @author  Alirio Portilla
  * @version 3.0.0
  */

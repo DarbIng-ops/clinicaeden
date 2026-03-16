@@ -5,7 +5,7 @@
  *
  * Componente Livewire para la edición en tiempo real de los datos de un paciente.
  *
- * @package ClinicaEden
+ * @package PulsoCore
  * @author  Alirio Portilla
  * @version 3.0.0
  */

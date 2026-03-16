@@ -5,7 +5,7 @@
  *
  * Panel del médico general: pacientes, consultas, hospitalizaciones y derivaciones.
  *
- * @package ClinicaEden
+ * @package PulsoCore
  * @author  Alirio Portilla
  * @version 3.0.0
  */

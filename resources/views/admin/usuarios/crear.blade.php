@@ -17,9 +17,9 @@
                placeholder="juan.perez"
                class="flex-1 px-3 py-2 outline-none border-none"
                required
-               oninput="document.getElementById('email_hidden').value = this.value + '@@clinicaeden.com'">
+               oninput="document.getElementById('email_hidden').value = this.value + '@@pulsocore.com'">
         <span class="bg-gray-100 px-3 py-2 text-gray-500 border-l border-gray-300 select-none whitespace-nowrap">
-            @@clinicaeden.com
+            @@pulsocore.com
         </span>
     </div>
     <input type="hidden" name="email" id="email_hidden">

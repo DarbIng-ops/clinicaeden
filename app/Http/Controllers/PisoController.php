@@ -5,7 +5,7 @@
  *
  * CRUD de pisos del edificio hospitalario: creación, edición y eliminación.
  *
- * @package ClinicaEden
+ * @package PulsoCore
  * @author  Alirio Portilla
  * @version 3.0.0
  */

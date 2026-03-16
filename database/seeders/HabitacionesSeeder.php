@@ -25,6 +25,8 @@ class HabitacionesSeeder extends Seeder
 {
     public function run(): void
     {
+        $jefeEnfermeria = User::where('email', 'jefe.enfermeria@pulsocore.com')->firstOrFail();
+
         // Crear Pisos
         $piso1 = Piso::create([
             'numero' => 1,
@@ -39,56 +41,6 @@ class HabitacionesSeeder extends Seeder
             'descripcion' => 'Piso especializado en partos, neonatos y hospitalización general',
             'activo' => true,
         ]);
-
-        // Crear usuarios adicionales para enfermería
-        $jefeEnfermeria1 = User::create([
-            'name' => 'Lic. Ana Martínez',
-            'email' => 'jefe.enfermeria1@clinicaeden.com',
-            'password' => Hash::make('password'),
-            'role' => 'jefe_enfermeria',
-            'telefono' => '555-0201',
-            'activo' => true,
-        ]);
-
-        $jefeEnfermeria2 = User::create([
-            'name' => 'Lic. Carlos Rodríguez',
-            'email' => 'jefe.enfermeria2@clinicaeden.com',
-            'password' => Hash::make('password'),
-            'role' => 'jefe_enfermeria',
-            'telefono' => '555-0202',
-            'activo' => true,
-        ]);
-
-        $jefeEnfermeria3 = User::create([
-            'name' => 'Lic. Laura Fernández',
-            'email' => 'jefe.enfermeria3@clinicaeden.com',
-            'password' => Hash::make('password'),
-            'role' => 'jefe_enfermeria',
-            'telefono' => '555-0203',
-            'activo' => true,
-        ]);
-
-        $jefeEnfermeria4 = User::create([
-            'name' => 'Lic. Miguel Torres',
-            'email' => 'jefe.enfermeria4@clinicaeden.com',
-            'password' => Hash::make('password'),
-            'role' => 'jefe_enfermeria',
-            'telefono' => '555-0204',
-            'activo' => true,
-        ]);
-
-        // Crear auxiliares de enfermería
-        $auxiliares = [];
-        for ($i = 1; $i <= 36; $i++) {
-            $auxiliares[] = User::create([
-                'name' => 'Aux. Enfermería ' . $i,
-                'email' => 'auxiliar.enfermeria' . $i . '@clinicaeden.com',
-                'password' => Hash::make('password'),
-                'role' => 'auxiliar_enfermeria',
-                'telefono' => '555-' . str_pad(300 + $i, 4, '0', STR_PAD_LEFT),
-                'activo' => true,
-            ]);
-        }
 
         // PISO 1 - 3 Consultorios
         for ($i = 1; $i <= 3; $i++) {
@@ -107,7 +59,7 @@ class HabitacionesSeeder extends Seeder
             'nombre' => 'Módulo Enfermería A',
             'tipo' => 'general',
             'descripcion' => 'Módulo de enfermería general - Piso 1',
-            'jefe_enfermeria_id' => $jefeEnfermeria1->id,
+            'jefe_enfermeria_id' => $jefeEnfermeria->id,
             'activo' => true,
         ]);
 
@@ -116,15 +68,9 @@ class HabitacionesSeeder extends Seeder
             'nombre' => 'Módulo Enfermería B',
             'tipo' => 'general',
             'descripcion' => 'Módulo de enfermería general - Piso 1',
-            'jefe_enfermeria_id' => $jefeEnfermeria2->id,
+            'jefe_enfermeria_id' => $jefeEnfermeria->id,
             'activo' => true,
         ]);
-
-        // Asignar auxiliares a módulos del piso 1 (10 auxiliares por módulo)
-        for ($i = 0; $i < 10; $i++) {
-            $modulo1Piso1->auxiliares()->attach($auxiliares[$i]->id, ['activo' => true]);
-            $modulo2Piso1->auxiliares()->attach($auxiliares[$i + 10]->id, ['activo' => true]);
-        }
 
         // Habitaciones del módulo 1 piso 1 (5 habitaciones de 4 camas cada una)
         for ($i = 1; $i <= 5; $i++) {
@@ -173,14 +119,9 @@ class HabitacionesSeeder extends Seeder
             'nombre' => 'Módulo Partos y Neonatos',
             'tipo' => 'partos_neonatos',
             'descripcion' => 'Módulo especializado en partos y cuidados neonatales',
-            'jefe_enfermeria_id' => $jefeEnfermeria3->id,
+            'jefe_enfermeria_id' => $jefeEnfermeria->id,
             'activo' => true,
         ]);
-
-        // Asignar auxiliares al módulo de partos (8 auxiliares)
-        for ($i = 20; $i < 28; $i++) {
-            $modulo1Piso2->auxiliares()->attach($auxiliares[$i]->id, ['activo' => true]);
-        }
 
         // Sala de partos (5 camas)
         Habitacion::create([
@@ -218,14 +159,9 @@ class HabitacionesSeeder extends Seeder
             'nombre' => 'Módulo Hospitalización General',
             'tipo' => 'hospitalizacion_general',
             'descripcion' => 'Módulo de hospitalización general',
-            'jefe_enfermeria_id' => $jefeEnfermeria4->id,
+            'jefe_enfermeria_id' => $jefeEnfermeria->id,
             'activo' => true,
         ]);
-
-        // Asignar auxiliares al módulo de hospitalización (8 auxiliares)
-        for ($i = 28; $i < 36; $i++) {
-            $modulo2Piso2->auxiliares()->attach($auxiliares[$i]->id, ['activo' => true]);
-        }
 
         // 3 habitaciones de 3 camas cada una
         for ($i = 1; $i <= 3; $i++) {

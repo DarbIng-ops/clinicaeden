@@ -16,13 +16,13 @@ class UsersTableSeeder extends Seeder
     {
         $users = [
             [
-                'email'           => 'admin@clinicaeden.com',
+                'email'           => 'admin@pulsocore.com',
                 'name'            => 'Administrador',
                 'role'            => 'admin',
                 'activo'          => true,
             ],
             [
-                'email'           => 'medico.general@clinicaeden.com',
+                'email'           => 'medico.general@pulsocore.com',
                 'name'            => 'Dr. Juan Pérez',
                 'role'            => 'medico_general',
                 'numero_licencia' => 'MG001',
@@ -31,7 +31,7 @@ class UsersTableSeeder extends Seeder
                 'activo'          => true,
             ],
             [
-                'email'           => 'medico.especialista@clinicaeden.com',
+                'email'           => 'medico.especialista@pulsocore.com',
                 'name'            => 'Dr. María González',
                 'role'            => 'medico_especialista',
                 'numero_licencia' => 'ME001',
@@ -40,28 +40,28 @@ class UsersTableSeeder extends Seeder
                 'activo'          => true,
             ],
             [
-                'email'           => 'recepcion@clinicaeden.com',
+                'email'           => 'recepcion@pulsocore.com',
                 'name'            => 'Recepción',
                 'role'            => 'recepcionista',
                 'telefono'        => '555-0200',
                 'activo'          => true,
             ],
             [
-                'email'           => 'jefe.enfermeria@clinicaeden.com',
+                'email'           => 'jefe.enfermeria@pulsocore.com',
                 'name'            => 'Jefe Enfermería',
                 'role'            => 'jefe_enfermeria',
                 'telefono'        => '555-0400',
                 'activo'          => true,
             ],
             [
-                'email'           => 'auxiliar@clinicaeden.com',
+                'email'           => 'auxiliar@pulsocore.com',
                 'name'            => 'Auxiliar Enfermería',
                 'role'            => 'auxiliar_enfermeria',
                 'telefono'        => '555-0500',
                 'activo'          => true,
             ],
             [
-                'email'           => 'caja@clinicaeden.com',
+                'email'           => 'caja@pulsocore.com',
                 'name'            => 'Caja',
                 'apellido'        => 'Sistema',
                 'role'            => 'caja',

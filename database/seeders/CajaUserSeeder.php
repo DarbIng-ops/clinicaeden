@@ -20,7 +20,7 @@ class CajaUserSeeder extends Seeder
             User::create([
                 'name' => 'Caja',
                 'apellido' => 'Sistema',
-                'email' => 'caja@clinicaeden.com',
+                'email' => 'caja@pulsocore.com',
                 'password' => Hash::make('password'),
                 'role' => 'caja',
                 'telefono' => '555-0300',

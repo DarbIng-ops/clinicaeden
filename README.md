@@ -4,7 +4,7 @@
 
 ## 📋 Descripción
 
-PulsoCore es un Sistema de Información Hospitalaria desarrollado para el Sanatorio Edén (Cajamarca, Colombia). Implementa una arquitectura RBAC con 7 perfiles de usuario que cubren la totalidad del flujo clínico: recepción, consulta médica, hospitalización, enfermería y facturación. Desarrollado como proyecto de grado SENA ADSO Ficha 2977408 — CENIGRAF.
+PulsoCore es un Sistema de Información Hospitalaria desarrolllado por darbin.tech  (Alirio Portilla). Implementa una arquitectura RBAC con 7 perfiles de usuario que cubren la totalidad del flujo clínico: recepción, consulta médica, hospitalización, enfermería y facturación. Desarrollado como proyecto de grado SENA ADSO Ficha 2977408 — CENIGRAF.
 
 ## 🚀 Demo en producción
 

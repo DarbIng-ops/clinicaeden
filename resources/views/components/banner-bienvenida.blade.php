@@ -24,10 +24,9 @@
             </p>
         </div>
         <div class="hidden md:block" style="position:relative;z-index:1;">
-            <img src="{{ asset(config('clinica.logo')) }}"
-                 alt="{{ config('clinica.nombre_largo') }}"
-                 style="height:80px;width:auto;opacity:.85;filter:brightness(0) invert(1)"
-                 onerror="this.style.display='none'">
+            <img src="{{ asset('images/banner.png') }}"
+                 alt="PulsoCore"
+                 style="height:110px;width:auto;opacity:.90">
         </div>
     </div>
 </div>

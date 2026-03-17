@@ -22,7 +22,7 @@
             </div>
             <div class="d-none d-md-block">
                 <img src="{{ asset(config('clinica.logo')) }}" alt="{{ config('clinica.nombre_largo') }}"
-                     style="height:70px;opacity:.85;filter:brightness(0) invert(1)"
+                     style="height:70px;opacity:.85"
                      onerror="this.style.display='none'">
             </div>
         </div>

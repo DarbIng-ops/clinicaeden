@@ -17,6 +17,9 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
+        <!-- Styles pushed from child views -->
+        @stack('styles')
+
         <!-- Styles -->
         @livewireStyles
     </head>
